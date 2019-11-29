@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Dual Residual Networks Leveraging the Potential of Paired Operations for Image Restoration摘要 提出一种新颖的残差结构 dual residual connection 针对5种不同的图片恢复问题（去燥，去雨滴，去雨线，去雾，去模糊）提出4种结构  方法结构  去燥 去模糊 去雾 去雨滴 去雨线 数据集 BS">
+<meta name="keywords" content="去雾,去燥,去雨线,去雨滴,ICCV">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dual Residual Networks">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="Dual Residual Networks Leveraging the Potential of Paired Operations for Image Restoration摘要 提出一种新颖的残差结构 dual residual connection 针对5种不同的图片恢复问题（去燥，去雨滴，去雨线，去雾，去模糊）提出4种结构  方法结构  去燥 去模糊 去雾 去雨滴 去雨线 数据集 BS">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;dual_residual.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;four_DuRB.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;DURBP.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;DURNU.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;DURNUS.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;DURNSP.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;DURBP.png">
+<meta property="og:updated_time" content="2019-11-29T05:53:53.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;19&#x2F;Dual-Residual-Networks&#x2F;dual_residual.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2019/11/19/Dual-Residual-Networks/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Dual Residual Networks | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2019/11/19/Dual-Residual-Networks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dual Residual Networks
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-19 10:39:10" itemprop="dateCreated datePublished" datetime="2019-11-19T10:39:10+08:00">2019-11-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-29 13:53:53" itemprop="dateModified" datetime="2019-11-29T13:53:53+08:00">2019-11-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%8E%BB%E9%9B%BE/" itemprop="url" rel="index">
+                    <span itemprop="name">去雾</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Dual-Residual-Networks-Leveraging-the-Potential-of-Paired-Operations-for-Image-Restoration"><a href="#Dual-Residual-Networks-Leveraging-the-Potential-of-Paired-Operations-for-Image-Restoration" class="headerlink" title="Dual Residual Networks Leveraging the Potential of Paired Operations for Image Restoration"></a>Dual Residual Networks Leveraging the Potential of Paired Operations for Image Restoration</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><ul>
+<li>提出一种新颖的残差结构 dual residual connection</li>
+<li>针对5种不同的图片恢复问题（去燥，去雨滴，去雨线，去雾，去模糊）提出4种结构</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p><img src="/2019/11/19/Dual-Residual-Networks/dual_residual.png" alt="dual_residual"></p>
+<p><img src="/2019/11/19/Dual-Residual-Networks/four_DuRB.png" alt="four_DuRB"></p>
+<h4 id="去燥"><a href="#去燥" class="headerlink" title="去燥"></a>去燥</h4><p><img src="/2019/11/19/Dual-Residual-Networks/DURBP.png" alt="DURBP"></p>
+<h4 id="去模糊"><a href="#去模糊" class="headerlink" title="去模糊"></a>去模糊</h4><p><img src="/2019/11/19/Dual-Residual-Networks/DURNU.png" alt="DURNU"></p>
+<h4 id="去雾"><a href="#去雾" class="headerlink" title="去雾"></a>去雾</h4><p><img src="/2019/11/19/Dual-Residual-Networks/DURNUS.png" alt="DURNUS"></p>
+<h4 id="去雨滴"><a href="#去雨滴" class="headerlink" title="去雨滴"></a>去雨滴</h4><p><img src="/2019/11/19/Dual-Residual-Networks/DURNSP.png" alt="DURNSP"></p>
+<h4 id="去雨线"><a href="#去雨线" class="headerlink" title="去雨线"></a>去雨线</h4><p><img src="/2019/11/19/Dual-Residual-Networks/DURBP.png" alt="DURBP"></p>
+<h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><ul>
+<li>BSD-grayscale dataset</li>
+<li>GoPro Dataset</li>
+<li>Dehaze Dataset and the RESIDE dataset</li>
+<li>RainDrop Dataset</li>
+<li>DDN-Data</li>
+</ul>
+<h3 id="损失"><a href="#损失" class="headerlink" title="损失"></a>损失</h3><ul>
+<li>l2 loss</li>
+<li>ssim+l1 loss</li>
+<li>ssim + l1 loss</li>
+<li>ssim+l1 loss</li>
+<li>ssim + l1 loss</li>
+</ul>
+<h3 id="对比实验"><a href="#对比实验" class="headerlink" title="对比实验"></a>对比实验</h3><ul>
+<li><p>REDNet MemNet E-CAE</p>
+</li>
+<li><p>Learning a convolutional neural network for non-uniform motion blur removal<br>Deep multi-scale convolutional neural network for dynamic scene deblurring<br>Unnatural l0 sparse representation for natural image deblurring<br>DeBlurGAN</p>
+</li>
+<li><p>DCP CAP Aod-net Dehazenet GFN<br>Non-local image dehazing</p>
+<p>Densely connected pyramid dehazing network<br>Single image dehazing via multiscale convolutional neural networks</p>
+</li>
+<li><p>Attentive generative adversarial network for raindrop removal from a single image</p>
+</li>
+<li><p>DDN JORDER DID-MDN RESCAN NLEDN</p>
+</li>
+</ul>
+<h3 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h3><ul>
+<li>PSNR</li>
+<li>SSIM</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8E%BB%E9%9B%BE/" rel="tag"># 去雾</a>
+              <a href="/tags/%E5%8E%BB%E7%87%A5/" rel="tag"># 去燥</a>
+              <a href="/tags/%E5%8E%BB%E9%9B%A8%E7%BA%BF/" rel="tag"># 去雨线</a>
+              <a href="/tags/%E5%8E%BB%E9%9B%A8%E6%BB%B4/" rel="tag"># 去雨滴</a>
+              <a href="/tags/ICCV/" rel="tag"># ICCV</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/19/Underwater-using-Domian-Adversarial-learning/" rel="prev" title="Underwater using Domain-Adversarial Learning">
+      <i class="fa fa-chevron-left"></i> Underwater using Domain-Adversarial Learning
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/11/23/PMS-Net/" rel="next" title="PMS-Net">
+      PMS-Net <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Dual-Residual-Networks-Leveraging-the-Potential-of-Paired-Operations-for-Image-Restoration"><span class="nav-number">1.</span> <span class="nav-text">Dual Residual Networks Leveraging the Potential of Paired Operations for Image Restoration</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">1.2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构"><span class="nav-number">1.2.1.</span> <span class="nav-text">结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#去燥"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">去燥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#去模糊"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">去模糊</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#去雾"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">去雾</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#去雨滴"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">去雨滴</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#去雨线"><span class="nav-number">1.2.1.5.</span> <span class="nav-text">去雨线</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集"><span class="nav-number">1.2.2.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#损失"><span class="nav-number">1.2.3.</span> <span class="nav-text">损失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对比实验"><span class="nav-number">1.2.4.</span> <span class="nav-text">对比实验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#评价指标"><span class="nav-number">1.2.5.</span> <span class="nav-text">评价指标</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
