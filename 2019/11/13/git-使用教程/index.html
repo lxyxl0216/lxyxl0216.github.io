@@ -46,13 +46,13 @@
   };
 </script>
 
-  <meta name="description" content="配置user信息 Git config –global user.name ‘your_name’ git config –global user.email ‘email’  git config –local 支队某个仓库有用 git config –system 对系统所有登录用于使用 –list 显示配置">
+  <meta name="description" content="配置user信息 Git config —global user.name ‘your_name’ git config —global user.email ‘email’  git config —local 支队某个仓库有用 git config —system 对系统所有登录用于使用 —list 显示配置">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git 使用教程">
 <meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;git-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B&#x2F;index.html">
 <meta property="og:site_name" content="李小阳小李">
-<meta property="og:description" content="配置user信息 Git config –global user.name ‘your_name’ git config –global user.email ‘email’  git config –local 支队某个仓库有用 git config –system 对系统所有登录用于使用 –list 显示配置">
+<meta property="og:description" content="配置user信息 Git config —global user.name ‘your_name’ git config —global user.email ‘email’  git config —local 支队某个仓库有用 git config —system 对系统所有登录用于使用 —list 显示配置">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2020-03-28T07:27:42.452Z">
 <meta name="twitter:card" content="summary">
@@ -242,13 +242,12 @@
 
       
         <h1 id="配置user信息"><a href="#配置user信息" class="headerlink" title="配置user信息"></a>配置user信息</h1><ul>
-<li>Git config –global user.name ‘your_name’</li>
-<li>git config –global user.email ‘email’</li>
+<li>Git config —global user.name ‘your_name’</li>
+<li>git config —global user.email ‘email’</li>
 </ul>
-<p>git config –local 支队某个仓库有用</p>
-<p>git config –system 对系统所有登录用于使用</p>
-<p>–list 显示配置</p>
-<a id="more"></a>
+<p>git config —local 支队某个仓库有用</p>
+<p>git config —system 对系统所有登录用于使用</p>
+<p>—list 显示配置<br><a id="more"></a></p>
 <h1 id="建git仓库"><a href="#建git仓库" class="headerlink" title="建git仓库"></a>建git仓库</h1><h2 id="把已有的项目纳入git管理"><a href="#把已有的项目纳入git管理" class="headerlink" title="把已有的项目纳入git管理"></a>把已有的项目纳入git管理</h2><ul>
 <li>cd 目录</li>
 <li>git init</li>
@@ -261,25 +260,25 @@
 <h1 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h1><p>git status 显示状态</p>
 <p>git checkout master （切换到master分支）</p>
 <p>git branch -av（当前在哪个branch里）</p>
-<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><p>git add –all（当前目录所有文件）</p>
+<h2 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h2><p>git add —all（当前目录所有文件）</p>
 <p>git add file （添加file文件）</p>
-<p>git commit -am ‘——’</p>
+<p>git commit -am ‘———’</p>
 <h2 id="重命名"><a href="#重命名" class="headerlink" title="重命名"></a>重命名</h2><p>git mv old-file new-file</p>
-<p>git commit -am’—-‘</p>
+<p>git commit -am’——‘</p>
 <h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><p>git log  显示日志</p>
-<p>git log –online</p>
+<p>git log —online</p>
 <p>git log -4（显示最近的4个日志）</p>
-<p>git log  –all –graph 所有分支的演进历史</p>
-<p>git help –web log （查看帮助）</p>
-<h2 id="提交提交"><a href="#提交提交" class="headerlink" title="提交提交"></a>提交提交</h2><p>git commit –amend（修改最近一次的message）</p>
+<p>git log  —all —graph 所有分支的演进历史</p>
+<p>git help —web log （查看帮助）</p>
+<h2 id="提交提交"><a href="#提交提交" class="headerlink" title="提交提交"></a>提交提交</h2><p>git commit —amend（修改最近一次的message）</p>
 <h2 id="删除当前commit文件"><a href="#删除当前commit文件" class="headerlink" title="删除当前commit文件"></a>删除当前commit文件</h2><p>git rm file</p>
-<h2 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h2><p>git clone –bare </p>
+<h2 id="备份"><a href="#备份" class="headerlink" title="备份"></a>备份</h2><p>git clone —bare </p>
 <h1 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h1><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>创建ssh key ：ssh-keygen -t  rsa -b -C “email”</p>
 <p>添加key ：id_rsa.pub</p>
 <h2 id="关联"><a href="#关联" class="headerlink" title="关联"></a>关联</h2><p>git remote add 《name》  url </p>
 <p>git remote -v 查看分支</p>
 <p>git fetch master  把master远端的拉下来，与本地无关联</p>
-<p>git push  –all</p>
+<p>git push  —all</p>
 
     </div>
 
@@ -358,7 +357,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -410,7 +409,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共2.8k字</span>
+  <span class="post-count">博客全站共4.1k字</span>
 </div>
 
         
@@ -453,6 +452,8 @@
 
 
 
+
+  
 
   
 
