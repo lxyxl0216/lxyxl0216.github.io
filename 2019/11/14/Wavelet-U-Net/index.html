@@ -21,12 +21,12 @@
   var CONFIG = {
     hostname: new URL('https://lxyxl0216.github.io').hostname,
     root: '/',
-    scheme: 'Mist',
+    scheme: 'Pisces',
     version: '7.5.0',
     exturl: false,
     sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
     copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
     bookmark: {"enable":false,"color":"#222","save":"auto"},
     fancybox: false,
     mediumzoom: false,
@@ -47,7 +47,7 @@
 </script>
 
   <meta name="description" content="WAVELET U-NET AND THE CHROMATIC ADAPTATION TRANSFORM FOR SINGLE IMAGE DEHAZINGICIP2019摘要 提出了小波Unet，它使用离散小波变换和逆离散小波变换来代替下采样和上采样，以提取边缘特征。 通过数学方式由卷积层实现的色适应变换来增强图像。  方法结构 DWT &amp;amp; IDWT 色彩自适应变化 采用restidua">
-<meta name="keywords" content="去雾,ICIP,小波变化">
+<meta name="keywords" content="ICIP,去雾,小波变化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Wavelet-U-Net">
 <meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;14&#x2F;Wavelet-U-Net&#x2F;index.html">
@@ -144,9 +144,24 @@
     <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
 
   </li>
   </ul>
@@ -178,7 +193,7 @@
     <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2019/11/14/Wavelet-U-Net/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.png">
       <meta itemprop="name" content="Alex Li">
       <meta itemprop="description" content="">
     </span>
@@ -261,8 +276,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%8E%BB%E9%9B%BE/" rel="tag"># 去雾</a>
               <a href="/tags/ICIP/" rel="tag"># ICIP</a>
+              <a href="/tags/%E5%8E%BB%E9%9B%BE/" rel="tag"># 去雾</a>
               <a href="/tags/%E5%B0%8F%E6%B3%A2%E5%8F%98%E5%8C%96/" rel="tag"># 小波变化</a>
           </div>
 
@@ -322,6 +337,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/%E5%A4%B4%E5%83%8F.png">
   <p class="site-author-name" itemprop="name">Alex Li</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -335,12 +352,16 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
         <span class="site-state-item-count">4</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">17</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -364,7 +385,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -373,8 +394,13 @@
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.5.0
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
   </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共2.8k字</span>
+</div>
 
         
 
@@ -395,7 +421,7 @@
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
 
 
@@ -421,5 +447,8 @@
 
   
 
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
 </body>
 </html>
