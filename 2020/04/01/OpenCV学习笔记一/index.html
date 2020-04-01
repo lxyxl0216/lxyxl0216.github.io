@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="使用OpenCV处理图像 读取图片 色彩空间转换 傅里叶变换 边缘检测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCV学习笔记一">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="使用OpenCV处理图像 读取图片 色彩空间转换 傅里叶变换 边缘检测">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80&#x2F;row.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80&#x2F;3*3.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80&#x2F;5*5.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80&#x2F;g_hpf.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80&#x2F;边缘检测微分图.jpg">
+<meta property="og:updated_time" content="2020-04-01T12:21:42.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80&#x2F;row.jpg">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/01/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>OpenCV学习笔记一 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/01/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenCV学习笔记一
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-01 16:36:47 / 修改时间：20:21:42" itemprop="dateCreated datePublished" datetime="2020-04-01T16:36:47+08:00">2020-04-01</time>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="使用OpenCV处理图像"><a href="#使用OpenCV处理图像" class="headerlink" title="使用OpenCV处理图像"></a>使用OpenCV处理图像</h1><ol>
+<li>读取图片</li>
+<li>色彩空间转换</li>
+<li>傅里叶变换</li>
+<li>边缘检测</li>
+</ol>
+<a id="more"></a>
+
+    <div id="aplayer-eeuwlJVZ" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h2 id="读取图片"><a href="#读取图片" class="headerlink" title="读取图片"></a>读取图片</h2><p>在默认情况下， 即使图像文件为灰度格式，imread()函数也会返回BGR格式的图像.BGR与red-green-blue(RGB)所表示的色彩空间相同，但字节顺序相反。</p>
+<p>可选的imread()的参数</p>
+<ul>
+<li>IMREAD_ANYCOLOR = 4</li>
+<li>IMREAD_ANYDEPTH = 2</li>
+<li>IMREAD_COLOR= 1</li>
+<li>IMREAD_GRAYSCALE = 0</li>
+<li>IMREAD_LOAD_GDAL = 8</li>
+<li>工MREAD_UNCHANGED= -1</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 读入图像</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">img = cv2.imread (<span class="string">'./image/1.jpg'</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 显示图像</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">cv2.imshow(<span class="string">'figure1'</span>,img)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">cv2.waitKey()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">cv2.destroyAllWindows()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 保存图像</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">cv2.imwrite(<span class="string">'保存.png'</span>,img)</span></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">print(img.shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">print(img.size)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">print(img.dtype)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">print(img.item(<span class="number">150</span>,<span class="number">120</span>,<span class="number">0</span>))</span></pre></td></tr></table></figure>
+<h2 id="不同色彩空间转换"><a href="#不同色彩空间转换" class="headerlink" title="不同色彩空间转换"></a>不同色彩空间转换</h2><p>在计算机视觉中有三种常用的色彩空间： 灰度、BGR 以及HSY (Hue, Saturation, Value) 。</p>
+<ul>
+<li>灰度色彩空间是通过去除彩色信息来将其转换成灰阶， 灰度色彩空间对中间处理特别有效， 比如人脸检测。</li>
+<li>BGR：即蓝—绿—红色彩空间， 每一个像素点都由一个三元数组来表示， 分别代表蓝、绿、红三种颜色。</li>
+<li>HSY,：H (Hue) 是色调， S (Saturation) 是饱和度， V (Value) 表示黑暗的程度（或光谱另一端的明亮程度）。</li>
+</ul>
+<h2 id="傅里叶变化"><a href="#傅里叶变化" class="headerlink" title="傅里叶变化"></a>傅里叶变化</h2><p>所有的波形都可以由一系列简单且频率不同的正弦曲线叠加得到。</p>
+<p><strong><em>LPF 帮助我们去除噪音，模糊图像。HPF 帮助我们找到图像的边缘</em></strong></p>
+<h3 id="高通滤波器"><a href="#高通滤波器" class="headerlink" title="高通滤波器"></a>高通滤波器</h3><p>高通滤波器(HPF) 是检测图像的某个区域， 然后根据像素与<strong>周围像素的亮度差值</strong>来提升该像素的亮度的滤波器。</p>
+<ul>
+<li>在计算完中央像素与周围邻近像素的亮度差值之和以后， 如果亮度变化很大， 中央像素的亮度会增加（反之则不会）。换句话说， 如果一个像素比它周围的像素更突出， 就会提升它的亮度。</li>
+</ul>
+<blockquote>
+<p>这在边缘检测上尤其有效， 它会采用一种称为高频提升滤波器(high boost filter)的高通滤波器。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> ndimage</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">kernel_3x3 = np.array([[<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>],</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">                   [<span class="number">-1</span>,  <span class="number">8</span>, <span class="number">-1</span>],</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">                   [<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>]])</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">kernel_5x5 = np.array([[<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>],</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">                       [<span class="number">-1</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">1</span>, <span class="number">-1</span>],</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">                       [<span class="number">-1</span>,  <span class="number">2</span>,  <span class="number">4</span>,  <span class="number">2</span>, <span class="number">-1</span>],</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">                       [<span class="number">-1</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">1</span>, <span class="number">-1</span>],</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">                       [<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>]])</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">img = cv2.imread(<span class="string">"../image/1.jpg"</span>,<span class="number">0</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">k3 = ndimage.convolve(img, kernel_3x3)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">k5 = ndimage.convolve(img, kernel_5x5)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">blurred = cv2.GaussianBlur(img, (<span class="number">17</span>,<span class="number">17</span>), <span class="number">0</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">g_hpf = img - blurred</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">cv2.imshow(<span class="string">"3x3"</span>, k3)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">cv2.imshow(<span class="string">"5x5"</span>, k5)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">cv2.imshow(<span class="string">"g_hpf"</span>, g_hpf)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">cv2.waitKey()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">cv2.destroyAllWindows()</span></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">原图</th>
+<th style="text-align:center">3*3</th>
+<th style="text-align:center">5*5</th>
+<th style="text-align:center">Gaussian</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="/2020/04/01/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/row.jpg" alt="原始"></td>
+<td style="text-align:center"><img src="/2020/04/01/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/3*3.jpg" alt="3*3"></td>
+<td style="text-align:center"><img src="/2020/04/01/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/5*5.jpg" alt="5*5"></td>
+<td style="text-align:center"><img src="/2020/04/01/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/g_hpf.jpg" alt="高斯"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="低通滤波器"><a href="#低通滤波器" class="headerlink" title="低通滤波器"></a>低通滤波器</h3><p>低通滤波器( LPF)则是在像素与周围像素的<strong>亮度差值小于一个特定值</strong>时， 平滑该像素的亮度。</p>
+<blockquote>
+<p>它主要用于去噪和模糊化，比如说， 高斯模糊是最常用的模糊滤波器（平滑滤波器）之一， 它是一个削弱高频信号强度的低通滤波器。</p>
+</blockquote>
+<h2 id="边缘检测"><a href="#边缘检测" class="headerlink" title="边缘检测"></a>边缘检测</h2><p> 边缘检测常用的算子中分为一阶检测算子和二阶检测算子 </p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">算子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">一阶边缘检测</td>
+<td style="text-align:center">Sobel,Canny,Roberts,Prewitt</td>
+</tr>
+<tr>
+<td style="text-align:center">二阶边缘检测</td>
+<td style="text-align:center">Lapacian,Marr-Hildreth，Lapacian of Gaussian</td>
+</tr>
+<tr>
+<td style="text-align:center">其他</td>
+<td style="text-align:center">Spaeck,Petrou,Susan</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="水平差分算子、垂直差分算子"><a href="#水平差分算子、垂直差分算子" class="headerlink" title="水平差分算子、垂直差分算子"></a>水平差分算子、垂直差分算子</h3><ul>
+<li>亮度变化可以通过对相邻点进行差分处理来增强。</li>
+<li>对水平方向的相邻点进行差分处理可以检测垂直方向上的亮度变化，根据其作用通常被称为水平边缘检测算子（horizontal edge detector），这样就可以检测出垂直边缘Ex；</li>
+<li>对垂直方向的相邻点进行差分处理可以检测水平方向上的亮度变化，根据其作用通常被称为垂直边缘检测算子（vertical edge detector），这样就可以检测出水平边缘Ey。 </li>
+</ul>
+<script type="math/tex; mode=display">
+E_x = |P_{x,y}-P_{x+1,y}|\\
+E_y = |P_{x,y}-P_{x,y+1}|</script><p>将水平边缘检测算子和垂直边缘检测算子结合，就可以同时检测出垂直边缘和水平边缘，即： $E_x = |P_{x,y}-P_{x+1,y}+P_{x,y}-P_{x,y+1}|=|2P_{x,y}-P_{x+1,y}-P_{x,y+1}|$</p>
+<blockquote>
+<p>得到一阶差分模板[[2,-1],[-1,0]]</p>
+</blockquote>
+<h3 id="一阶边缘检测"><a href="#一阶边缘检测" class="headerlink" title="一阶边缘检测"></a>一阶边缘检测</h3><h4 id="Roberts交叉算子"><a href="#Roberts交叉算子" class="headerlink" title="Roberts交叉算子"></a>Roberts交叉算子</h4><p>Roberts交叉算子实现的基础是一阶边缘检测，利用两个模板，计算对角线上而不是坐标轴上的两个像素的微分。这里命名这两个模板分别为M+,M- 。</p>
+<blockquote>
+<p>M+:  [[+1,0],[0,-1]]   </p>
+<p>M-:  [[0,+1],[-1,0]]</p>
+</blockquote>
+<h4 id="Prewitt边缘检测算子"><a href="#Prewitt边缘检测算子" class="headerlink" title="Prewitt边缘检测算子"></a>Prewitt边缘检测算子</h4><p>边缘检测类似微分处理，它检测的变化的部分，必然对噪声和图像的亮度变化都有相应处理。因此，把均值处理加入到边缘检测过程中一定要非常谨慎。我们可以把垂直模板Mx扩展成三行，而水平模板My扩展成三列。这样就得到Prewitt边缘检测算子。 </p>
+<blockquote>
+<p>Mx:  [[1,0,-1],[1,0,-1],[1,0,-1]]  </p>
+<p>My:  [[1,1,1],[0,0,0],[-1,-1,-1]]</p>
+</blockquote>
+<h4 id="Sobel边缘检测算子"><a href="#Sobel边缘检测算子" class="headerlink" title="Sobel边缘检测算子"></a>Sobel边缘检测算子</h4><p>如果把使两个Prewitt模板算子中心像素的权值去两倍的数值，便得到有名的Sobel边缘检测算子，它是由矢量方式确定边缘的两个掩码组成的。Sobel很受欢迎是因为它比Prewitt算子等同时期的其他边缘检测算子性能更好。 </p>
+<blockquote>
+<p>Mx:  [[1,0,-1],[2,0,-2],[1,0,-1]]  </p>
+<p>My:  [[1,1,1],[0,0,0],[-1,-1,-1]]</p>
+</blockquote>
+<p>Sobel算子的通用形式综合了一条坐标轴上的最优平滑和另一条坐标轴上的最优差分。值得注意的是，大的边缘检测模板的好处是它减少噪声的平滑效果更好，然而边缘模糊却成为一个大难题。 </p>
+<h4 id="Canny边缘检测算子"><a href="#Canny边缘检测算子" class="headerlink" title="Canny边缘检测算子"></a>Canny边缘检测算子</h4><p>Canny边缘检测算子可以说是当前最受欢迎的边缘检测方法。它由三个主要目标形成：</p>
+<ul>
+<li>无附加响应的最优检测</li>
+<li>检测边缘位置和实际边缘位置之间距离最小的正确定位</li>
+<li>减少单边缘的多重响应而得到单响应</li>
+</ul>
+<p>Canny指出高斯算子对图像平滑处理是最优的。Canny边缘检测一般处理的步骤可以粗略的分为以下四个步骤：</p>
+<ol>
+<li>应用高斯平滑处理</li>
+<li>应用Sobel算子</li>
+<li>应用非极大值抑制（非极大值抑制实质上是找到边缘强度数据中的最高点）</li>
+<li>滞后阈值处理来连接边缘点（阈值处理需要两个阈值，即上限阈值和下限阈值 ）</li>
+</ol>
+<h3 id="二阶边缘检测"><a href="#二阶边缘检测" class="headerlink" title="二阶边缘检测"></a><strong>二阶边缘检测</strong></h3><p>一阶边缘检测的前提是微分处理可以使变化增强。找图像变化率最大的地方不仅可以通过一阶变化率的极值寻找，同时也可以通过二阶变化的过零点来寻找 .</p>
+<p><img src="/2020/04/01/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%80/边缘检测微分图.jpg" alt="边缘检测微分图"></p>
+<h4 id="Laplacian算子"><a href="#Laplacian算子" class="headerlink" title="Laplacian算子"></a>Laplacian算子</h4><p>二阶微分可以利用两个相邻一阶微分的差值来近似 </p>
+<blockquote>
+<p> 邻域系统是4  [[0,-1,0],[-1,4,1],[0,-1,0]]</p>
+<p> 邻域系统是8  [[1,1,1],[1,-8,1],[1,1,1]] </p>
+</blockquote>
+<h3 id="相位一致性"><a href="#相位一致性" class="headerlink" title="相位一致性"></a>相位一致性</h3><p>边缘检测算子的比较突出了它们的一些内在问题：不完整轮廓问题、阈值选择问题和噪声响应问题。因为光照强度在图像的不同区域是不一样的，选择单个阈值通常不能适用于图像中的所有区域。这些问题单靠简单初级的处理难以解决。需要优化方法或者使用较为高级的手段才能达到一定的效果。 </p>
+<p>相位一致性（Phase congruency）方法是一个特征检测算子，它由如下两个优点：</p>
+<ul>
+<li>可以检测大范围的特征</li>
+</ul>
+<ul>
+<li>对局部（和平滑）光照变化具有不变性</li>
+</ul>
+<p>这两个优点其实就是一致性检测具有局部对比度不变性：即使阶梯边缘强度变小，其变化位置并不改变。</p>
+<h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>OpenCV提供了许多边缘检测滤波函数， 包括Laplacian()， Sobel()以及Scharr(）。这些滤波函数都会将非边缘区域转为黑色， 将边缘区域转为白色或其他饱和的颜色。</p>
+<blockquote>
+<p>但是，这些函数都很容易将噪声错误地识别为边缘。缓解这个问题的方法是在找到边缘之前对图像进行模糊处理。</p>
+<p>OpenCV也提供了许多模糊滤波函数， 包括blur()(简单的算术平均）、<br>medianBlur()以及GaussianBlur()。</p>
+<p>举例说明：</p>
+<ul>
+<li>这里使用medianBlur()作为模糊函数， 它对去除数字化的视频噪声非常有效， 特别是彩色图像的噪声</li>
+<li>使用Laplacian()作为边缘检测函数，它会产生明显的边缘线条， 灰度图像更是如此。</li>
+<li>在使用medianBlur()函数之后， 将要使用Laplacian()函数之前，需要将图像从BGR色彩空间转为灰度色彩空间。</li>
+<li>在得到Laplacian()函数的结果之后， 需要将其转换成黑色边缘和白色背景的图像。然后将其归一化（使它的像素值在0到1之间）， 并乘以源图像以便能将边缘变黑</li>
+</ul>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># Laplacian边缘检测</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">strokeEdges</span><span class="params">(src, dst , blurKsize = <span class="number">7</span>, edgeKsize = <span class="number">5</span>)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">	<span class="keyword">if</span> blurKsize &gt;= <span class="number">3</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">		blurredSrc = cv2.medianBlur(src, blurKsize)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">		graySrc = cv2. cvtColor(blurredSrc, cv2.COLOR_BGR2GRAY)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">	<span class="keyword">else</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">		graySrc = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">	cv2.Laplacian(graySrc, cv2.CV_8U, graySrc, ksize = edgeKsize)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">	norrnalizedinverseAlpha = (<span class="number">1.0</span> / <span class="number">255</span>) * (<span class="number">255</span> - graySrc)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">	channels = cv2.split(src)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">	<span class="keyword">for</span> channel <span class="keyword">in</span> channels:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">		channel[:] = channel * norrnalizedinverseAlpha</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">	cv2.merge(channels, dst)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># cv2.CV_8U表示位深度 ,dst表示输出，src表示输入</span></span></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># canny边缘检测</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#读入灰度图像</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">img=cv2.imread(<span class="string">'../test.jpg'</span>,cv2.IMREAD_GRAYSCALE)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#边缘检测</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">cv2.imwrite(<span class="string">'../canny.jpg'</span>,cv2.Canny(img,<span class="number">200</span>,<span class="number">300</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#显示图像</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">cv2.imshow(<span class="string">'canny'</span>,cv2.imread(<span class="string">'../canny.jpg'</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">cv2.waitKey()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">cv2.destroyAllWindows()</span></pre></td></tr></table></figure>
+<h2 id="1-1"><a href="#1-1" class="headerlink" title="1.1"></a>1.1</h2><h2 id="1-2"><a href="#1-2" class="headerlink" title="1.2"></a>1.2</h2><h1 id="二"><a href="#二" class="headerlink" title="二"></a>二</h1><h2 id="2-1"><a href="#2-1" class="headerlink" title="2.1"></a>2.1</h2><h2 id="2-2"><a href="#2-2" class="headerlink" title="2.2"></a>2.2</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" rel="prev" title="MML-线性模型">
+      <i class="fa fa-chevron-left"></i> MML-线性模型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/02/BFS%E4%B8%80/" rel="next" title="BFS一">
+      BFS一 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用OpenCV处理图像"><span class="nav-number">1.</span> <span class="nav-text">使用OpenCV处理图像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#读取图片"><span class="nav-number">1.1.</span> <span class="nav-text">读取图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同色彩空间转换"><span class="nav-number">1.2.</span> <span class="nav-text">不同色彩空间转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#傅里叶变化"><span class="nav-number">1.3.</span> <span class="nav-text">傅里叶变化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高通滤波器"><span class="nav-number">1.3.1.</span> <span class="nav-text">高通滤波器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#低通滤波器"><span class="nav-number">1.3.2.</span> <span class="nav-text">低通滤波器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#边缘检测"><span class="nav-number">1.4.</span> <span class="nav-text">边缘检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#水平差分算子、垂直差分算子"><span class="nav-number">1.4.1.</span> <span class="nav-text">水平差分算子、垂直差分算子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一阶边缘检测"><span class="nav-number">1.4.2.</span> <span class="nav-text">一阶边缘检测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Roberts交叉算子"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">Roberts交叉算子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Prewitt边缘检测算子"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">Prewitt边缘检测算子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sobel边缘检测算子"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">Sobel边缘检测算子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Canny边缘检测算子"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">Canny边缘检测算子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二阶边缘检测"><span class="nav-number">1.4.3.</span> <span class="nav-text">二阶边缘检测</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Laplacian算子"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">Laplacian算子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相位一致性"><span class="nav-number">1.4.4.</span> <span class="nav-text">相位一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#举例"><span class="nav-number">1.4.5.</span> <span class="nav-text">举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1"><span class="nav-number">1.5.</span> <span class="nav-text">1.1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2"><span class="nav-number">1.6.</span> <span class="nav-text">1.2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二"><span class="nav-number">2.</span> <span class="nav-text">二</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1"><span class="nav-number">2.1.</span> <span class="nav-text">2.1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2"><span class="nav-number">2.2.</span> <span class="nav-text">2.2</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">36k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:01</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共14.9k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>
