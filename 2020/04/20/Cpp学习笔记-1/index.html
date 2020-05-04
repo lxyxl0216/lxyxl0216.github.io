@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="李小阳小李">
 <meta property="og:description" content="输入输出">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-20T12:36:09.131Z">
+<meta property="og:updated_time" content="2020-04-25T09:19:51.573Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://lxyxl0216.github.io/2020/04/20/Cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/">
@@ -216,10 +216,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-04-20 15:20:25 / 修改时间：20:36:09" itemprop="dateCreated datePublished" datetime="2020-04-20T15:20:25+08:00">2020-04-20</time>
+              <time title="创建时间：2020-04-20 15:20:25" itemprop="dateCreated datePublished" datetime="2020-04-20T15:20:25+08:00">2020-04-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-25 17:19:51" itemprop="dateModified" datetime="2020-04-25T17:19:51+08:00">2020-04-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -238,14 +244,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>587</span>
+              <span>964</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -259,20 +265,20 @@
       
         <h1 id="输入输出"><a href="#输入输出" class="headerlink" title="输入输出"></a>输入输出</h1><a id="more"></a>
 
-    <div id="aplayer-DmxInTmG" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+    <div id="aplayer-DLmZqixu" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h2 id="如何读取带有空格的字符串"><a href="#如何读取带有空格的字符串" class="headerlink" title="如何读取带有空格的字符串"></a>如何读取带有空格的字符串</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> name[<span class="number">10</span>];</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>&gt;&gt;name;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="comment">// li haha</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span> &lt;&lt; name &lt;&lt;<span class="built_in">endl</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="comment">// li</span></span></pre></td></tr></table></figure>
 <h3 id="解决方法使用cin-getline-或者cin-get"><a href="#解决方法使用cin-getline-或者cin-get" class="headerlink" title="解决方法使用cin.getline() 或者cin.get()"></a>解决方法使用cin.getline() 或者cin.get()</h3><ul>
 <li>getline()每次读取一行，通过换行符来确定行尾，但不保存换行符</li>
 </ul>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> name[<span class="number">10</span>];</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>.getline(name,<span class="number">10</span>);</span></pre></td></tr></table></figure>
 <ul>
-<li>get()读取一行但是舍弃换行符</li>
+<li>get()读取一行但是舍弃换行符，换行符保留着输入队列中</li>
 </ul>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> name[<span class="number">10</span>];</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>.get(name);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>.get(name,<span class="number">10</span>);</span></pre></td></tr></table></figure>
 <h3 id="连续读取"><a href="#连续读取" class="headerlink" title="连续读取"></a>连续读取</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> year;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> name[<span class="number">10</span>];</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>&gt;&gt;year;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>.getline(name,<span class="number">10</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span> &lt;&lt; year&lt;&lt;name&lt;&lt;<span class="built_in">endl</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2020</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里会直接输出2020,因为在2020之后的换行符留在输入队列中被getline读取了，直接返回给name</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//调整为</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>&gt;&gt;year;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>.get(); </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//或者直接使用(cin&gt;&gt;year).get();</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cin</span>.getline(name,<span class="number">10</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span> &lt;&lt; year&lt;&lt;name&lt;&lt;<span class="built_in">endl</span>;</span></pre></td></tr></table></figure>
-<h2 id="string类读取"><a href="#string类读取" class="headerlink" title="string类读取"></a>string类读取</h2><ul>
-<li>getline(cin,str)</li>
-</ul>
+<h2 id="string类读取"><a href="#string类读取" class="headerlink" title="string类读取"></a>string类读取</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> s;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">getline(<span class="built_in">cin</span>,s);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">cout</span>&lt;&lt; s&lt;&lt;<span class="built_in">endl</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//自动处理长度</span></span></pre></td></tr></table></figure>
+<h2 id="格式化输入输出"><a href="#格式化输入输出" class="headerlink" title="格式化输入输出"></a>格式化输入输出</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">scanf</span>(<span class="string">"%d %d"</span>,&amp;a,&amp;b);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">"%d %d"</span>,a,b)</span></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">int</span> h1,h2,h3;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">char</span> line[<span class="number">100</span>] &#123;&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    <span class="built_in">cin</span>.getline(line,<span class="number">100</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="built_in">sscanf</span>(line,<span class="string">"%d:%d:%d"</span>,&amp;h1,&amp;h2,&amp;h3);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    <span class="built_in">cout</span> &lt;&lt; h1 &lt;&lt; <span class="built_in">endl</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//将line的内容输入到h1,h2,h3</span></span></pre></td></tr></table></figure>
 
     </div>
 
@@ -335,7 +341,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#输入输出"><span class="nav-number">1.</span> <span class="nav-text">输入输出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何读取带有空格的字符串"><span class="nav-number">1.1.</span> <span class="nav-text">如何读取带有空格的字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法使用cin-getline-或者cin-get"><span class="nav-number">1.1.1.</span> <span class="nav-text">解决方法使用cin.getline() 或者cin.get()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连续读取"><span class="nav-number">1.1.2.</span> <span class="nav-text">连续读取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string类读取"><span class="nav-number">1.2.</span> <span class="nav-text">string类读取</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#输入输出"><span class="nav-number">1.</span> <span class="nav-text">输入输出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何读取带有空格的字符串"><span class="nav-number">1.1.</span> <span class="nav-text">如何读取带有空格的字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法使用cin-getline-或者cin-get"><span class="nav-number">1.1.1.</span> <span class="nav-text">解决方法使用cin.getline() 或者cin.get()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连续读取"><span class="nav-number">1.1.2.</span> <span class="nav-text">连续读取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string类读取"><span class="nav-number">1.2.</span> <span class="nav-text">string类读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式化输入输出"><span class="nav-number">1.3.</span> <span class="nav-text">格式化输入输出</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -351,20 +357,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">55</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -398,12 +404,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">136k</span>
+    <span title="站点总字数">156k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:46</span>
+    <span title="站点阅读时长">4:20</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -413,7 +419,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共63k字</span>
+  <span class="post-count">博客全站共70.3k字</span>
 </div>
 
         
