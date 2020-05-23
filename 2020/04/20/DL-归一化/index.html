@@ -55,7 +55,7 @@
 <meta property="og:description" content="Normalization">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;其他归一化.png">
-<meta property="og:updated_time" content="2020-04-21T13:14:48.257Z">
+<meta property="og:updated_time" content="2020-05-18T05:55:33.920Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;其他归一化.png">
 
@@ -226,7 +226,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-21 21:14:48" itemprop="dateModified" datetime="2020-04-21T21:14:48+08:00">2020-04-21</time>
+                <time title="修改时间：2020-05-18 13:55:33" itemprop="dateModified" datetime="2020-05-18T13:55:33+08:00">2020-05-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -267,7 +267,7 @@
       
         <h1 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h1><a id="more"></a>
 
-    <div id="aplayer-LcdpwUri" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+    <div id="aplayer-kOClEClN" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h1 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h1><h2 id="为什么会提出BN"><a href="#为什么会提出BN" class="headerlink" title="为什么会提出BN"></a>为什么会提出BN</h2><p>深度神经网络训练困难的一个重要原因是：深度神经网络涉及很多层的叠加，而每一层的参数更新会导致上一层的输入数据分布发生变化。这会带来两个问题：</p>
 <ul>
 <li>下层输入的变化可能趋向于变大或者变小，导致上层落入饱和区，使得学习过早停止。</li>
@@ -276,7 +276,7 @@
 <h2 id="BN的目的"><a href="#BN的目的" class="headerlink" title="BN的目的"></a>BN的目的</h2><p>将神经网络的每一层的输入的分布限定其均值和方差。</p>
 <h2 id="BN的算法"><a href="#BN的算法" class="headerlink" title="BN的算法"></a>BN的算法</h2><h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><p>假设$H = {h_1,h_2,…h_m}$为神经网络某一层的mini-batch的输入，m为batch大小，n为输入的维度。</p>
 <ol>
-<li>计算输入的<strong>每个维度</strong>的均值和标准差：</li>
+<li>计算输入的<strong>每个维度</strong>的均值和方差：</li>
 </ol>
 <script type="math/tex; mode=display">
 \bar{\mu} = \frac{1}{m}\sum_{i=1}^{m}h_i\\
@@ -297,7 +297,7 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
 <li><p>归一化一个神经元的均值和标准差会降低包含该神经元的神经网络的表达能力。(若每个神经元的输出都是均值为0、标准差为 1 ，则会产生两个问题：</p>
 <ul>
 <li>无论底层的神经元如何学习，其输出在提交给上层神经元处理之前，都被粗暴的归一化。导致底层神经元的学习毫无意义</li>
-<li>sigmoid 等激活函数通过区分饱和区、非饱和区（线性区），使得神经网络具有非线性计算<br>的能力。输入归一化使得数据几乎都被映射到激活函数的线性区，从而降低了模型的表达能力。)</li>
+<li>sigmoid 等激活函数通过区分饱和区、非饱和区（线性区），使得神经网络具有非线性计算的能力。输入归一化使得数据几乎都被映射到激活函数的线性区，从而降低了模型的表达能力。)</li>
 </ul>
 </li>
 <li><p>所以缩放的原因就是保证模型的表达能力不会降低</p>
@@ -395,8 +395,8 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/20/Cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-1/" rel="prev" title="Cpp学习笔记-1">
-      <i class="fa fa-chevron-left"></i> Cpp学习笔记-1
+    <a href="/2020/04/20/Cpp-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" rel="prev" title="Cpp-输入输出">
+      <i class="fa fa-chevron-left"></i> Cpp-输入输出
     </a></div>
       <div class="post-nav-item">
     <a href="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" rel="next" title="DL-激活函数">
@@ -468,7 +468,7 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -502,12 +502,12 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">181k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:20</span>
+    <span title="站点阅读时长">5:01</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -517,7 +517,7 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共70.3k字</span>
+  <span class="post-count">博客全站共86.6k字</span>
 </div>
 
         

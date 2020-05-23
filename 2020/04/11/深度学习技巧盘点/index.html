@@ -69,7 +69,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;mobilenet.webp">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;U-Net.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;Linknet.png">
-<meta property="og:updated_time" content="2020-04-11T08:32:40.933Z">
+<meta property="og:updated_time" content="2020-05-04T17:08:20.345Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;相对感受野.png">
 
@@ -232,10 +232,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-04-11 11:42:55 / 修改时间：16:32:40" itemprop="dateCreated datePublished" datetime="2020-04-11T11:42:55+08:00">2020-04-11</time>
+              <time title="创建时间：2020-04-11 11:42:55" itemprop="dateCreated datePublished" datetime="2020-04-11T11:42:55+08:00">2020-04-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-05 01:08:20" itemprop="dateModified" datetime="2020-05-05T01:08:20+08:00">2020-05-05</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -254,7 +260,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.5k</span>
+              <span>3.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -275,7 +281,7 @@
       
         <h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><a id="more"></a>
 
-    <div id="aplayer-OQUfUxVr" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+    <div id="aplayer-qHTdIxLu" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h1 id="设计技巧"><a href="#设计技巧" class="headerlink" title="设计技巧"></a>设计技巧</h1><h2 id="深度-and-宽度"><a href="#深度-and-宽度" class="headerlink" title="深度 and 宽度"></a>深度 and 宽度</h2><ol>
 <li>深度决定了网络的表达能力，网络越深学习能力越强。</li>
 <li>宽度（通道数）决定了网络在某一层学到的信息量，另外因为卷积层能重组通道间的信息，这一操作能让有效信息量增大（这也是1x1卷积的作用，它能学习出重组信息，使得对于任务更友好 ）</li>
@@ -331,8 +337,11 @@
 <p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/inception1.webp" alt="inception1"></p>
 <p>inception-V2：连续两个3*3的卷积代替5*5，同时提出BN，在tf中BN在激活之前效果更好。网络加深，参数减少。</p>
 <p>inception-V3：提出用1*n和n*1卷积核代替n*n，网络加深，参数减少。</p>
-<h1 id="Resnet"><a href="#Resnet" class="headerlink" title="Resnet"></a>Resnet</h1><p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/Resnet.png" alt="Resnet"></p>
-<p>为什么残差结构是有效的呢？这是因为引入残差之后的特征映射对输出的变化更加敏感，也即是说梯度更加，更容易训练。 </p>
+<h1 id="Resnet"><a href="#Resnet" class="headerlink" title="Resnet"></a>Resnet</h1><p>退化问题：</p>
+<p>随着网络深度的增加，准确度变得饱和，然后迅速退化，这种退化不是过拟合造成的，并且在适当的深度模型中添加更多的层会导致更高的训练误差。</p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/Resnet.png" alt="Resnet"></p>
+<p>为什么残差结构是有效的呢？</p>
+<p>这是因为引入残差之后的特征映射对输出的变化更加敏感，也即是说梯度更大，更容易训练。 </p>
 <p>推导一下残差结构的梯度计算公式，假设从浅层到深层的学习特征$y = x+F(x,W)$，其中$F(x,W)$就是带权重的卷积之后的结果，我们可以反向求出损失函数对$x$的提取$\frac{dloss}{dx} = \frac{dloss}{dy} \times \frac{dy}{dx}=\frac{dloss}{dy}*(1+\frac{dF(x,W)}{dx})$，其中$\frac{dloss}{dy}$代表损失函数在最高层的梯度，小括号中的表示残差连接可以无损的传播梯度，而另外一项残差的梯度则需要经过带有可学习参数的卷积层。另外残差梯度不会巧合到全部为，而且就算它非常小也还有这一项存在，因此梯度会稳定的回传，不用担心梯度消失。同时因为残差一般会比较小，残差学习需要学习的内容少，学习难度也变小，学习就更容易。 </p>
 <h1 id="ResNeXt"><a href="#ResNeXt" class="headerlink" title="ResNeXt"></a>ResNeXt</h1><p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/ResNext.webp" alt="ResNext"></p>
 <h1 id="Xception"><a href="#Xception" class="headerlink" title="Xception"></a>Xception</h1><p>深度可分离卷积，通过3*3卷积和1*1卷积减少计算量。（其实就是3*3*1的卷积+1*1*通道数，代替3*3*通道数）</p>
@@ -469,7 +478,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -503,12 +512,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">181k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:20</span>
+    <span title="站点阅读时长">5:01</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -518,7 +527,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共70.3k字</span>
+  <span class="post-count">博客全站共86.6k字</span>
 </div>
 
         

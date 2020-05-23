@@ -60,7 +60,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;RMSprop.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;RMSprop+动量.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;Adam.png">
-<meta property="og:updated_time" content="2020-04-24T09:03:44.586Z">
+<meta property="og:updated_time" content="2020-05-07T08:51:59.528Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;SGD.png">
 
@@ -231,7 +231,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-24 17:03:44" itemprop="dateModified" datetime="2020-04-24T17:03:44+08:00">2020-04-24</time>
+                <time title="修改时间：2020-05-07 16:51:59" itemprop="dateModified" datetime="2020-05-07T16:51:59+08:00">2020-05-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -272,7 +272,7 @@
       
         <h1 id="基本优化算法"><a href="#基本优化算法" class="headerlink" title="基本优化算法"></a>基本优化算法</h1><a id="more"></a>
 
-    <div id="aplayer-ESfedvXS" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+    <div id="aplayer-mukGHxLh" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h2 id="GD"><a href="#GD" class="headerlink" title="GD"></a>GD</h2><p>网络更新参数的公式为：$\theta=\theta-\eta \times \nabla_{\theta}J(\theta)$其中η是学习率，$\nabla_{\theta}J(\theta)$是损失函数$J(θ)$的梯度。</p>
 <p>梯度下降中，对于$θ$的更新，所有的样本都有贡献，也就是参与调整$θ$ 。其计算得到的是一个标准梯度。因而理论上来说一次更新的幅度是比较大的。如果样本不多的情况下，当然是这样收敛的速度会更快。 </p>
 <h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
@@ -322,7 +322,7 @@ r = r + g \odot g\\
 <li>AdaGrad 学习速率减小的时机过早，且减小的幅度过大。因为学习率与历史梯度的平方和的开方成反比，导致过快、过多的下降。</li>
 <li>学习率可能衰减至0，导致提前结束</li>
 </ul>
-<h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><p>将梯度累计策略修改为指数加权的移动平均</p>
+<h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><p>将梯度累计策略修改为指数平方加权的移动平均</p>
 <script type="math/tex; mode=display">
 r = \lambda r + (1-\lambda)g \odot g\\
 \theta = \theta-\frac{\epsilon}{\sqrt{\bar r} }\odot g\\
@@ -374,8 +374,8 @@ r=\beta_2*r+(1-\beta_2)*g \odot g\\
       <i class="fa fa-chevron-left"></i> DL-激活函数
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/04/21/Cpp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-2/" rel="next" title="Cpp学习笔记-2">
-      Cpp学习笔记-2 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/04/21/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-Faster-Rcnnn/" rel="next" title="目标检测 Faster Rcnnn">
+      目标检测 Faster Rcnnn <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -443,7 +443,7 @@ r=\beta_2*r+(1-\beta_2)*g \odot g\\
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -477,12 +477,12 @@ r=\beta_2*r+(1-\beta_2)*g \odot g\\
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">181k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:20</span>
+    <span title="站点阅读时长">5:01</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -492,7 +492,7 @@ r=\beta_2*r+(1-\beta_2)*g \odot g\\
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共70.3k字</span>
+  <span class="post-count">博客全站共86.6k字</span>
 </div>
 
         

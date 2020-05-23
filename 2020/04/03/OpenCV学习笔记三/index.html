@@ -46,18 +46,18 @@
   };
 </script>
 
-  <meta name="description" content="使用OpenCV处理图像 图像平滑 阈值分割">
-<meta name="keywords" content="OpenCV">
+  <meta name="description" content="使用OpenCV处理图像 滤波 图像平滑 阈值分割">
+<meta name="keywords" content="图像平滑,阈值分割">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenCV学习笔记三">
 <meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%89&#x2F;index.html">
 <meta property="og:site_name" content="李小阳小李">
-<meta property="og:description" content="使用OpenCV处理图像 图像平滑 阈值分割">
+<meta property="og:description" content="使用OpenCV处理图像 滤波 图像平滑 阈值分割">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%89&#x2F;双边滤波.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%89&#x2F;导向滤波原理图.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%89&#x2F;导向滤波.png">
-<meta property="og:updated_time" content="2020-04-04T16:08:14.851Z">
+<meta property="og:updated_time" content="2020-05-09T06:58:54.886Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%89&#x2F;双边滤波.png">
 
@@ -228,7 +228,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-05 00:08:14" itemprop="dateModified" datetime="2020-04-05T00:08:14+08:00">2020-04-05</time>
+                <time title="修改时间：2020-05-09 14:58:54" itemprop="dateModified" datetime="2020-05-09T14:58:54+08:00">2020-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -236,8 +236,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" itemprop="url" rel="index">
-                    <span itemprop="name">图像处理</span>
+                  <a href="/categories/OpenCV/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenCV</span>
                   </a>
                 </span>
             </span>
@@ -268,12 +268,13 @@
 
       
         <h1 id="使用OpenCV处理图像"><a href="#使用OpenCV处理图像" class="headerlink" title="使用OpenCV处理图像"></a>使用OpenCV处理图像</h1><ul>
+<li>滤波</li>
 <li>图像平滑</li>
 <li>阈值分割</li>
 </ul>
 <a id="more"></a>
 
-    <div id="aplayer-WoADuaIL" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+    <div id="aplayer-GbxFkgBW" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h1 id="图像平滑"><a href="#图像平滑" class="headerlink" title="图像平滑"></a>图像平滑</h1><p>每一幅图像都包含某种程度的噪声，噪声可以理解为由一种或者多种原因造成的灰度值的随机变化，如由光子通量的随机性造成的噪声等，在大多数情况下，通过平滑技术（也常称为滤波技术）进行抑制或者去除，其中具备保持边缘（Edge Preserving）作用的平滑技术得到了更多的关注。常用的平滑处理算法包括基于二维离散卷积的高斯平滑、均值平滑，基于统计学方法的中值平滑，具备保持边缘作用的平滑算法的双边滤波、导向滤波等。</p>
 <h2 id="高斯平滑"><a href="#高斯平滑" class="headerlink" title="高斯平滑"></a>高斯平滑</h2><p>假设宽为W，高为H的高斯卷积算子$gaussKernel_{H \times W}$，其中W和H都是奇数，锚点的位置为$((H-1)/2,(W-1)/2)$</p>
 <ol>
@@ -377,7 +378,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/OpenCV/" rel="tag"># OpenCV</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%B9%B3%E6%BB%91/" rel="tag"># 图像平滑</a>
+              <a href="/tags/%E9%98%88%E5%80%BC%E5%88%86%E5%89%B2/" rel="tag"># 阈值分割</a>
           </div>
 
         
@@ -459,7 +461,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -493,12 +495,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">181k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:20</span>
+    <span title="站点阅读时长">5:01</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -508,7 +510,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共70.3k字</span>
+  <span class="post-count">博客全站共86.6k字</span>
 </div>
 
         

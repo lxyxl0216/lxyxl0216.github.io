@@ -47,7 +47,7 @@
 </script>
 
   <meta name="description" content="使用OpenCV处理图像 插值算法 对比度增强算法">
-<meta name="keywords" content="OpenCV">
+<meta name="keywords" content="插值,对比度增强">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenCV学习笔记二">
 <meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8C&#x2F;index.html">
@@ -62,7 +62,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8C&#x2F;灰度直方图.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8C&#x2F;分段线性变换.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8C&#x2F;CLAHE.png">
-<meta property="og:updated_time" content="2020-04-03T06:35:31.918Z">
+<meta property="og:updated_time" content="2020-05-09T06:57:46.006Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8C&#x2F;最近邻插值.jpg">
 
@@ -233,7 +233,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-03 14:35:31" itemprop="dateModified" datetime="2020-04-03T14:35:31+08:00">2020-04-03</time>
+                <time title="修改时间：2020-05-09 14:57:46" itemprop="dateModified" datetime="2020-05-09T14:57:46+08:00">2020-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,8 +241,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" itemprop="url" rel="index">
-                    <span itemprop="name">图像处理</span>
+                  <a href="/categories/OpenCV/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenCV</span>
                   </a>
                 </span>
             </span>
@@ -278,7 +278,7 @@
 </ul>
 <a id="more"></a>
 
-    <div id="aplayer-LQUTZqkn" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+    <div id="aplayer-RJnfDpwW" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h2 id="插值算法"><a href="#插值算法" class="headerlink" title="插值算法"></a>插值算法</h2><h3 id="最近邻插值"><a href="#最近邻插值" class="headerlink" title="最近邻插值"></a>最近邻插值</h3><p>最近邻法实际上是不需要计算新图像矩阵中点的数值的，直接找到原图像中对应的点，将数值赋值给新图像矩阵中的点，根据对应关系找到原图像中的对应的坐标，这个坐标可能不是整数，这时候找最近的点进行插值。对应关系如下： </p>
 <script type="math/tex; mode=display">
 src_x =des_x*src_w/des_w\\
@@ -381,7 +381,8 @@ a = \frac{O_{max}-O_{min}}{I_{max}-I_{min}},b = O_{min}-\frac{O_{max}-O_{min}}{I
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/OpenCV/" rel="tag"># OpenCV</a>
+              <a href="/tags/%E6%8F%92%E5%80%BC/" rel="tag"># 插值</a>
+              <a href="/tags/%E5%AF%B9%E6%AF%94%E5%BA%A6%E5%A2%9E%E5%BC%BA/" rel="tag"># 对比度增强</a>
           </div>
 
         
@@ -463,7 +464,7 @@ a = \frac{O_{max}-O_{min}}{I_{max}-I_{min}},b = O_{min}-\frac{O_{max}-O_{min}}{I
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">52</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -497,12 +498,12 @@ a = \frac{O_{max}-O_{min}}{I_{max}-I_{min}},b = O_{min}-\frac{O_{max}-O_{min}}{I
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">156k</span>
+    <span title="站点总字数">181k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:20</span>
+    <span title="站点阅读时长">5:01</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -512,7 +513,7 @@ a = \frac{O_{max}-O_{min}}{I_{max}-I_{min}},b = O_{min}-\frac{O_{max}-O_{min}}{I
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共70.3k字</span>
+  <span class="post-count">博客全站共86.6k字</span>
 </div>
 
         
