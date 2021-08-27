@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="降维与度量学习">
+<meta name="keywords" content="降维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ML-降维">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="降维与度量学习">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;knn.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;泛化误差.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;重构误差.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;PCA.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;LDA.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;SVD.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;MDS.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;Isomap.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;LLE.png">
+<meta property="og:updated_time" content="2020-04-11T13:51:18.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;ML-%E9%99%8D%E7%BB%B4&#x2F;knn.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/11/ML-%E9%99%8D%E7%BB%B4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ML-降维 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/11/ML-%E9%99%8D%E7%BB%B4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ML-降维
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-11 16:34:45 / 修改时间：21:51:18" itemprop="dateCreated datePublished" datetime="2020-04-11T16:34:45+08:00">2020-04-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="降维与度量学习"><a href="#降维与度量学习" class="headerlink" title="降维与度量学习"></a>降维与度量学习</h1><a id="more"></a>
+
+    <div id="aplayer-iTShGHYP" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="k近邻"><a href="#k近邻" class="headerlink" title="k近邻"></a>k近邻</h1><p>k近邻(k-Nearest Neighbor, 简称kNN)学习是一种常用的监督学习方法，其工作机制非常简单：给定测试样本，基于某种距离度量找出训练集中与其最靠近的K个训练样本，然后基于这k个“邻居” 的信息来进行预测通常，在分类任务中可使用“投票法”</p>
+<p>机器学习分类：</p>
+<ul>
+<li>懒惰学习</li>
+<li>急切学习</li>
+</ul>
+<p>knn属于懒惰学习</p>
+<p>此类学习技术在训练阶段仅仅是把样本保存起来，训练时间开销为零，待收到测试样本后再进行处理；相应的，那些在训练阶段就对样本进行学习处理的方法，称为“ 急切学习”</p>
+<p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/knn.png" alt="knn"></p>
+<p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/泛化误差.png" alt="泛化误差"></p>
+<p>最近邻分类器虽简单，但它的泛化错误率不超过贝叶斯最优分类器的错误率的两倍！</p>
+<h1 id="降维方法分类"><a href="#降维方法分类" class="headerlink" title="降维方法分类"></a>降维方法分类</h1><ul>
+<li>线性降维<ul>
+<li>PCA</li>
+</ul>
+</li>
+<li>非线性降维<ul>
+<li>KPCA</li>
+<li>流形降维</li>
+<li>lsomap</li>
+<li>LLE</li>
+</ul>
+</li>
+</ul>
+<h1 id="主成分分析"><a href="#主成分分析" class="headerlink" title="主成分分析"></a>主成分分析</h1><h2 id="PCA算法"><a href="#PCA算法" class="headerlink" title="PCA算法"></a>PCA算法</h2><h3 id="坐标变换"><a href="#坐标变换" class="headerlink" title="坐标变换"></a>坐标变换</h3><ul>
+<li>样本中心化：即减去均值$x = x-\sum^N x/N$</li>
+<li>坐标变换：$z = Wx$</li>
+</ul>
+<p>降维的物理意义为：通过线性组合原始特征，从而去掉一些冗余的或者不重要的特征、保留重要的特征。 </p>
+<h3 id="重构误差"><a href="#重构误差" class="headerlink" title="重构误差"></a>重构误差</h3><ul>
+<li>对z进行重构 $\hat x = Wz$</li>
+<li>重构误差为$mse(\hat x,x)$</li>
+<li>PCA降维要求重构误差最小</li>
+</ul>
+<p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/重构误差.png" alt="重构误差"></p>
+<p> <code>PCA</code> 最优化问题需要求解就是$X^TX$ 的特征值。</p>
+<ul>
+<li>只需要对矩阵$X^TX$进行特征值分解，将求得的特征值排序：$\lambda_1,\lambda_2,…\lambda_n$  。然后取前d个特征值对应的单位特征向量构成坐标变换矩$W = (w1,w2,…wd)$。</li>
+<li>当样本数据进行了中心化时$\sum xx^T=X^TX$，  就是样本集的协方差矩阵。这也是为什么需要对样本进行中心化的一个原因。</li>
+</ul>
+<p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/PCA.png" alt="PCA"></p>
+<p>通常低维空间维数d的选取有两种方法：</p>
+<ul>
+<li><p>通过交叉验证法选取较好的d。<code>比较好</code>指的是在降维后的学习器的性能比较好。</p>
+</li>
+<li><p>从算法原理的角度设置一个阈值，比如$t = 95\%$，然后选取使得下式成立的最小的d的值： 其中$\lambda_i$从大到小排列。</p>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+\frac{\sum_{i=1}^d \lambda_i}{\sum_{i=1}^n \lambda_i} \geq t</script><ul>
+<li><code>PCA</code>不仅将数据压缩到低维，它也使得降维之后的数据各特征相互独立。 </li>
+<li><code>PCA</code>算法中，低维空间与高维空间必然不相同 </li>
+<li>对于训练集、验证集、测试集，当对训练集进行<code>PCA</code> 降维时，也需要对验证集、测试集执行同样的降维。 </li>
+</ul>
+<p><code>PCA</code>降维的准则有两个：</p>
+<ul>
+<li>最近重构性：样本集中所有点，重构后的点距离原来的点的误差之和最小（就是前面介绍的内容）。</li>
+<li>最大可分性：样本点在低维空间的投影尽可能分开。</li>
+</ul>
+<h2 id="LDA线性判别分析"><a href="#LDA线性判别分析" class="headerlink" title="LDA线性判别分析"></a>LDA线性判别分析</h2><p>LDA的思想非常朴素给定训练样例集，设法将样例投影到一条直线上，使得同类样例的投影点尽可能接近、异类样例的投影点尽可能远离，在对新样本进行分类时，将其投影到同样的这条直线上，冉根据投影点的位置来确定新样本的类别。</p>
+<p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/LDA.png" alt="LDA"></p>
+<p><code>LDA</code> 也可以用于降维。对于2维空间降低到1维直线的情况下，它设法将样例投影到某一条直线上，使得同类样例的投影点尽可能接近、异类样例的投影点尽可能远离。</p>
+<ul>
+<li><code>LDA</code> 考虑的是：向类别区分最大的方向投影。如下图中的绿色投影直线。</li>
+<li><code>PCA</code> 考虑的是：向方差最大的方向投影。如下图中的紫色投影直线。</li>
+</ul>
+<p>因此<code>LDA</code> 降维对于类别的区分效果要好的多。</p>
+<h2 id="SVD奇异值分解"><a href="#SVD奇异值分解" class="headerlink" title="SVD奇异值分解"></a>SVD奇异值分解</h2><p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/SVD.png" alt="SVD"></p>
+<p><code>SVD</code>奇异值分解等价于<code>PCA</code>主成分分析，核心都是求解 的特征值以及对应的单位特征向量。 </p>
+<h2 id="KPCA核化线性降维"><a href="#KPCA核化线性降维" class="headerlink" title="KPCA核化线性降维"></a>KPCA核化线性降维</h2><p><code>PCA</code>方法假设从高维空间到低维空间的映射是线性的，但是在不少现实任务中可能需要非线性映射才能找到合适的低维空间来降维。</p>
+<p>非线性降维的一种常用方法是基于核技巧对线性降维方法进行核化<code>kernelized</code>， 如核主成分分析<code>Kernelized PCA:KPCA</code></p>
+<ul>
+<li>通过核函数先升维，在用PCA降维</li>
+<li><code>KPCA</code>需要对所有样本求和，因此它的计算开销较大。 </li>
+</ul>
+<h1 id="流形学习"><a href="#流形学习" class="headerlink" title="流形学习"></a>流形学习</h1><ol>
+<li><p>流形学习<code>manifold learning</code>是一类借鉴了拓扑流形概念的降维方法。</p>
+</li>
+<li><p>流形是在局部和欧氏空间同胚的空间，它在局部具有欧氏空间的性质，能用欧氏距离进行距离计算。</p>
+<p>如果低维流形嵌入到高维空间中，则数据样本在高维空间的分布虽然看起来非常复杂，但是在局部上仍然具有欧氏空间的性质。</p>
+</li>
+<li><p>当维数被降低至二维或者三维时，能对数据进行可视化展示，因此流形学习也可用于可视化。</p>
+</li>
+<li><p>流形学习对于噪音数据非常敏感。噪音数据可能出现在两个区域连接处：</p>
+<ul>
+<li>如果没有出现噪音，这两个区域是断路的。</li>
+<li>如果出现噪音，这两个区域是短路的。</li>
+</ul>
+</li>
+</ol>
+<h2 id="MDS多维缩放算法"><a href="#MDS多维缩放算法" class="headerlink" title="MDS多维缩放算法"></a>MDS多维缩放算法</h2><p>多维缩放<code>Multiple Dimensional Scaling:MDS</code>要求原始空间中样本之间的距离在低维空间中得到保持。 </p>
+<p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/MDS.png" alt="MDS"></p>
+<h2 id="Isomap-等度量映射"><a href="#Isomap-等度量映射" class="headerlink" title="Isomap 等度量映射"></a>Isomap 等度量映射</h2><p>等度量映射 <code>Isometric Mapping:Isomap</code>的基本观点是：低维流形嵌入到高维空间后，直接在高维空间中计算直线距离具有误导性。因为在高维空间中的直线距离在低维嵌入流形上是不可达的。 </p>
+<p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/Isomap.png" alt="Isomap"></p>
+<h2 id="LLE局部线性嵌入"><a href="#LLE局部线性嵌入" class="headerlink" title="LLE局部线性嵌入"></a>LLE局部线性嵌入</h2><p>与<code>Isomap</code>试图保持邻域内样本之间的距离不同，局部线性嵌入<code>Locally Linear Embedding:LLE</code>试图保持邻域内样本之间的线性关系。</p>
+<p>这种线性保持在二维空间中就是保持共线性，三维空间中就是保持共面性。</p>
+<p><img src="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/LLE.png" alt="LLE"></p>
+<h1 id="度量学习"><a href="#度量学习" class="headerlink" title="度量学习"></a>度量学习</h1><ol>
+<li><p>在机器学习中对高维数据进行降维的主要目的是：希望找出一个合适的低维空间，在这个低维空间中进行学习能比原始空间性能更好。</p>
+<p>每个空间对应了在样本属性上定义的一个距离度量。寻找合适的空间，本质上就是在寻找一个合适的距离度量。</p>
+</li>
+<li><p>度量学习<code>metric learning</code>的思想就是：尝试直接学习出一个合适的距离度量。</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%99%8D%E7%BB%B4/" rel="tag"># 降维</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/" rel="prev" title="卷积计算">
+      <i class="fa fa-chevron-left"></i> 卷积计算
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/11/%E4%BA%8C%E5%8F%89%E6%A0%91-2/" rel="next" title="二叉树-2">
+      二叉树-2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#降维与度量学习"><span class="nav-number">1.</span> <span class="nav-text">降维与度量学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#k近邻"><span class="nav-number">2.</span> <span class="nav-text">k近邻</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#降维方法分类"><span class="nav-number">3.</span> <span class="nav-text">降维方法分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主成分分析"><span class="nav-number">4.</span> <span class="nav-text">主成分分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA算法"><span class="nav-number">4.1.</span> <span class="nav-text">PCA算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#坐标变换"><span class="nav-number">4.1.1.</span> <span class="nav-text">坐标变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重构误差"><span class="nav-number">4.1.2.</span> <span class="nav-text">重构误差</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LDA线性判别分析"><span class="nav-number">4.2.</span> <span class="nav-text">LDA线性判别分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVD奇异值分解"><span class="nav-number">4.3.</span> <span class="nav-text">SVD奇异值分解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KPCA核化线性降维"><span class="nav-number">4.4.</span> <span class="nav-text">KPCA核化线性降维</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流形学习"><span class="nav-number">5.</span> <span class="nav-text">流形学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MDS多维缩放算法"><span class="nav-number">5.1.</span> <span class="nav-text">MDS多维缩放算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Isomap-等度量映射"><span class="nav-number">5.2.</span> <span class="nav-text">Isomap 等度量映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLE局部线性嵌入"><span class="nav-number">5.3.</span> <span class="nav-text">LLE局部线性嵌入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#度量学习"><span class="nav-number">6.</span> <span class="nav-text">度量学习</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

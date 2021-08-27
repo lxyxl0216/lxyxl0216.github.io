@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="基本优化算法">
+<meta name="keywords" content="基本优化算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DL-优化算法">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="基本优化算法">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;SGD.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;动量.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;Adagrad.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;RMSprop.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;RMSprop+动量.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;Adam.png">
+<meta property="og:updated_time" content="2020-05-07T08:51:59.528Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;SGD.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>DL-优化算法 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DL-优化算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 22:40:40" itemprop="dateCreated datePublished" datetime="2020-04-20T22:40:40+08:00">2020-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-07 16:51:59" itemprop="dateModified" datetime="2020-05-07T16:51:59+08:00">2020-05-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="基本优化算法"><a href="#基本优化算法" class="headerlink" title="基本优化算法"></a>基本优化算法</h1><a id="more"></a>
+
+    <div id="aplayer-TGvTWKdM" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h2 id="GD"><a href="#GD" class="headerlink" title="GD"></a>GD</h2><p>网络更新参数的公式为：$\theta=\theta-\eta \times \nabla_{\theta}J(\theta)$其中η是学习率，$\nabla_{\theta}J(\theta)$是损失函数$J(θ)$的梯度。</p>
+<p>梯度下降中，对于$θ$的更新，所有的样本都有贡献，也就是参与调整$θ$ 。其计算得到的是一个标准梯度。因而理论上来说一次更新的幅度是比较大的。如果样本不多的情况下，当然是这样收敛的速度会更快。 </p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>在处理大型数据集时速度很慢且难以控制，甚至导致内存溢出。</li>
+<li>权重更新的快慢是由学习率η决定的，并且可以在凸面误差曲面中收敛到全局最优值，在非凸曲面中可能趋于局部最优值。</li>
+<li>使用标准形式的批量梯度下降还有一个问题，就是在训练大型数据集时存在冗余的权重更新。</li>
+</ul>
+<h2 id="mini-SGD"><a href="#mini-SGD" class="headerlink" title="mini-SGD"></a>mini-SGD</h2><script type="math/tex; mode=display">
+\theta = \theta-\epsilon \nabla_{\theta}J(\theta)</script><p>随机梯度下降沿着随机挑选的mini-batch 数据的梯度下降方向推进，可以很大程度的加速训练过程。</p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/SGD.png" alt="SGD"></p>
+<h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>可以减少参数更新的波动，最终得到效果更好和更稳定的收敛。</li>
+<li>可以使用最新的深层学习库中通用的矩阵优化方法，使计算小批量数据的梯度更加高效。</li>
+<li>可以解决高方差的参数更新和不稳定收敛的问题</li>
+</ul>
+<h3 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>每次梯度的方向不确定，可能需要很长时间接近最小值点 （更新时间长）</li>
+<li></li>
+</ul>
+<h2 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h2><script type="math/tex; mode=display">
+v=\alpha v-\epsilon \nabla_{\theta}J(\theta)\\
+\theta = \theta+v</script><p>动量方法积累了之前梯度的指数级衰减的移动平均，然后继续沿着该方向移动。</p>
+<ul>
+<li>它是一种移动平均，权重是指数级衰减的：近期的权重较大，远期的权重很小。</li>
+<li>动量方法取这些加权梯度的均值，根据该均值的方向决定参数的更新方向。</li>
+<li>在原步长之上，增加了与上一时刻步长相关的$v$，$\alpha$为衰减指数通常取 0.9 左右。</li>
+<li>这意味着<strong>参数更新方向不仅由当前的梯度决定，也与此前累积的下降方向有关</strong>。这使得参数中那些梯度方向变化不大的维度可以加速更新，并减少梯度方向变化较大的维度上的更新幅度。由此产生了加速收敛和减小震荡的效果。</li>
+</ul>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/动量.png" alt="动量"></p>
+<h3 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>使网络能更优和更稳定的收敛；</li>
+<li>减少振荡过程；</li>
+<li>当其梯度指向实际移动方向时，动量项v增大；当梯度与实际移动方向相反时，v减小。这种方式意味着动量项只对相关样本进行参数更新，减少了不必要的参数更新，从而得到更快且稳定的收敛，也减少了振荡过程。通过优化相关方向的训练和弱化无关方向的振荡，来加速SGD训练。</li>
+</ul>
+<h2 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h2><p>AdaGrad 算法的思想是：参数空间每个方向的学习率反比于某个值的平方根。这个值就是该方向上累计的梯度分量的平方值之和。</p>
+<script type="math/tex; mode=display">
+r = r + g \odot g\\
+\theta = \theta-\frac{\epsilon}{\sqrt{\bar r} }\odot g</script><ul>
+<li><p>如果代价函数在某个方向上有较大偏导数，则这个方向上学习率降低</p>
+</li>
+<li><p>如果代价函数在某个方向上有较小偏导数，则这个方向上学习率提高</p>
+</li>
+<li>由于随着迭代次数的增加，r也在增大，因此起到了衰减学习率的作用</li>
+</ul>
+<h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/Adagrad.png" alt="Adagrad"></p>
+<h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>AdaGrad 学习速率减小的时机过早，且减小的幅度过大。因为学习率与历史梯度的平方和的开方成反比，导致过快、过多的下降。</li>
+<li>学习率可能衰减至0，导致提前结束</li>
+</ul>
+<h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><p>将梯度累计策略修改为指数平方加权的移动平均</p>
+<script type="math/tex; mode=display">
+r = \lambda r + (1-\lambda)g \odot g\\
+\theta = \theta-\frac{\epsilon}{\sqrt{\bar r} }\odot g\\
+\lambda 是衰减速率，指定了指数加权移动平均的有效长度</script><h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/RMSprop.png" alt="RMSprop"></p>
+<p> <img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/RMSprop+动量.png" alt="RMSprop+动量"></p>
+<h3 id="优点-3"><a href="#优点-3" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>与动量相比， RMSProp 不需要手动配置学习率超参数，由算法自动完成。</li>
+<li>AdaGrad当应用于非凸函数训练神经网络时，学习轨迹可能穿过了很多不同的结构，最终到达一个局部是凸碗的区域。AdaGrad根据平方梯度的整个历史收缩学习率，可能使得学习率在达到这样的凸结构前就变得太小了</li>
+</ul>
+<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><p>结合了AdaGrad和RMSProp ，能计算每个参数的自适应学习率；不仅使用了平方梯度的指数衰减平均值，而且保持了梯度的指数衰减平均值，这一点与动量类似</p>
+<script type="math/tex; mode=display">
+s=\beta_1*s+(1-\beta_1)*g\\
+r=\beta_2*r+(1-\beta_2)*g \odot g\\
+\theta = \theta -\epsilon\frac{s}{\sqrt{r}}*g</script><p> 计算了每个梯度分量的指数平均和梯度分量的平方指数平均 </p>
+<h3 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/Adam.png" alt="Adam"></p>
+<h3 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h3><ul>
+<li>无论梯度的大小如何， Adam 算法的参数更新步长几乎都是$\epsilon$，相比较而言， AdaGrad 和 RMSProp 算法的参数更新步长随时间在减少。</li>
+</ul>
+<h3 id="优点-4"><a href="#优点-4" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>与其他自适应学习率算法相比，其收敛速度更快，学习效果更为有效</li>
+<li>而且可以纠正其他优化技术中存在的问题，如学习率消失、收敛过慢或是高方差的参数更新导致损失函数波动较大等问题。</li>
+<li>在实际应用中，Adam方法效果良好。</li>
+<li>自适应算法能很快收敛，并快速找到参数更新中正确的目标方向；而标准的SGD、NAG和动量项等方法收敛缓慢，且很难找到正确的方向。 </li>
+</ul>
+<h3 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>在某些情况下， Adam 可能导致训练不收敛。主要原因是：随着时间窗口的变化，遇到的数据可能发生巨变。这就使得$\sqrt{r}$可能会时大时小，从而使得调整后的学习率 不再是单调递减的。</li>
+<li>AdaDelta 、RMSProp 算法也都存在这样的问题。</li>
+<li>虽然在训练早期Adam 具有很好的收敛速度，但是最终模型的泛化能力并不如使用朴素的SGD 训练得到的模型好： Adam 训练的模型得到的测试集误差会更大。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E6%9C%AC%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" rel="tag"># 基本优化算法</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" rel="prev" title="DL-激活函数">
+      <i class="fa fa-chevron-left"></i> DL-激活函数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/21/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B-Faster-Rcnnn/" rel="next" title="目标检测 Faster Rcnnn">
+      目标检测 Faster Rcnnn <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本优化算法"><span class="nav-number">1.</span> <span class="nav-text">基本优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GD"><span class="nav-number">1.1.</span> <span class="nav-text">GD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">1.1.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">1.1.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mini-SGD"><span class="nav-number">1.2.</span> <span class="nav-text">mini-SGD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法"><span class="nav-number">1.2.1.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Momentum"><span class="nav-number">1.3.</span> <span class="nav-text">Momentum</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点-2"><span class="nav-number">1.3.2.</span> <span class="nav-text">优点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adagrad"><span class="nav-number">1.4.</span> <span class="nav-text">Adagrad</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点-2"><span class="nav-number">1.4.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMSprop"><span class="nav-number">1.5.</span> <span class="nav-text">RMSprop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点-3"><span class="nav-number">1.5.2.</span> <span class="nav-text">优点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam"><span class="nav-number">1.6.</span> <span class="nav-text">Adam</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法-4"><span class="nav-number">1.6.1.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性质"><span class="nav-number">1.6.2.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点-4"><span class="nav-number">1.6.3.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点-3"><span class="nav-number">1.6.4.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

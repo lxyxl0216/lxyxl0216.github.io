@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="第2章  模型评估与选择">
+<meta name="keywords" content="机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ML-模型评估与选择">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;03&#x2F;31&#x2F;ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="第2章  模型评估与选择">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;03&#x2F;31&#x2F;ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9&#x2F;混淆矩阵.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;03&#x2F;31&#x2F;ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9&#x2F;P-R示意图.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;03&#x2F;31&#x2F;ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9&#x2F;P-R平衡示意.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;03&#x2F;31&#x2F;ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9&#x2F;ROC-AUC.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;03&#x2F;31&#x2F;ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9&#x2F;二分类代价矩阵.png">
+<meta property="og:updated_time" content="2020-04-06T10:13:58.612Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;03&#x2F;31&#x2F;ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9&#x2F;混淆矩阵.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/03/31/ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ML-模型评估与选择 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/03/31/ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ML-模型评估与选择
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-31 21:19:08" itemprop="dateCreated datePublished" datetime="2020-03-31T21:19:08+08:00">2020-03-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-06 18:13:58" itemprop="dateModified" datetime="2020-04-06T18:13:58+08:00">2020-04-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="第2章-模型评估与选择"><a href="#第2章-模型评估与选择" class="headerlink" title="第2章  模型评估与选择"></a>第2章  模型评估与选择</h1><a id="more"></a>
+
+    <div id="aplayer-WSgoVXbC" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h2 id="2-1-经验误差与过拟合"><a href="#2-1-经验误差与过拟合" class="headerlink" title="2.1  经验误差与过拟合"></a>2.1  经验误差与过拟合</h2><ul>
+<li>训练集上的误差称为“ 训练误差”或“ 经验误差”</li>
+<li>在新样本上的误差称为“泛化误差” </li>
+<li>模型对未知数据的预测能力称作模型的泛化能力，它是模型最重要的性质。泛化误差可以反映模型的泛化能力：泛化误差越小，该模型越有效。</li>
+</ul>
+<h3 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a>过拟合</h3><ul>
+<li>由于学习能力过于强大，以至于把训练样本所包含的不太一般的特性都学到了</li>
+<li>无法避免</li>
+</ul>
+<h3 id="欠拟合"><a href="#欠拟合" class="headerlink" title="欠拟合"></a>欠拟合</h3><ul>
+<li>由于学习能力低下而造成的．</li>
+<li>解决方法：<ul>
+<li>决策树学习中扩展分支</li>
+<li>在神经网络学习中增加训练轮数等</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2评估方法"><a href="#2-2评估方法" class="headerlink" title="2.2评估方法"></a>2.2评估方法</h2><h3 id="2-2-1留出法"><a href="#2-2-1留出法" class="headerlink" title="2.2.1留出法"></a>2.2.1留出法</h3><p>直接将数据集D划分为两个互斥的集合，其中一个集合作为训练集s, 另一个作为测试集T。</p>
+<ul>
+<li>保留类别比例的采样方式通常称为“ 分层采样” ，即<strong>数据分布一致性</strong>。</li>
+<li>采用若干次随机划分、重复进行实验评估后取<strong>平均值</strong>作为留出法的评估结果</li>
+<li>缺点：在数据集比较大时， 训练m个模型的计算开销较大</li>
+</ul>
+<h3 id="2-2-2交叉验证法"><a href="#2-2-2交叉验证法" class="headerlink" title="2.2.2交叉验证法"></a>2.2.2交叉验证法</h3><p>数据集D<strong>随机</strong>划分为K个大小相似的互斥子集，然后，每次用K—1个子集的并集作为训练集，余卜的那个子集作为测试集；这样就可获得K组训练／测试集，从而可进行K次训练和测试，最终返回的是这K个测试结果的均值。</p>
+<ul>
+<li>数据分布一致性</li>
+<li>缺点：在数据集比较大时， 训练m个模型的计算开销较大</li>
+</ul>
+<h3 id="2-2-3自助法"><a href="#2-2-3自助法" class="headerlink" title="2.2.3自助法"></a>2.2.3自助法</h3><p>以自助采样法(bootstrap sampling)为基础。</p>
+<p>给定包含m个样本的数据集D , 我们对它进行采样产生数据集D’:每次随机从D中挑选一个样本，将其拷贝放入D’然, 后再将该样本放回初始数据集D中，使得该样本在下次采样时仍有可能被采到；这个过程重复执行m次后， 我们就得到了包含m个样本的数据集D’,这就是自助采样的结果。将D’用作训练集，D\D’用作测试集；这样，实际评估的模型与期望评估的模型都使用m个训练样本， 而我们仍有数据总量约1/3的、没在训练集中出现的样本用于测试．</p>
+<ul>
+<li>有一部分多次出现，有一部分未出现。未出现概率为$(1-1/m)^m=0.368$</li>
+<li>优点：在数据集较小、难以有效划分训练／测试集时很有用。</li>
+<li>缺点：自助法产生的数据集改变了初始数据集的分布，这会引入估计偏差．</li>
+</ul>
+<h3 id="2-2-4调参与最终模型"><a href="#2-2-4调参与最终模型" class="headerlink" title="2.2.4调参与最终模型"></a>2.2.4调参与最终模型</h3><p>采用验证集</p>
+<p>训练集训练，验证集调参，反复循环。</p>
+<h2 id="2-3性能度量"><a href="#2-3性能度量" class="headerlink" title="2.3性能度量"></a>2.3性能度量</h2><p>回归任务：均方误差</p>
+<h3 id="2-3-1错误率与精度"><a href="#2-3-1错误率与精度" class="headerlink" title="2.3.1错误率与精度"></a>2.3.1错误率与精度</h3><ul>
+<li><p>错误率是分类错误的样本数占样本总数的比例。</p>
+</li>
+<li><p>精度则是分类正确的样本数占样本总数的比例</p>
+</li>
+</ul>
+<h3 id="2-3-2-查准率、查全率与F1"><a href="#2-3-2-查准率、查全率与F1" class="headerlink" title="2.3.2 查准率、查全率与F1"></a>2.3.2 查准率、查全率与F1</h3><p><img src="/2020/03/31/ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/混淆矩阵.png" alt="分类结果混淆矩阵"></p>
+<ul>
+<li><p>准确率：$Acc  = \frac{TP+TN}{TP+TN+FP+FN}$</p>
+</li>
+<li><p>查准率：$Precission = \frac{TP}{TP+FP}$(所有预测为正的样本中实际为正的概率)</p>
+</li>
+<li><p>查全率：$Recall=\frac{TP}{TP+FN}$(实际为正的样本中能够被预测为正的概率)</p>
+</li>
+<li><p>F值:<script type="math/tex">F-score=\frac{2}{\frac{1}{P}+\frac{1}{R}}=\frac{2*P*R}{P+R} = \frac{2TP}{2TP+FP+FN}=\frac{(1+\beta) \times P \times R}{(\beta \times P)+R}</script> ($\beta &gt;1$ 时查全率有更大影响;$\beta &lt;1$ 时查准率有更大影响)</p>
+</li>
+<li><p>真正例率：$True Positive Rate(TPR)=\frac{TP}{TP+FN}$</p>
+</li>
+<li><p>假正例率：$FalsePositiveRate(FPR)=\frac{FP}{TN+FP}$</p>
+</li>
+</ul>
+<h4 id="2-3-2-1-P-R曲线"><a href="#2-3-2-1-P-R曲线" class="headerlink" title="2.3.2.1 P-R曲线"></a>2.3.2.1 P-R曲线</h4><p>我们可根据学习器的预测结果对样例进行排序，排在前面的是学习器认为“最可能” 是正例的样本，排在最后的则是学习器认为“最不可能” 是正例的样本按此顺序逐个把样本作为正例进行预测，则每次可以计算出当前的查全率、查准率以查准率为纵轴、查全率为横轴作图，就得到了查准率－查全率曲线简称”P-R曲线” 。</p>
+<p>如何理解随着阈值变化：Pre增大，Re减小</p>
+<p><img src="/2020/03/31/ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/P-R示意图.png" alt="P-R示意图"></p>
+<p><img src="/2020/03/31/ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/P-R平衡示意.png" alt="P-R平衡示意"></p>
+<blockquote>
+<p>“ 平衡点” (Break-Event Point, 简称BEP)就是这样一个度量，它是“ 查准率＝查全率” 时的取值。</p>
+</blockquote>
+<h4 id="2-3-2-2-多分类问题"><a href="#2-3-2-2-多分类问题" class="headerlink" title="2.3.2.2 多分类问题"></a>2.3.2.2 多分类问题</h4><ol>
+<li><p>先分别计算再平均</p>
+<ul>
+<li>$macro-P = \sum_{i=1} P_i /n$</li>
+<li>$macro-R = \sum_{i=1} R_i/n$</li>
+<li>$macro-F1=\frac{2 \times macro-P \times macro-R}{macro-P + macro-R}$</li>
+</ul>
+</li>
+<li><p>先平均再计算</p>
+<ul>
+<li>$\bar{TP}, \bar{FP}, \bar{TN},\bar{FN}$</li>
+<li>$macro-P = \frac{\bar{TP}}{\bar{TP}+\bar{FP}}$</li>
+<li>$macro-R = \frac{\bar{TP}}{\bar{TP}+\bar{FN}}$</li>
+<li>$macro-F1=\frac{2 \times macro-P \times macro-R}{macro-P + macro-R}$</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-3-3ROC-与AUC"><a href="#2-3-3ROC-与AUC" class="headerlink" title="2.3.3ROC 与AUC"></a>2.3.3ROC 与AUC</h3><p>根据学习器的预测结果对样例进行排序，按此顺序逐个把样本作为正例进行预测，每次计算出两个重要量的值，分别以它们为横、纵坐标作图，就得到了”ROC曲线”。</p>
+<p><img src="/2020/03/31/ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/ROC-AUC.png" alt="ROC曲线与AUC"></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">T(真实正例)</th>
+<th style="text-align:center">F(真实反例)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">P(预测正例)</td>
+<td style="text-align:center">TP（真正例）</td>
+<td style="text-align:center">FP（假正例）</td>
+</tr>
+<tr>
+<td style="text-align:center">N(预测反例)</td>
+<td style="text-align:center">FN（假反例）</td>
+<td style="text-align:center">TN（真反例）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><p>真正例率：$True Positive Rate(TPR)=\frac{TP}{TP+FN}$</p>
+</li>
+<li><p>假正例率：$FalsePositiveRate(FPR)=\frac{FP}{TN+FP}$</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">AUC</span><span class="params">(label, pre)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">#计算正样本和负样本的索引，以便索引出之后的概率值</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    pos = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(len(label)) <span class="keyword">if</span> label[i] == <span class="number">1</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    neg = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(len(label)) <span class="keyword">if</span> label[i] == <span class="number">0</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    auc = <span class="number">0</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> pos:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> neg:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">            <span class="keyword">if</span> pre[i] &gt; pre[j]:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">                auc += <span class="number">1</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">            <span class="keyword">elif</span> pre[i] == pre[j]:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">                auc += <span class="number">0.5</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> auc / (len(pos) * len(neg))</span></pre></td></tr></table></figure>
+<h3 id="2-3-4代价敏感错误率与代价曲线"><a href="#2-3-4代价敏感错误率与代价曲线" class="headerlink" title="2.3.4代价敏感错误率与代价曲线"></a>2.3.4代价敏感错误率与代价曲线</h3><p><img src="/2020/03/31/ML-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/二分类代价矩阵.png" alt="二分类代价矩阵"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/31/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-2/" rel="prev" title="论文整理二">
+      <i class="fa fa-chevron-left"></i> 论文整理二
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" rel="next" title="ML-线性模型">
+      ML-线性模型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第2章-模型评估与选择"><span class="nav-number">1.</span> <span class="nav-text">第2章  模型评估与选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-经验误差与过拟合"><span class="nav-number">1.1.</span> <span class="nav-text">2.1  经验误差与过拟合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#过拟合"><span class="nav-number">1.1.1.</span> <span class="nav-text">过拟合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#欠拟合"><span class="nav-number">1.1.2.</span> <span class="nav-text">欠拟合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2评估方法"><span class="nav-number">1.2.</span> <span class="nav-text">2.2评估方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1留出法"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.2.1留出法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2交叉验证法"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2.2交叉验证法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3自助法"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.2.3自助法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-4调参与最终模型"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.2.4调参与最终模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3性能度量"><span class="nav-number">1.3.</span> <span class="nav-text">2.3性能度量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1错误率与精度"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.3.1错误率与精度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-查准率、查全率与F1"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.3.2 查准率、查全率与F1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-1-P-R曲线"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">2.3.2.1 P-R曲线</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-2-多分类问题"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">2.3.2.2 多分类问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-3ROC-与AUC"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3.3ROC 与AUC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-4代价敏感错误率与代价曲线"><span class="nav-number">1.3.4.</span> <span class="nav-text">2.3.4代价敏感错误率与代价曲线</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

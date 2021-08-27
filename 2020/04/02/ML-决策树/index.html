@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="第四章 决策树">
+<meta name="keywords" content="决策树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ML-决策树">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="第四章 决策树">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;未剪枝.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;预剪枝.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;后剪枝.png">
+<meta property="og:updated_time" content="2020-04-02T09:58:38.027Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;未剪枝.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ML-决策树 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ML-决策树
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-02 15:21:52 / 修改时间：17:58:38" itemprop="dateCreated datePublished" datetime="2020-04-02T15:21:52+08:00">2020-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="第四章-决策树"><a href="#第四章-决策树" class="headerlink" title="第四章 决策树"></a>第四章 决策树</h1><a id="more"></a>
+
+    <div id="aplayer-bSVkQbIl" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h2 id="4-1基本流程"><a href="#4-1基本流程" class="headerlink" title="4.1基本流程"></a>4.1基本流程</h2><ol>
+<li><p>决策树模型可以认为是<code>if-then</code>规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。 </p>
+</li>
+<li><p>决策树将特征空间划分为互不相交的单元，在每个单元定义一个类的概率分布，这就构成了一个条件概率分布。</p>
+</li>
+</ol>
+<ul>
+<li>决策树的每一条路径对应于划分中的一个基本单元。</li>
+<li>设某个单元$S$内部有 $N_s$个样本点，则它定义了一个条件概率分布$P(y|x)$ 。<ul>
+<li>单元上的条件概率偏向哪个类，则该单元划归到该类的概率较大。即单元的类别为：$argmax[p(y|x)]$</li>
+<li>决策树所代表的条件概率分布由各个单元给定条件下类的条件概率分布组成。</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><p>决策树的学习目标是：根据给定的训练数据集构造一个决策树模型，使得它能够对样本进行正确的分类。</p>
+</li>
+<li><p>决策树最优化的策略是：损失函数最小化。决策树的损失函数通常是正则化的极大似然函数。</p>
+</li>
+<li>决策树学习的算法通常递归地选择<strong>最优</strong>特征，并根据该特征对训练数据进行分割，使得对各个子数据集有一个最好的分类。这一过程对应着特征空间的划分，也对应着决策树的构建。</li>
+<li>决策树生成算法：<ul>
+<li>构建根结点：将所有训练数据放在根结点。</li>
+<li>选择一个<strong>最优特征</strong>，根据这个特征将训练数据分割成子集，使得各个子集有一个在当前条件下最好的分类。<ul>
+<li>若这些子集已能够被基本正确分类，则将该子集构成叶结点。</li>
+<li>若某个子集不能够被基本正确分类，则对该子集选择新的最优的特征，继续对该子集进行分割，构建相应的结点。</li>
+</ul>
+</li>
+<li>如此递归下去，直至所有训练数据子集都被基本正确分类，或者没有合适的特征为止。</li>
+</ul>
+</li>
+</ol>
+<h2 id="4-2划分选择"><a href="#4-2划分选择" class="headerlink" title="4.2划分选择"></a>4.2划分选择</h2><p>划分关键是：选取对训练数据有较强分类能力的特征。若一个特征的分类结果与随机分类的结果没有什么差别，则称这个特征是没有分类能力的。 </p>
+<p>熵定义为：$Ent(y) = \sum -p(y)\log p(y)$</p>
+<h3 id="4-2-1信息增益"><a href="#4-2-1信息增益" class="headerlink" title="4.2.1信息增益"></a>4.2.1信息增益</h3><p>特征$A$对训练数据集$D$的信息增益$Gain(D,A)$定义为：集合$D$的经验熵 $H(D)$与关于特征$A$经验条件熵$H(D|A)$之差。即：$Gain(D,A)=H(D)-\sum_{v=1}^V \frac{D^V}{D}H(D^V)=H(D)-H(D|A)$ 。 </p>
+<p>不同的特征往往具有不同的信息增益。</p>
+<ul>
+<li>信息增益大的特征具有更强的分类能力 。</li>
+<li>如果一个特征的信息增益为0，则表示该特征没有什么分类能力。</li>
+</ul>
+<h3 id="4-2-2增益率"><a href="#4-2-2增益率" class="headerlink" title="4.2.2增益率"></a>4.2.2增益率</h3><p>以信息增益作为划分训练集的特征选取方案，存在偏向于选取值较多的特征的问题。 </p>
+<p>特征$A$对训练集$D$的信息增益比$Gain_r(D,A)$定义为：信息增益$Gain(D,A)$与关于特征$A$的熵$H_A(D)$之比：$Gain_r(D,A) = \frac{Gain(D,A)}{H_A(D)}$，其中$H_A(D) = -\sum_{v=1}^V \frac{D^V}{D}log \frac{D^V}{D}$</p>
+<p>信息增益比本质上是对信息增益乘以一个加权系数：</p>
+<ul>
+<li>当特征A的取值集合较大时，加权系数较小，表示抑制该特征。</li>
+<li>当特征A的取值集合较小时，加权系数较大，表示鼓励该特征。</li>
+</ul>
+<h3 id="4-2-3基尼指数"><a href="#4-2-3基尼指数" class="headerlink" title="4.2.3基尼指数"></a>4.2.3基尼指数</h3><p>数据集的纯度$D$可以用基尼指数衡量：$Gini(D) = 1-\sum_{k=1}^{|y|}p_k^2$</p>
+<p>从数据集中随机抽取两个样本，类别不一致的概率。</p>
+<p>特征A的基尼指数定义为：$Gini_{index}(D,a)=\sum_{v=1}^V \frac{D^V}{D} Gini(D^V)$</p>
+<p>Gini指数越小说明越纯。</p>
+<h2 id="4-3生成算法"><a href="#4-3生成算法" class="headerlink" title="4.3生成算法"></a>4.3生成算法</h2><h3 id="4-3-1-ID3"><a href="#4-3-1-ID3" class="headerlink" title="4.3.1 ID3"></a>4.3.1 ID3</h3><p><code>ID3</code> 生成算法核心是在决策树的每个结点上应用信息增益准则选择特征，递归地构建决策树。</p>
+<ul>
+<li>从根结点开始，计算结点所有可能的特征的信息增益，选择信息增益最大的特征作为结点的特征，由该特征划分出子结点。</li>
+<li>再对子结点递归地调用以上方法，构建决策树。</li>
+<li>直到所有特征的信息增益均很小或者没有特征可以选择为止，最后得到一个决策树 。</li>
+</ul>
+<p>如果不设置特征信息增益的<em>下限</em>，则可能会使得每个叶子都只有一个样本点，从而划分得太细。</p>
+<h3 id="4-3-2-C4-5"><a href="#4-3-2-C4-5" class="headerlink" title="4.3.2 C4.5"></a>4.3.2 C4.5</h3><p>采用信息增益比</p>
+<h3 id="4-3-3-CART"><a href="#4-3-3-CART" class="headerlink" title="4.3.3 CART"></a>4.3.3 CART</h3><p><code>CART</code> 树与<code>ID3</code> 决策树和 <code>C4.5</code> 决策树的重要区别：</p>
+<ul>
+<li><p><code>CART</code> 树是二叉树，而后两者是<code>N</code> 叉树。</p>
+<p>由于是二叉树，因此 <code>CART</code> 树的拆分不依赖于特征的取值数量。因此<code>CART</code> 树也就不像<code>ID3</code> 那样倾向于取值数量较多的特征。</p>
+</li>
+<li><p><code>CART</code> 树的特征可以是离散的，也可以是连续的。</p>
+<p>而后两者的特征是离散的。如果是连续的特征，则需要执行分桶来进行离散化。</p>
+</li>
+</ul>
+<p><code>CART</code>算法分两步：</p>
+<ul>
+<li>决策树生成：用训练数据生成尽可能大的决策树。</li>
+<li>决策树剪枝：用验证数据基于损失函数最小化的标准对生成的决策树剪枝</li>
+</ul>
+<p><code>CART</code>生成算法有两个生成准则：</p>
+<ul>
+<li><code>CART</code> 回归树：用<strong>平方误差</strong>最小化准则。</li>
+<li><code>CART</code> 分类树：用<strong>基尼指数</strong>最小化准则。</li>
+</ul>
+<p><code>CART</code> 树的剪枝：</p>
+<ul>
+<li>从完全生长的<code>CART</code> 树底端减去一些子树，使得<code>CART</code> 树变小（即模型变简单），从而使得它对未知数据有更好的预测能力。 </li>
+</ul>
+<h2 id="4-4剪枝处理"><a href="#4-4剪枝处理" class="headerlink" title="4.4剪枝处理"></a>4.4剪枝处理</h2><ol>
+<li><p>决策树生成算法生成的树往往对于训练数据拟合很准确，但是对于未知的测试数据分类却没有那么准确。即出现<strong>过拟合</strong>现象。</p>
+</li>
+<li><p>过拟合产生得原因是决策树太复杂。解决的办法是：对<strong>决策树剪枝</strong>，即对生成的决策树进行简化。</p>
+</li>
+<li>剪枝的依据是：极小化决策树的整体损失函数或者代价函数。</li>
+<li>决策树生成算法是学习局部的模型，决策树剪枝是学习整体的模型。即：生成算法仅考虑局部最优，而剪枝算法考虑全局最优。</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">未剪枝</th>
+<th style="text-align:center">预剪枝</th>
+<th style="text-align:center">后剪枝</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/未剪枝.png" alt="未剪枝"></td>
+<td style="text-align:center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/预剪枝.png" alt="预剪枝"></td>
+<td style="text-align:center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/后剪枝.png" alt="后剪枝"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="4-4-1预剪枝"><a href="#4-4-1预剪枝" class="headerlink" title="4.4.1预剪枝"></a>4.4.1预剪枝</h3><p>预剪枝是指在决策树生成过程中，对每个结点在划分前先进行估计，若当前结点的划分不能带来决策树泛化性能提升，则停止划分并将当前结点标记为叶结点。</p>
+<ul>
+<li>这不仅降低了过拟合的风险，还显著减少了决策树的训练时间开销和测试时间开销</li>
+<li>有些分支的当前划分虽不能提升泛化性能、甚至可能导致泛化性能暂时下降，但在其基础上进行的后续划分却有可能导致性能显著提高</li>
+<li>预剪枝基于“ 贪心” 本质禁止这些分支展开，给预剪枝决策树带来了<strong>欠拟合</strong>的风险</li>
+</ul>
+<h3 id="4-4-2后剪枝"><a href="#4-4-2后剪枝" class="headerlink" title="4.4.2后剪枝"></a>4.4.2后剪枝</h3><p>后剪枝则是先从训练集生成一棵完整的决策树，然后自底向上地对非叶结点进行考察，若将该结点对应的子树替换为叶结点能带来决策树泛化性能提升，则将该子树替换为叶结点</p>
+<ul>
+<li>后剪枝决策树的欠拟合风险很小，泛化性能往往优于预剪枝决策树。</li>
+<li>后剪枝过程是在生成完全决策树之后进行的，并且要自底向上地对树中的所有非叶结点进行逐一考察，因此其训练时间开销比未剪枝决策树和预剪枝决策树都要大得多。</li>
+<li>剪枝时精度不变，可以不剪枝</li>
+</ul>
+<h2 id="4-5连续与缺失值"><a href="#4-5连续与缺失值" class="headerlink" title="4.5连续与缺失值"></a>4.5连续与缺失值</h2><h3 id="4-5-1连续值处理"><a href="#4-5-1连续值处理" class="headerlink" title="4.5.1连续值处理"></a>4.5.1连续值处理</h3><p>采用二分法(bi-partition)对连续属性进行处理。根据能使特征A的信息增益最大的点划分为两个集合。</p>
+<h3 id="4-5-2缺失值"><a href="#4-5-2缺失值" class="headerlink" title="4.5.2缺失值"></a>4.5.2缺失值</h3><p>为每个样本赋予权重</p>
+<h2 id="4-6多变量决策树"><a href="#4-6多变量决策树" class="headerlink" title="4.6多变量决策树"></a>4.6多变量决策树</h2><ul>
+<li>传统的单变量决策树的分类边界每一段是与坐标轴平行的，每一段划分都直接对应了某个属性的取值。</li>
+<li>多变量决策树的分类边界可以为斜线，它可以大大简化了决策树的模型。</li>
+<li>与传统的单变量决策树不同，在多变量决策树的学习过程中，不是为每内部结点寻找一个最优划分属性，而是试图建立一个合适的线性分类器。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/" rel="tag"># 决策树</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/02/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8C/" rel="prev" title="OpenCV学习笔记二">
+      <i class="fa fa-chevron-left"></i> OpenCV学习笔记二
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/03/BFS-2/" rel="next" title="BFS-2">
+      BFS-2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第四章-决策树"><span class="nav-number">1.</span> <span class="nav-text">第四章 决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1基本流程"><span class="nav-number">1.1.</span> <span class="nav-text">4.1基本流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2划分选择"><span class="nav-number">1.2.</span> <span class="nav-text">4.2划分选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1信息增益"><span class="nav-number">1.2.1.</span> <span class="nav-text">4.2.1信息增益</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2增益率"><span class="nav-number">1.2.2.</span> <span class="nav-text">4.2.2增益率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-3基尼指数"><span class="nav-number">1.2.3.</span> <span class="nav-text">4.2.3基尼指数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3生成算法"><span class="nav-number">1.3.</span> <span class="nav-text">4.3生成算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-ID3"><span class="nav-number">1.3.1.</span> <span class="nav-text">4.3.1 ID3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-C4-5"><span class="nav-number">1.3.2.</span> <span class="nav-text">4.3.2 C4.5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-CART"><span class="nav-number">1.3.3.</span> <span class="nav-text">4.3.3 CART</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4剪枝处理"><span class="nav-number">1.4.</span> <span class="nav-text">4.4剪枝处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-1预剪枝"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.4.1预剪枝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-2后剪枝"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.4.2后剪枝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5连续与缺失值"><span class="nav-number">1.5.</span> <span class="nav-text">4.5连续与缺失值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-1连续值处理"><span class="nav-number">1.5.1.</span> <span class="nav-text">4.5.1连续值处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-2缺失值"><span class="nav-number">1.5.2.</span> <span class="nav-text">4.5.2缺失值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6多变量决策树"><span class="nav-number">1.6.</span> <span class="nav-text">4.6多变量决策树</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

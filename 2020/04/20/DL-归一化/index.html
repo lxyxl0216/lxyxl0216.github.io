@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Normalization">
+<meta name="keywords" content="BN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DL-归一化">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="Normalization">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;其他归一化.png">
+<meta property="og:updated_time" content="2020-05-18T05:55:33.920Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;其他归一化.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/20/DL-%E5%BD%92%E4%B8%80%E5%8C%96/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>DL-归一化 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/20/DL-%E5%BD%92%E4%B8%80%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DL-归一化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-20 21:14:58" itemprop="dateCreated datePublished" datetime="2020-04-20T21:14:58+08:00">2020-04-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-18 13:55:33" itemprop="dateModified" datetime="2020-05-18T13:55:33+08:00">2020-05-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h1><a id="more"></a>
+
+    <div id="aplayer-FvxMHlwL" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h1><h2 id="为什么会提出BN"><a href="#为什么会提出BN" class="headerlink" title="为什么会提出BN"></a>为什么会提出BN</h2><p>深度神经网络训练困难的一个重要原因是：深度神经网络涉及很多层的叠加，而每一层的参数更新会导致上一层的输入数据分布发生变化。这会带来两个问题：</p>
+<ul>
+<li>下层输入的变化可能趋向于变大或者变小，导致上层落入饱和区，使得学习过早停止。</li>
+<li>通过层层叠加，高层的输入分布变化会非常剧烈。这就使得高层需要不断去适应底层的参数更新变化。</li>
+</ul>
+<h2 id="BN的目的"><a href="#BN的目的" class="headerlink" title="BN的目的"></a>BN的目的</h2><p>将神经网络的每一层的输入的分布限定其均值和方差。</p>
+<h2 id="BN的算法"><a href="#BN的算法" class="headerlink" title="BN的算法"></a>BN的算法</h2><h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><p>假设$H = {h_1,h_2,…h_m}$为神经网络某一层的mini-batch的输入，m为batch大小，n为输入的维度。</p>
+<ol>
+<li>计算输入的<strong>每个维度</strong>的均值和方差：</li>
+</ol>
+<script type="math/tex; mode=display">
+\bar{\mu} = \frac{1}{m}\sum_{i=1}^{m}h_i\\
+\bar{\sigma}=(\sigma_1^2,\sigma_2^2,...\sigma_n^2)^T\\
+\sigma_j^2 = \frac{1}{m}\sum_{i=1}^m(h_{ij}-\mu_j)</script><ol>
+<li>对输入的<strong>每个维度</strong>进行归一化：</li>
+</ol>
+<script type="math/tex; mode=display">
+h_i^1 = \frac{h_i-\bar{\mu}}{\sqrt{\bar{\sigma}^2}+\epsilon}</script><ol>
+<li>进行缩放处理：</li>
+</ol>
+<script type="math/tex; mode=display">
+h_i^2 = \gamma \odot h_i^1 +\beta\\
+这里\gamma 和\beta是网络从数据中自动学习到的参数用于调整h_i^2的均值和方差</script><blockquote>
+<p>虽然$h_i^2$的每个维度不是零均值、单位方差的，但是可以保证它的每个维度的均值、方差不再依赖于低层的网络。</p>
+</blockquote>
+<h3 id="缩放的原因"><a href="#缩放的原因" class="headerlink" title="缩放的原因"></a>缩放的原因</h3><ul>
+<li><p>归一化一个神经元的均值和标准差会降低包含该神经元的神经网络的表达能力。(若每个神经元的输出都是均值为0、标准差为 1 ，则会产生两个问题：</p>
+<ul>
+<li>无论底层的神经元如何学习，其输出在提交给上层神经元处理之前，都被粗暴的归一化。导致底层神经元的学习毫无意义</li>
+<li>sigmoid 等激活函数通过区分饱和区、非饱和区（线性区），使得神经网络具有非线性计算的能力。输入归一化使得数据几乎都被映射到激活函数的线性区，从而降低了模型的表达能力。)</li>
+</ul>
+</li>
+<li><p>所以缩放的原因就是保证模型的表达能力不会降低</p>
+</li>
+<li>当网络学习的参数$\gamma = \sqrt{\sigma^2+\epsilon},\beta=\bar{\mu}$时，输入与输出相同，。这样，模型既可以改变、也可以保持原输入，这就提升了网络的表达能力。</li>
+</ul>
+<h3 id="不使用偏置的原因"><a href="#不使用偏置的原因" class="headerlink" title="不使用偏置的原因"></a>不使用偏置的原因</h3><ul>
+<li>大多数神经网络采用$\phi(XW+b)$的形式，其中$\phi$是激活函数</li>
+<li>在BN中参数$b$会被$\beta$吸收，所以无论b是多少都会被减去</li>
+</ul>
+<h2 id="BN为什么效果好"><a href="#BN为什么效果好" class="headerlink" title="BN为什么效果好"></a>BN为什么效果好</h2><ul>
+<li>内部协方差偏移(Internal Covariate Shift) 会对训练产生负面影响， BN 能够减少ICS 。内部协方差偏移：低层网络的更新对当前层输入分布造成了改变。</li>
+<li>BN 的成功的<strong>真正原因</strong>是：它使得优化问题的解空间更加平滑了。这确保梯度更具有预测性，从而允许使用更大范围的学习率，实现更快的网络收敛。</li>
+</ul>
+<h2 id="BN的缺点"><a href="#BN的缺点" class="headerlink" title="BN的缺点"></a>BN的缺点</h2><ul>
+<li>高度依赖于mini-batch 的大小。它要求每个mini-batch 都比较大，因此不适合batch_size 较小的场景（batch=1）</li>
+<li>不使用RNN。因为不同样本的 sequence 的长度不同，因此RNN 的深度是不固定的。同一个batch 中的多个样本会产生不同深度的RNN ，因此很难对同一层的样本进行归一化。</li>
+</ul>
+<h2 id="BN代码"><a href="#BN代码" class="headerlink" title="BN代码"></a>BN代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BatchNormalization</span><span class="params">(Layer)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, epsilon=<span class="number">1e-3</span>, axis=<span class="number">-1</span>,</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="params">                 weights=None, beta_init=<span class="string">'zero'</span>, gamma_init=<span class="string">'one'</span>,</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="params">                 gamma_regularizer=None, beta_regularizer=None, **kwargs)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">        self.supports_masking = <span class="literal">True</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">        self.beta_init = initializers.get(beta_init)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">        self.gamma_init = initializers.get(gamma_init)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">        self.epsilon = epsilon</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">        self.axis = axis</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">        self.gamma_regularizer = regularizers.get(gamma_regularizer)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">        self.beta_regularizer = regularizers.get(beta_regularizer)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">        self.initial_weights = weights</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">        super(BatchNormalization, self).__init__(**kwargs)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(self, input_shape)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">        self.input_spec = [InputSpec(shape=input_shape)]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">        shape = (input_shape[self.axis],)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">        self.gamma = self.add_weight(shape,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">                                     initializer=self.gamma_init,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">                                     regularizer=self.gamma_regularizer,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">                                     name=<span class="string">'&#123;&#125;_gamma'</span>.format(self.name),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">                                     trainable=<span class="literal">False</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">        self.beta = self.add_weight(shape,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">                                    initializer=self.beta_init,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line">                                    regularizer=self.beta_regularizer,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line">                                    name=<span class="string">'&#123;&#125;_beta'</span>.format(self.name),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line">                                    trainable=<span class="literal">False</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">        self.running_mean = self.add_weight(shape, initializer=<span class="string">'zero'</span>,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line">                                            name=<span class="string">'&#123;&#125;_running_mean'</span>.format(self.name),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line">                                            trainable=<span class="literal">False</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">34</span></pre></td><td class="code"><pre><span class="line">        self.running_std = self.add_weight(shape, initializer=<span class="string">'one'</span>,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">35</span></pre></td><td class="code"><pre><span class="line">                                           name=<span class="string">'&#123;&#125;_running_std'</span>.format(self.name),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">36</span></pre></td><td class="code"><pre><span class="line">                                           trainable=<span class="literal">False</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">37</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">38</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> self.initial_weights <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">39</span></pre></td><td class="code"><pre><span class="line">            self.set_weights(self.initial_weights)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">40</span></pre></td><td class="code"><pre><span class="line">            <span class="keyword">del</span> self.initial_weights</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">41</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">42</span></pre></td><td class="code"><pre><span class="line">        self.built = <span class="literal">True</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">43</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">44</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(self, x, mask=None)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">45</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">46</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">assert</span> self.built, <span class="string">'Layer must be built before being called'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">47</span></pre></td><td class="code"><pre><span class="line">        input_shape = K.int_shape(x)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">48</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">49</span></pre></td><td class="code"><pre><span class="line">        reduction_axes = list(range(len(input_shape)))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">50</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">del</span> reduction_axes[self.axis]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">51</span></pre></td><td class="code"><pre><span class="line">        broadcast_shape = [<span class="number">1</span>] * len(input_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">52</span></pre></td><td class="code"><pre><span class="line">        broadcast_shape[self.axis] = input_shape[self.axis]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">53</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">54</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> sorted(reduction_axes) == range(K.ndim(x))[:<span class="number">-1</span>]:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">55</span></pre></td><td class="code"><pre><span class="line">            x_normed = K.batch_normalization(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">56</span></pre></td><td class="code"><pre><span class="line">                x, self.running_mean, self.running_std,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">57</span></pre></td><td class="code"><pre><span class="line">                self.beta, self.gamma,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">58</span></pre></td><td class="code"><pre><span class="line">                epsilon=self.epsilon)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">59</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">else</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">60</span></pre></td><td class="code"><pre><span class="line">            <span class="comment"># need broadcasting</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">61</span></pre></td><td class="code"><pre><span class="line">            broadcast_running_mean = K.reshape(self.running_mean, broadcast_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">62</span></pre></td><td class="code"><pre><span class="line">            broadcast_running_std = K.reshape(self.running_std, broadcast_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">63</span></pre></td><td class="code"><pre><span class="line">            broadcast_beta = K.reshape(self.beta, broadcast_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">64</span></pre></td><td class="code"><pre><span class="line">            broadcast_gamma = K.reshape(self.gamma, broadcast_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">65</span></pre></td><td class="code"><pre><span class="line">            x_normed = K.batch_normalization(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">66</span></pre></td><td class="code"><pre><span class="line">                x, broadcast_running_mean, broadcast_running_std,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">67</span></pre></td><td class="code"><pre><span class="line">                broadcast_beta, broadcast_gamma,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">68</span></pre></td><td class="code"><pre><span class="line">                epsilon=self.epsilon)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">69</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">70</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">return</span> x_normed</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">71</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">72</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_config</span><span class="params">(self)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">73</span></pre></td><td class="code"><pre><span class="line">        config = &#123;<span class="string">'epsilon'</span>: self.epsilon,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">74</span></pre></td><td class="code"><pre><span class="line">                  <span class="string">'axis'</span>: self.axis,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">75</span></pre></td><td class="code"><pre><span class="line">                  <span class="string">'gamma_regularizer'</span>: self.gamma_regularizer.get_config() <span class="keyword">if</span> self.gamma_regularizer <span class="keyword">else</span> <span class="literal">None</span>,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">76</span></pre></td><td class="code"><pre><span class="line">                  <span class="string">'beta_regularizer'</span>: self.beta_regularizer.get_config() <span class="keyword">if</span> self.beta_regularizer <span class="keyword">else</span> <span class="literal">None</span>&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">77</span></pre></td><td class="code"><pre><span class="line">        base_config = super(BatchNormalization, self).get_config()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">78</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">return</span> dict(list(base_config.items()) + list(config.items()))</span></pre></td></tr></table></figure>
+<h1 id="其他-Normalization"><a href="#其他-Normalization" class="headerlink" title="其他 Normalization"></a>其他 Normalization</h1><p><img src="/2020/04/20/DL-%E5%BD%92%E4%B8%80%E5%8C%96/其他归一化.png" alt="其他归一化"></p>
+<ul>
+<li>BN 是对<strong>每个神经元</strong>（通道上）在mini batch 样本之间计算均值和方差。对每个神经元， mini-batch 中的所有样本在该神经元上都使用相同的均值和方差。但是不同神经元使用不同的均值和方差。</li>
+<li>LN 是对单个样本的<strong>同一层的神经元</strong>进行归一化，同层神经元使用相同的均值和方差。</li>
+<li>IN是对同一层神经元中的同一个通道进行归一化。</li>
+<li>GN 介于LN 和IN 之间。如果G=1 ，即只有一个分组，则GN 就是LN ；如果G=C ，即每个通道构成一个组，则GN 就是IN 。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">Batch N</th>
+<th style="text-align:center">Layer N</th>
+<th style="text-align:center">Instance N</th>
+<th style="text-align:center">Group N</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">维度</td>
+<td style="text-align:center">对N、H、W做归一化，而保留通道 C 的维度。</td>
+<td style="text-align:center">对C、H、W归一化</td>
+<td style="text-align:center">对H、W做归一化</td>
+<td style="text-align:center">channel分组，然后再做归一化</td>
+</tr>
+<tr>
+<td style="text-align:center">目的</td>
+<td style="text-align:center">使数据在进入激活函数之前，沿着通道计算每个batch的均值、方差，‘强迫’数据保持均值为0，方差为1的正态分布</td>
+<td style="text-align:center">LN对深度网络的某一层的所有神经元的输入进行归一化</td>
+<td style="text-align:center">针对图像像素做normalization，最初用于图像的风格化迁移。</td>
+<td style="text-align:center">在 channel 方向 group，然后每个 group 内做 Norm，计算</td>
+</tr>
+<tr>
+<td style="text-align:center">作用</td>
+<td style="text-align:center">1.避免梯度消失2.减弱对初始化的强依赖性3.保持隐藏层中数值的均值、方差不变，让数值更稳定4.正则作用5.容许较大学习率</td>
+<td style="text-align:center">不需要批训练，在单条数据内部就能归一化</td>
+<td style="text-align:center">可以加速模型收敛，并且保持每个图像实例之间的独立。</td>
+<td style="text-align:center">解决BN对较小的mini-batch size效果差的问题</td>
+</tr>
+<tr>
+<td style="text-align:center">问题</td>
+<td style="text-align:center">1.batch size太小，则计算的均值、方差不足以代表整个数据分布2.batch size太大：会超过内存容量；需要跑更多的epoch，导致总训练时间变长3.会直接固定梯度下降的方向，导致很难更新。</td>
+<td style="text-align:center">LN用于RNN效果比较明显，但是在CNN上，效果不如BN。</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>比喻成一摞书，这摞书总共有 N 本，每本有 C 页，每页有 H 行，每行 有W 个字符。</p>
+<ol>
+<li><p>BN 求均值时，相当于把这些书按页码一一对应地加起来（例如第1本书第36页，第2本书第36页……），再除以每个页码下的字符总数：N×H×W，因此可以把 BN 看成求“平均书”的操作（注意这个“平均书”每页只有一个字），求标准差时也是同理。</p>
+</li>
+<li><p>LN 求均值时，相当于把每一本书的所有字加起来，再除以这本书的字符总数：C×H×W，即求整本书的“平均字”，求标准差时也是同理。</p>
+</li>
+<li><p>IN 求均值时，相当于把一页书中所有字加起来，再除以该页的总字数：H×W，即求每页书的“平均字”，求标准差时也是同理。</p>
+</li>
+<li><p>GN 相当于把一本 C 页的书平均分成 G 份，每份成为有 C/G 页的小册子，求每个小册子的“平均字”和字的“标准差”。</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/BN/" rel="tag"># BN</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/20/Cpp-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" rel="prev" title="Cpp-输入输出">
+      <i class="fa fa-chevron-left"></i> Cpp-输入输出
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/" rel="next" title="DL-激活函数">
+      DL-激活函数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Normalization"><span class="nav-number">1.</span> <span class="nav-text">Normalization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Batch-Normalization"><span class="nav-number">2.</span> <span class="nav-text">Batch Normalization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么会提出BN"><span class="nav-number">2.1.</span> <span class="nav-text">为什么会提出BN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BN的目的"><span class="nav-number">2.2.</span> <span class="nav-text">BN的目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BN的算法"><span class="nav-number">2.3.</span> <span class="nav-text">BN的算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现"><span class="nav-number">2.3.1.</span> <span class="nav-text">算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缩放的原因"><span class="nav-number">2.3.2.</span> <span class="nav-text">缩放的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不使用偏置的原因"><span class="nav-number">2.3.3.</span> <span class="nav-text">不使用偏置的原因</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BN为什么效果好"><span class="nav-number">2.4.</span> <span class="nav-text">BN为什么效果好</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BN的缺点"><span class="nav-number">2.5.</span> <span class="nav-text">BN的缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BN代码"><span class="nav-number">2.6.</span> <span class="nav-text">BN代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他-Normalization"><span class="nav-number">3.</span> <span class="nav-text">其他 Normalization</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

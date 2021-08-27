@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="论文题目  Closed-loop Matters: Dual Regression Networks for Single Image Super-Resolution Structure-Preserving Super Resolution with Gradient Guidance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文整理-3">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="论文题目  Closed-loop Matters: Dual Regression Networks for Single Image Super-Resolution Structure-Preserving Super Resolution with Gradient Guidance">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;对偶回归训练.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;train——loss.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;对偶算法.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;对偶网络.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;数据集混合比例.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;对偶对比实验.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;梯度分支.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;梯度网络.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;梯度总损失.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;梯度对比实验.png">
+<meta property="og:updated_time" content="2020-04-10T15:49:01.048Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;10&#x2F;%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3&#x2F;对偶回归训练.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>论文整理-3 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          论文整理-3
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-10 11:19:23 / 修改时间：23:49:01" itemprop="dateCreated datePublished" datetime="2020-04-10T11:19:23+08:00">2020-04-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>论文题目</p>
+<ul>
+<li>Closed-loop Matters: Dual Regression Networks for Single Image Super-Resolution</li>
+<li>Structure-Preserving Super Resolution with Gradient Guidance</li>
+</ul>
+<a id="more"></a>
+
+    <div id="aplayer-SNOrhlWR" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="Closed-loop-Matters-Dual-Regression-Networks-for-Single-Image-Super-Resolution"><a href="#Closed-loop-Matters-Dual-Regression-Networks-for-Single-Image-Super-Resolution" class="headerlink" title="Closed-loop Matters: Dual Regression Networks for Single Image Super-Resolution"></a>Closed-loop Matters: Dual Regression Networks for Single Image Super-Resolution</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><ul>
+<li>现有的SR存在两个潜在的局限性：<ul>
+<li>LR到HR图像的隐射函数是一个问题，从HR降采样到LR有无限种可能，使得函数空间无限大，很难得到好的解决方法</li>
+<li>成对的训练数据在真实生活中很难获得，而且图像降级的方法往往未知</li>
+</ul>
+</li>
+<li>引出一种对LR的附加约束来减少函数空间，提出一种双重回归方案且不依赖与HR图像</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="双重回归方案"><a href="#双重回归方案" class="headerlink" title="双重回归方案"></a>双重回归方案</h3><p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/对偶回归训练.png" alt="对偶回归训练"></p>
+<p>通过学习两种隐射$X-&gt;Y采用P(X)$，$Y-&gt;X采用D(Y)$</p>
+<p>训练的损失定义为：</p>
+<p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/train——loss.png" alt="train——loss"></p>
+<p>其中$L_P,L_D$代表l1损失</p>
+<h3 id="不成对数据的对偶回归"><a href="#不成对数据的对偶回归" class="headerlink" title="不成对数据的对偶回归"></a>不成对数据的对偶回归</h3><p>通过结合成对的数据和不成对的数据来训练整个网络：</p>
+<p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/对偶算法.png" alt="对偶算法"></p>
+<blockquote>
+<p>$1_{SP}表示的是对成对数据的判断，如果数据是成对的，那么1_{SP}为1，否则为0$</p>
+</blockquote>
+<h3 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h3><p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/对偶网络.png" alt="对偶网络"></p>
+<h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><ul>
+<li>成对的数据集</li>
+<li>不成对的数据集</li>
+<li>数据集混合采用（$\rho =m/(m+n),\rho=0.3效果最好$）</li>
+</ul>
+<p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/数据集混合比例.png" alt="数据集混合比例"></p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><script type="math/tex; mode=display">
+primal regression loss+\lambda*dual regression loss（\lambda=0.1效果最好）</script><h2 id="对比实验"><a href="#对比实验" class="headerlink" title="对比实验"></a>对比实验</h2><p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/对偶对比实验.png" alt="对偶对比实验"></p>
+<h1 id="Structure-Preserving-Super-Resolution-with-Gradient-Guidance"><a href="#Structure-Preserving-Super-Resolution-with-Gradient-Guidance" class="headerlink" title="Structure-Preserving Super Resolution with Gradient Guidance"></a>Structure-Preserving Super Resolution with Gradient Guidance</h1><h2 id="摘要-1"><a href="#摘要-1" class="headerlink" title="摘要"></a>摘要</h2><ul>
+<li>提出一种保留结构的超分辨率方法，同时保留GAN的优点</li>
+<li>利用梯度分支来恢复</li>
+<li>提出一种梯度损失</li>
+</ul>
+<h2 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h2><p>训练一个类似GAN的对梯度约束的网络，加入HR和LR在判别器的对抗损失，加入梯度图的损失。</p>
+<h3 id="梯度分支"><a href="#梯度分支" class="headerlink" title="梯度分支"></a>梯度分支</h3><p>梯度分支的目标是估计梯度图从LR模式到HR模式的转换。通过计算相邻像素之间的差异获得图像I的梯度图：</p>
+<p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/梯度分支.png" alt="梯度分支"></p>
+<blockquote>
+<p>M代表获取梯度的方法</p>
+</blockquote>
+<p>因为梯度强度足以揭示恢复图像中局部区域的清晰度。因此，采用强度图作为梯度图。</p>
+<p>由于梯度图的大多数区域都接近于零，因此卷积神经网络可以将更多的注意力集中在轮廓的空间关系上。因此，网络可能更容易捕获结构依赖性并因此为SR图像生成近似梯度图。</p>
+<h3 id="SR分支"><a href="#SR分支" class="headerlink" title="SR分支"></a>SR分支</h3><p>使用ESRGAN中提出的残差密集块（RRDB）中的残差。原始模型中有23个RRDB块。合并了从第5、10、15、20个块到梯度分支的特征图。由于常规SR模型仅产生3个通道的图像，因此删除了最后的卷积重建层，并将输出特征馈送到连续部分，与梯度分支融合。</p>
+<h3 id="网络结构-1"><a href="#网络结构-1" class="headerlink" title="网络结构"></a>网络结构</h3><p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/梯度网络.png" alt="梯度网络"></p>
+<h2 id="损失函数-1"><a href="#损失函数-1" class="headerlink" title="损失函数"></a>损失函数</h2><p>5个损失的组合：</p>
+<script type="math/tex; mode=display">
+L_{SR}^{Per} = 感知损失\\
+L_{SR}^{Pix_I} = MAE\\
+L_{SR}^{Adv_I} = -\log D_{I}(I^{HR})\\
+L_{SR}^{Pix_{GM}} =||M(G(I^{LR}))-M(I^{HR})||_1 \\
+L_{SR}^{Adv_{GM}} =-\log D_{GM}(M(I^{HR})) \\
+L_{GB}^{Pix_{GM}} = 梯度图的MAE\\</script><p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/梯度总损失.png" alt="梯度总损失"></p>
+<h2 id="对比实验-1"><a href="#对比实验-1" class="headerlink" title="对比实验"></a>对比实验</h2><p><img src="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/梯度对比实验.png" alt="梯度对比实验"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/09/%E4%BA%8C%E5%8F%89%E6%A0%91-1/" rel="prev" title="二叉树-1">
+      <i class="fa fa-chevron-left"></i> 二叉树-1
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/" rel="next" title="深度学习技巧盘点">
+      深度学习技巧盘点 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Closed-loop-Matters-Dual-Regression-Networks-for-Single-Image-Super-Resolution"><span class="nav-number">1.</span> <span class="nav-text">Closed-loop Matters: Dual Regression Networks for Single Image Super-Resolution</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">1.2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#双重回归方案"><span class="nav-number">1.2.1.</span> <span class="nav-text">双重回归方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不成对数据的对偶回归"><span class="nav-number">1.2.2.</span> <span class="nav-text">不成对数据的对偶回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络结构"><span class="nav-number">1.2.3.</span> <span class="nav-text">网络结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集"><span class="nav-number">1.3.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数"><span class="nav-number">1.4.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对比实验"><span class="nav-number">1.5.</span> <span class="nav-text">对比实验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Structure-Preserving-Super-Resolution-with-Gradient-Guidance"><span class="nav-number">2.</span> <span class="nav-text">Structure-Preserving Super Resolution with Gradient Guidance</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要-1"><span class="nav-number">2.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法-1"><span class="nav-number">2.2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度分支"><span class="nav-number">2.2.1.</span> <span class="nav-text">梯度分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SR分支"><span class="nav-number">2.2.2.</span> <span class="nav-text">SR分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络结构-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">网络结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数-1"><span class="nav-number">2.3.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对比实验-1"><span class="nav-number">2.4.</span> <span class="nav-text">对比实验</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

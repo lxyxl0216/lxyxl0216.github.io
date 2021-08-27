@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="使用OpenCV处理图像 加入噪声 形态学处理">
+<meta name="keywords" content="形态学,加入噪声">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenCV学习笔记四">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="使用OpenCV处理图像 加入噪声 形态学处理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;形态学操作.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;腐蚀.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;img.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;noise_img.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;erode_3.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;erode_7.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;img.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;dilate_3.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;dilate_7.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;img.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;open_img.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;close_img.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;img.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;T_hat.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;B_hat.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;Grident.jpg">
+<meta property="og:updated_time" content="2020-05-09T06:58:16.816Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B&#x2F;形态学操作.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>OpenCV学习笔记四 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          OpenCV学习笔记四
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-05 10:42:33" itemprop="dateCreated datePublished" datetime="2020-04-05T10:42:33+08:00">2020-04-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-09 14:58:16" itemprop="dateModified" datetime="2020-05-09T14:58:16+08:00">2020-05-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenCV/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenCV</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="使用OpenCV处理图像"><a href="#使用OpenCV处理图像" class="headerlink" title="使用OpenCV处理图像"></a>使用OpenCV处理图像</h1><ul>
+<li>加入噪声</li>
+<li>形态学处理</li>
+</ul>
+<a id="more"></a>
+
+    <div id="aplayer-tGWqmYBj" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="加入噪声"><a href="#加入噪声" class="headerlink" title="加入噪声"></a>加入噪声</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sp_noise</span><span class="params">(image,prob)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    <span class="string">'''</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="string">    添加椒盐噪声</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="string">    prob:噪声比例</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="string">    '''</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    output = np.zeros(image.shape,np.uint8)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    thres = <span class="number">1</span> - prob</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(image.shape[<span class="number">0</span>]):</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(image.shape[<span class="number">1</span>]):</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">            rdn = random.random()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">            <span class="keyword">if</span> rdn &lt; prob:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">                output[i][j] = <span class="number">0</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">            <span class="keyword">elif</span> rdn &gt; thres:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">                output[i][j] = <span class="number">255</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">            <span class="keyword">else</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">                output[i][j] = image[i][j]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> output</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line"> </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gasuss_noise</span><span class="params">(image, mean=<span class="number">0</span>, var=<span class="number">0.001</span>)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">    <span class="string">'''</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line"><span class="string">        添加高斯噪声</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line"><span class="string">        mean : 均值</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line"><span class="string">        var : 方差</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line"><span class="string">    '''</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line">    image = np.array(image/<span class="number">255</span>, dtype=float)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line">    noise = np.random.normal(mean, var ** <span class="number">0.5</span>, image.shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">    out = image + noise</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">if</span> out.min() &lt; <span class="number">0</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line">        low_clip = <span class="number">-1.</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">34</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">else</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">35</span></pre></td><td class="code"><pre><span class="line">        low_clip = <span class="number">0.</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">36</span></pre></td><td class="code"><pre><span class="line">    out = np.clip(out, low_clip, <span class="number">1.0</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">37</span></pre></td><td class="code"><pre><span class="line">    out = np.uint8(out*<span class="number">255</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">38</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">#cv.imshow("gasuss", out)</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">39</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> out</span></pre></td></tr></table></figure>
+<h1 id="形态学处理"><a href="#形态学处理" class="headerlink" title="形态学处理"></a>形态学处理</h1><p>分割的结果经常包含一些干扰，有的甚至影响了目标物体的形状。数学形态学提供了一组有用的方法，能够用来调整分割区域的形状以获得比较理想的结果，它最初是从数学中的集合论发展而来并用于处理二值图的，虽然运算很简单，但是往往可以产生很好的效果，后来将这些方法推广到普通的灰度级图像处理中。常用的形态学处理方法包括：<strong>腐蚀、膨胀、开运算、闭运算、顶帽运算、底帽运算</strong>，其中腐蚀和膨胀是最基础的方法，其他方法是两者相互组合而产生的。</p>
+<p><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/形态学操作.png" alt="形态学操作"></p>
+<h2 id="腐蚀"><a href="#腐蚀" class="headerlink" title="腐蚀"></a>腐蚀</h2><p>图像的腐蚀操作与中值平滑操作类似，它是取每一个位置的矩形<strong>邻域内值的最小值</strong>作为该位置的输出灰度值。与卷积核类似，不过核的形状可以是任意的。</p>
+<p><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/腐蚀.png" alt="腐蚀"></p>
+<p>因为取每个位置邻域内的最小值，所以腐蚀后输出图像的总体亮度的平均值比起原图会有所降低，图像中比较亮的区域的面积会变小甚至消失，而比较暗的区域的面积会增大。图像I与结构元S 的腐蚀操作记为：</p>
+<script type="math/tex; mode=display">
+E = I \circleddash S</script><p>因为对图像进行腐蚀操作后<strong>缩小了亮度区域的面积</strong>，所以针对阈值分割后前景是<strong><em>白色</em></strong>的二值图，可以通过$I-E$ 操作来<strong>提取边界</strong>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#-*- coding:utf-8 -*-</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">I = cv2.imread(<span class="string">"1.jpg"</span>,<span class="number">0</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建3*3,</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">s3 = cv2.getStructuringElement(cv2.MORPH_RECT,(<span class="number">3</span>,<span class="number">3</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#腐蚀图像，迭代次数默认为1</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">r3 = cv2.erode(I,s3)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#边界提取</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">e3 = I - r3</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#7*7尺寸结构元</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">s7 = cv2.getStructuringElement(cv2.MORPH_RECT,(<span class="number">7</span>,<span class="number">7</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">r7 = cv2.erode(I,s7)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">e7 = I - r7</span></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">原图</th>
+<th style="text-align:center">噪声</th>
+<th style="text-align:center">3*3</th>
+<th style="text-align:center">7*7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/img.jpg" alt="原图"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/noise_img.jpg" alt="噪声图像"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/erode_3.jpg" alt="3*3腐蚀"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/erode_7.jpg" alt="7*7腐蚀"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="膨胀"><a href="#膨胀" class="headerlink" title="膨胀"></a>膨胀</h2><p>与中值平滑和腐蚀操作类似，膨胀是取每一个位置<strong>邻域内的最大值</strong>，同样，邻域的形状由结构元决定。既然取邻域内的最大值，那么显然膨胀后的输出图像的总体亮度的平均值比起原图会有所上升，而图像中较亮物体的尺寸会变大；相反，较暗物体的尺寸会减小，甚至消失。图像I 和结构元S 的膨胀操作记为：</p>
+<script type="math/tex; mode=display">
+D = I \oplus S</script><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">原图</th>
+<th style="text-align:center">3*3</th>
+<th style="text-align:center">7*7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/img.jpg" alt="原图"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/dilate_3.jpg" alt="3*3膨胀"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/dilate_7.jpg" alt="7*7膨胀"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="开运算与闭运算"><a href="#开运算与闭运算" class="headerlink" title="开运算与闭运算"></a>开运算与闭运算</h2><h3 id="开预算"><a href="#开预算" class="headerlink" title="开预算"></a>开预算</h3><p><strong>先腐蚀后膨胀的过程称为开运算</strong></p>
+<script type="math/tex; mode=display">
+I \circ S = (I \circleddash S) \oplus S</script><ul>
+<li><p>它具有消除亮度较高的细小区域、在纤细点处分离物体.</p>
+</li>
+<li><p>对于较大物体，可以在不明显改变其面积的情况下平滑其边界等作用。</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">s = cv2.getStructuringElement(cv2.MORPH_RECT,(<span class="number">5</span>,<span class="number">5</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">d_open = cv2.morphologyEx(img,cv2.MORPH_OPEN,s,iterations=<span class="number">3</span>)</span></pre></td></tr></table></figure>
+<h3 id="闭运算"><a href="#闭运算" class="headerlink" title="闭运算"></a>闭运算</h3><p><strong>先膨胀后腐蚀的过程称为闭运算</strong></p>
+<script type="math/tex; mode=display">
+I \bullet S = (I \oplus S) \circleddash S</script><ul>
+<li>它具有填充白色物体内细小黑色空洞的区域、连接临近物体、同一个结构元、多次迭代处理</li>
+<li>不明显改变其面积的情况下平滑其边界等作用。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">s = cv2.getStructuringElement(cv2.MORPH_RECT,(<span class="number">5</span>,<span class="number">5</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">d_close = cv2.morphologyEx(img,cv2.MORPH_CLOSE,s,iterations=<span class="number">3</span>)</span></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">原图</th>
+<th style="text-align:center">开运算</th>
+<th style="text-align:center">闭运算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/img.jpg" alt="原图"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/open_img.jpg" alt="开运算"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/close_img.jpg" alt="闭运算"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="顶帽变换与底帽变换与梯度"><a href="#顶帽变换与底帽变换与梯度" class="headerlink" title="顶帽变换与底帽变换与梯度"></a>顶帽变换与底帽变换与梯度</h3><h3 id="顶帽变换"><a href="#顶帽变换" class="headerlink" title="顶帽变换"></a>顶帽变换</h3><p>图像减去开运算结果</p>
+<script type="math/tex; mode=display">
+T_{hat} = I-I\circ S</script><p>开运算可以消除暗背景下的较亮区域，那么如果用原图减去开运算结果就可以得到原图中灰度较亮的区域，所以又称白顶帽变换。它还有一个很重要的作用，就是<strong>校正不均匀光照</strong>。</p>
+<h3 id="底帽变换"><a href="#底帽变换" class="headerlink" title="底帽变换"></a>底帽变换</h3><p>图像减去闭运算结果</p>
+<script type="math/tex; mode=display">
+B_{hat} = I\bullet S-I</script><p>闭运算可以删除亮度较高背景下的较暗区域，那么用原图减去闭<br>运算结果就可以得到原图中灰度较暗的区域，所以又称黑底帽变换。</p>
+<h2 id="梯度"><a href="#梯度" class="headerlink" title="梯度"></a>梯度</h2><p>膨胀结果减去腐蚀结果，因为膨胀是取邻域内的最大值，从而增大亮度高的区域的面积；而腐蚀是取邻域内的最小值，从而减小亮度高的区域的面积，所以$G（r，c）<br>≥0$，且得到的便是图像中物体的边界。</p>
+<script type="math/tex; mode=display">
+G = I \oplus S - I\circleddash S</script><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">s = cv2.getStructuringElement(cv2.MORPH_RECT,(<span class="number">5</span>,<span class="number">5</span>))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">T_hat = cv2.morphologyEx(img,cv2.MORPH_TOPHAT,s,iterations=<span class="number">3</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">B_hat = cv2.morphologyEx(img,cv2.MORPH_BLACKHAT,s,iterations=<span class="number">3</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">Grident = cv2.morphologyEx(img,cv2.MORPH_GRADIENT,s,iterations=<span class="number">3</span>)</span></pre></td></tr></table></figure>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">原图</th>
+<th style="text-align:center">顶帽</th>
+<th style="text-align:center">底帽</th>
+<th style="text-align:center">梯度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/img.jpg" alt="原图"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/T_hat.jpg" alt="顶帽"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/B_hat.jpg" alt="底帽"></td>
+<td style="text-align:center"><img src="/2020/04/05/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%9B%9B/Grident.jpg" alt="梯度"></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BD%A2%E6%80%81%E5%AD%A6/" rel="tag"># 形态学</a>
+              <a href="/tags/%E5%8A%A0%E5%85%A5%E5%99%AA%E5%A3%B0/" rel="tag"># 加入噪声</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/04/BFS-3/" rel="prev" title="BFS-3">
+      <i class="fa fa-chevron-left"></i> BFS-3
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/05/ML-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/" rel="next" title="ML-贝叶斯分类器">
+      ML-贝叶斯分类器 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用OpenCV处理图像"><span class="nav-number">1.</span> <span class="nav-text">使用OpenCV处理图像</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加入噪声"><span class="nav-number">2.</span> <span class="nav-text">加入噪声</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#形态学处理"><span class="nav-number">3.</span> <span class="nav-text">形态学处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#腐蚀"><span class="nav-number">3.1.</span> <span class="nav-text">腐蚀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#膨胀"><span class="nav-number">3.2.</span> <span class="nav-text">膨胀</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开运算与闭运算"><span class="nav-number">3.3.</span> <span class="nav-text">开运算与闭运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开预算"><span class="nav-number">3.3.1.</span> <span class="nav-text">开预算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#闭运算"><span class="nav-number">3.3.2.</span> <span class="nav-text">闭运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#顶帽变换与底帽变换与梯度"><span class="nav-number">3.3.3.</span> <span class="nav-text">顶帽变换与底帽变换与梯度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#顶帽变换"><span class="nav-number">3.3.4.</span> <span class="nav-text">顶帽变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#底帽变换"><span class="nav-number">3.3.5.</span> <span class="nav-text">底帽变换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度"><span class="nav-number">3.4.</span> <span class="nav-text">梯度</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

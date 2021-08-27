@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="EM算法">
+<meta name="keywords" content="EM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ML-EM">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;ML-EM&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="EM算法">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;ML-EM&#x2F;EM算法示意图.jpg">
+<meta property="og:updated_time" content="2020-04-06T16:19:22.968Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;05&#x2F;ML-EM&#x2F;EM算法示意图.jpg">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/05/ML-EM/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ML-EM | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/05/ML-EM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ML-EM
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-05 18:12:03" itemprop="dateCreated datePublished" datetime="2020-04-05T18:12:03+08:00">2020-04-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-07 00:19:22" itemprop="dateModified" datetime="2020-04-07T00:19:22+08:00">2020-04-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="EM算法"><a href="#EM算法" class="headerlink" title="EM算法"></a>EM算法</h1><a id="more"></a>
+
+    <div id="aplayer-JUbZzQMz" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<ol>
+<li><p>如果概率模型的变量都是观测变量，则给定数据之后，可以直接用极大似然估计法或者贝叶斯估计法来估计模型参数。</p>
+<p>但是当模型含有隐变量时，就不能简单的使用这些估计方法。此时需要使用<code>EM</code> 算法。</p>
+<ul>
+<li><code>EM</code> 算法是一种迭代算法。</li>
+<li><code>EM</code> 算法专门用于含有隐变量的概率模型参数的极大似然估计，或者极大后验概率估计。</li>
+</ul>
+</li>
+<li><p><code>EM</code>算法的每次迭代由两步组成：</p>
+<ul>
+<li><code>E</code>步求期望。</li>
+<li><code>M</code>步求极大。</li>
+</ul>
+<p>所以<code>EM</code>算法也称为期望极大算法。</p>
+</li>
+</ol>
+<h2 id="EM算法原理"><a href="#EM算法原理" class="headerlink" title="EM算法原理"></a>EM算法原理</h2><p>启发式的迭代方法，既然无法直接求出模型分布参数，那么可以先猜想隐含数据（EM算法的E步），接着基于观察数据和猜测的隐含数据一起来极大化对数似然，求解模型参数（EM算法的M步)。</p>
+<p>由于之前的隐藏数据是猜测的，所以此时得到的模型参数一般还不是想要的结果。基于当前得到的模型参数，继续猜测隐含数据（EM算法的E步），然后继续极大化对数似然，求解模型参数（EM算法的M步)。以此类推，不断的迭代下去，直到模型分布参数基本无变化，算法收敛，找到合适的模型参数。 </p>
+<h2 id="EM算法推导"><a href="#EM算法推导" class="headerlink" title="EM算法推导"></a>EM算法推导</h2><p>对于m个观察数据$x = (x_1,x_2,…x_m)$找出样本的模型参数$\theta$，极大化模型分布的对数似然函数</p>
+<script type="math/tex; mode=display">
+\theta = arg\max \limits_{\theta} \sum_{i=1}^m logP(x;\theta)</script><p> 如果我们得到的观察数据有未观察到的隐含数据，$z = (z_1,z_2,…z_m)$ ，此时我们的极大化模型分布的对数似然函数如下： </p>
+<script type="math/tex; mode=display">
+\theta = arg\max \limits_{\theta}\sum_{i=1}^m logP(x;\theta)=arg\max \limits_{\theta}\sum_{i=1}^m log \sum _{z}P(x,z;\theta)</script><p>假设$Q_i$为隐变量$z_i$的一个概率分布，则$\sum Q_i(z) =1,Q_i(z)\geq 0$</p>
+<script type="math/tex; mode=display">
+上式=arg\max \limits_{\theta}\sum_{i=1}^m log \sum _{z} Q_i(z)\frac{P(x,z;\theta)}{Q_i(z)}</script><p>根据Jensen不等式：</p>
+<script type="math/tex; mode=display">
+如果f(x)是凸函数：E(f(x))\geq f(E(x))\\
+arg\max \limits_{\theta}\sum_{i=1}^m log \sum _{z} Q_i(z)\frac{P(x,z;\theta)}{Q_i(z)} \geq 
+arg\max \limits_{\theta}\sum_{i=1}^m  \sum _{z} Q_i(z)log\frac{P(x,z;\theta)}{Q_i(z)}</script><p>上式给出了对数似然函数的一个下界，$Q_i$可以是任意一个概率分布，因此可以利用参数$\theta$的当前估计值来构造。显然$Q_i$，这个下界函数更容易求极值，因为对数函数里面已经没有求和项，对参数求导并令导数为0时一般可以得到公式解。 </p>
+<p>如果要满足Jensen的不等式的等号：</p>
+<script type="math/tex; mode=display">
+\frac{P(x,z;\theta)}{Q_i(z)} = c,c为常数</script><p>由于$\sum Q_i(z) =1$</p>
+<script type="math/tex; mode=display">
+Q_i(z) = \frac{P(x,z;\theta)}{\sum_zP(x,z;\theta)}=\frac{P(x,z;\theta)}{\sum_zP(x;\theta)}=P(z|x;\theta)</script><script type="math/tex; mode=display">
+去掉常数部分：arg\max \limits_{\theta}\sum_{i=1}^m  \sum _{z} Q_i(z)logP(x,z;\theta)</script><h2 id="EM算法流程"><a href="#EM算法流程" class="headerlink" title="EM算法流程"></a>EM算法流程</h2><p>E：基于当前的参数估计值$\theta$，计算在给定x时隐变量z的条件概率：</p>
+<script type="math/tex; mode=display">
+Q_i(z) =P(z|x;\theta)</script><p>M：最大化似然函数：</p>
+<script type="math/tex; mode=display">
+arg\max \limits_{\theta}\sum_{i=1}^m  \sum _{z} Q_i(z)logP(x,z;\theta)</script><h2 id="收敛性证明"><a href="#收敛性证明" class="headerlink" title="收敛性证明"></a>收敛性证明</h2><p>假设第t次迭代时的参数值为$\theta_t$，第t+1次迭代时的参数值为$\theta_{t+1}$。如果能证明每次迭代时对数似然函数的值单调增，即： </p>
+<script type="math/tex; mode=display">
+L(\theta_t) \leq L(\theta_{t+1})</script><script type="math/tex; mode=display">
+L(\theta_{t+1}) \geq \sum_{i=1}^m  \sum _{z} Q_i(z)log\frac{P(x,z;\theta_{t+1})}{Q_i(z)} \geq \sum_{i=1}^m  \sum _{z} Q_i(z)log\frac{P(x,z;\theta_{t})}{Q_i(z)}=L(\theta)</script><p>第二个不等式成立的条件是因为： 因为$\theta_{t+1}$是函数的极值，因此会大于等于任意点处的函数值，第三个等式在上面已经做了说明，是Jensen不等式取等式。上面的结论保证了每次迭代时函数值会上升，直到到达局部极大值点处，但只能保证收敛到局部极值。 </p>
+<p><img src="/2020/04/05/ML-EM/EM算法示意图.jpg" alt="EM算法示意图"></p>
+<p>图中的蓝色曲线为要求解的对数似然函数，黄色曲线为构造出的下界函数。首先用参数的当前估计值$\theta_{t}$计算出每个训练样本的隐变量的概率分布估计值$\theta_{t}$，然后用该值构造下界函数，在参数的当前估计值$\theta_{t}$处，下界函数与对数似然函数的值相等（对应图中左侧第一条虚线）。然后求下界函数的极大值，得到参数新的估计值$\theta_{t+1}$，再以当前的参数值$\theta_{t+1}$计算隐变量的概率分$\theta_{t+1}$布，构造出新的下界函数，然后求下界函数的极大值得到$\theta_{t+2}$。如此反复，直到收敛。 </p>
+<h1 id="高斯混合模型"><a href="#高斯混合模型" class="headerlink" title="高斯混合模型"></a>高斯混合模型</h1><h2 id="什么是高斯混合模型"><a href="#什么是高斯混合模型" class="headerlink" title="什么是高斯混合模型"></a>什么是高斯混合模型</h2><p>GMM(Gaussian Mixture Model, 高斯混合模型)被誉为万能分布近似器, 其拥有强悍的数据建模能力. GMM使用若干个高斯分布的加权和作为对观测数据集进行建模的基础分布, 而由中心极限定理我们知道, 大量独立同分布的随机变量的均值在做适当标准化之后会依分布收敛于高斯分布, 这使得高斯分布具有普适性的建模能力, 继而奠定了使用高斯分布作为主要构成部件的GMM进行数据建模的理论基础. GMM是典型的概率图模型 , GMM与其变种k-means(k均值)算法都是工业实践中经常使用的聚类工具. </p>
+<h2 id="求解高斯混合模型"><a href="#求解高斯混合模型" class="headerlink" title="求解高斯混合模型"></a>求解高斯混合模型</h2><p>假设有一批样本${x_1,x_2,…x_m}$。为每个样本$x_i$增加一个隐变量$z_i$，表示样本来自于哪个高斯分布。这是一个离散型的随机变量，取值范围为{<strong>1</strong>,..,<strong>k</strong>}，取每个值的概率为$w_i$。x和z的联合概率可以写成 :</p>
+<script type="math/tex; mode=display">
+p(x,z =j ) = p(z=j)p(x|z=j)=w_jN(x,\mu,\Sigma_j)</script><p>这是样本的隐变量取值为j，并且样本向量值为x的概率。在E步构造Q函数 </p>
+<script type="math/tex; mode=display">
+Q_i(z_i=j) = q_{ij} = \frac{p(x_i,z_i=j;\theta)}{\sum_z p(x_i,z;\theta)}=\frac{w_j N(x;\mu,\Sigma)}{\sum_{t=1}^k w_t N(x;\mu,\Sigma)}</script><p>这个值根据$\mu,\Sigma,w$的当前迭代值计算，是一个常数。得到z的分布即Q值之后，要求解的目标函数为 </p>
+<script type="math/tex; mode=display">
+L(w,\mu,\Sigma) = \sum_i^m \sum_{z_i}^kQ_i(z_i) log \frac{p(x_i,z_i;\theta)}{Q_i(z_i)}\\
+= \sum_i \sum_{z_i}q_{ij} log \frac{p(w_jN(x;\mu,\Sigma_j))}{q_{ij}}\\
+=\sum_i \sum_{z_i}q_{ij} log \frac{w_j\frac{1}{\sqrt{2\pi \Sigma}}e^{-\frac{(x-\mu)^2}{2\Sigma}}}{q_{ij}}\\
+=\sum_i \sum_{z_i}q_{ij}( log w_j+log\frac{1}{\sqrt{2\pi \Sigma}q_{ij}}-\frac{(x-\mu)^2}{2\Sigma})</script><p>在这里$q_{ij}$已经是一个常数而不是<em>μ</em>和<em>∑</em>的函数。对求$\mu_j$梯度并令梯度为0，可以得到 </p>
+<script type="math/tex; mode=display">
+\nabla_{\mu_j}L(w,\mu,\Sigma)=-\sum_{i=1}^mq_{ij}\frac{x_i-\mu_j}{\Sigma}=0\\
+\mu_j = \frac{\sum_{i=1}^m q_{ij}x_i}{\sum_{i=1}q_{ij}}</script><p> 对$\Sigma_j$求梯度并令梯度为0，根据正态分布最大似然估计的结论，可以解到 </p>
+<script type="math/tex; mode=display">
+\Sigma_j=\frac{\sum_{i=1}q_{ij}(x-\mu)^2}{\sum_{i=1}q_{ij}}</script><p>最后处理w。上面的目标函数中，只有$logx_j$和w有关，因此可以简化。由于$w_i$有等式约束$\sum_{i=1}^kw_i=0$</p>
+<p>构造拉格朗日乘子函数$L(w,\lambda)=\sum_{i=1}\sum_{j=1}q_{ij}\log w_j+\lambda(\sum_{j=1}w_j-1)$</p>
+<p> 对w求梯度并令梯度为0，可以得到下面的方程组 </p>
+<script type="math/tex; mode=display">
+\sum\sum\frac{q_{ij}}{w_j}+\lambda=0\\
+\sum_{i=1}w_i =1\\
+最后解得 w_j=\sum_{i=1}^lq_{ij}/l</script><p>由此得到求解高斯混合模型的EM算法流程。首先初始化<em>μ,**∑,w</em>，接下来循环进行迭代，直至收敛，每次迭代时的操作为： </p>
+<p>E： 根据模型参数的当前估计值，计算第i个样本来自第j个高斯分布的概率： </p>
+<script type="math/tex; mode=display">
+q_{ij} = p(z_i=j|x_i;w,\mu,\Sigma)</script><p>M：计算模型的参数 :</p>
+<script type="math/tex; mode=display">
+权重：w_j=\sum_{i=1}^lq_{ij}/l\\
+均值：\mu_j = \frac{\sum_{i=1}^m q_{ij}x_i}{\sum_{i=1}q_{ij}}\\
+协方差：\Sigma_j=\frac{\sum_{i=1}q_{ij}(x-\mu)^2}{\sum_{i=1}q_{ij}}</script><blockquote>
+<p> 参考</p>
+<p><a href="https://mp.weixin.qq.com/s/FLR36-n126aVbTxjD1MMGQ" target="_blank" rel="noopener">高斯混合模型与EM算法的数学原理及应用实例</a></p>
+<p><a href="https://mp.weixin.qq.com/s/5V4LgKDNID4DhBE0ky6fRQ" target="_blank" rel="noopener">理解EM算法</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/EM/" rel="tag"># EM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/05/ML-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8/" rel="prev" title="ML-贝叶斯分类器">
+      <i class="fa fa-chevron-left"></i> ML-贝叶斯分类器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/05/DFS-1/" rel="next" title="DFS-1">
+      DFS-1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法"><span class="nav-number">1.</span> <span class="nav-text">EM算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法原理"><span class="nav-number">1.1.</span> <span class="nav-text">EM算法原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法推导"><span class="nav-number">1.2.</span> <span class="nav-text">EM算法推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法流程"><span class="nav-number">1.3.</span> <span class="nav-text">EM算法流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收敛性证明"><span class="nav-number">1.4.</span> <span class="nav-text">收敛性证明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高斯混合模型"><span class="nav-number">2.</span> <span class="nav-text">高斯混合模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是高斯混合模型"><span class="nav-number">2.1.</span> <span class="nav-text">什么是高斯混合模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求解高斯混合模型"><span class="nav-number">2.2.</span> <span class="nav-text">求解高斯混合模型</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

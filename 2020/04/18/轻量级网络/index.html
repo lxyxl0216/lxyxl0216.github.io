@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="轻量级网络">
+<meta name="keywords" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="轻量级网络">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="轻量级网络">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;普通卷积.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;分组卷积.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;MobileNetV1网络结构.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;D+P.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;depthwise.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;pointwise.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;MobileNetV1卷积.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;MobileNetV2.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;对比Mobile12.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;h-swish.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;V3small.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;V3large.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;ShuffleNetV1.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;Shuffle%20channel.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;ShuffleV12对比.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;ShuffleNetV2.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;Ghost%20moudle.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;Ghost%20block.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;Ghost计算量.gif">
+<meta property="og:updated_time" content="2020-08-17T10:30:42.344Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;18&#x2F;%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C&#x2F;普通卷积.jpg">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>轻量级网络 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          轻量级网络
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-18 16:47:10" itemprop="dateCreated datePublished" datetime="2020-04-18T16:47:10+08:00">2020-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-17 18:30:42" itemprop="dateModified" datetime="2020-08-17T18:30:42+08:00">2020-08-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="轻量级网络"><a href="#轻量级网络" class="headerlink" title="轻量级网络"></a>轻量级网络</h1><a id="more"></a>
+
+    <div id="aplayer-jUVnXiEB" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="Group-convolution"><a href="#Group-convolution" class="headerlink" title="Group convolution"></a>Group convolution</h1><p>假设有输入feature map，尺寸为 $H\times W\times C$，同时有k个卷积核。对于一般卷积，feature map的输出尺寸为 $H\times W\times k$。 </p>
+<p>而Group convolution的实质就是将convolution分为$g$个独立的组，分别计算。即： </p>
+<ul>
+<li>把input feature 分为g组，每组的尺寸为 $H\times W\times (C/g)$</li>
+<li>把kernel分为g组，没组的尺寸为 $h\times w \times (k/g)$</li>
+<li>按顺序每组input feature和kernel分别做卷积，输出g组$H’\times W’ \times (k/g)$特征，即$H’\times W’\times g$</li>
+</ul>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/普通卷积.jpg" alt="普通卷积"></p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/分组卷积.jpg" alt="分组卷积"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch.autograd <span class="keyword">import</span> Variable</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">input = torch.ones(<span class="number">1</span>, <span class="number">3</span>, <span class="number">224</span>, <span class="number">224</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">input = Variable(input)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">f = nn.Conv2d(in_channels=<span class="number">3</span>, out_channels=<span class="number">9</span>, kernel_size=<span class="number">5</span>, groups=<span class="number">3</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">output = f(input)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">print(output.shape) <span class="comment"># (1, 9, 220, 220)</span></span></pre></td></tr></table></figure>
+<h1 id="MobileNet-V1"><a href="#MobileNet-V1" class="headerlink" title="MobileNet V1"></a>MobileNet V1</h1><p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/MobileNetV1网络结构.png" alt="MobileNetV1网络结构"></p>
+<p>核心是通过把卷积拆分为 Depthwise+Pointwise两部分。</p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/D+P.jpg" alt="Depthwise+Pointwise"></p>
+<p>假设有$N\times H\times W\times C$，$k个3\times 3$的卷积。</p>
+<p>Depthwise将$N\times H\times W\times C$的输入分为$group=C$，然后每组做$3\times 3$的卷积。</p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/depthwise.jpg" alt="depthwise"></p>
+<p>Pointwise将$N\times H\times W \times C$的输入做$k$个$1\times 1$的卷积。</p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/pointwise.jpg" alt="pointwise"></p>
+<p>于是普通卷积和MobileNet的卷积对比为：</p>
+<ul>
+<li>普通卷积：$3\times 3Conv+BN+RELU,计算量：H\times W\times C\times k\times 3\times 3$</li>
+<li>MobileNet卷积：$3\times 3Depthwise Conv+BN+RELU和1\times 1Pointwise Conv+BN+RELU,\\计算量为：H\times W\times C\times 3\times 3\times 1+H\times W\times C\times 1\times 1\times k$</li>
+<li>计算量压缩为：$\frac{H\times W\times C\times 3\times 3+H\times W\times C\times K}{H\times W\times C\times K\times 3\times 3}=\frac{1}{k}+\frac{1}{3\times 3}$</li>
+</ul>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/MobileNetV1卷积.jpg" alt="MobileNetV1卷积"></p>
+<p>可以对结构中所有的卷积层的kernel个数同一乘缩小因子$\alpha$，进而计算量降低为：$H\times W\times \alpha C\times 3\times 3+H\times W\times \alpha C\times \alpha k$</p>
+<p>加入$RELU6$ 作为非线性激活函数，在低精度计算下具有更强的鲁棒性 。</p>
+<p>缺点</p>
+<p>通道维数较小造成特征退化</p>
+<h1 id="MobileNetV2"><a href="#MobileNetV2" class="headerlink" title="MobileNetV2"></a>MobileNetV2</h1><ul>
+<li>认为RELU在低维度的时候容易引起信息丢失</li>
+<li>在V1基础上加入残差和Liner bottleneck</li>
+<li>先通过$1\times 1$卷积扩大通道数，最后再恢复（这里与ResNet不同，ResNet是先缩小再恢复），再恢复后加入relu激活</li>
+</ul>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/MobileNetV2.jpg" alt="MobileNetV2"></p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/对比Mobile12.jpg" alt="对比Mobile12"></p>
+<h1 id="MobileNetV3"><a href="#MobileNetV3" class="headerlink" title="MobileNetV3"></a>MobileNetV3</h1><ul>
+<li>引入SE模块</li>
+<li>在V2的基础上，在最后分类的部分删掉了一些层</li>
+<li>在$switchx=x \cdot \sigma(x)激活函数上进行优化h-swishx=x\frac{RELU6(x+3)}{6}$</li>
+</ul>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/h-swish.png" alt="h-swish"></p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/V3small.png" alt="V3small"></p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/V3large.png" alt="V3large"></p>
+<h1 id="ShuffleNetV1"><a href="#ShuffleNetV1" class="headerlink" title="ShuffleNetV1"></a>ShuffleNetV1</h1><p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/ShuffleNetV1.jpg" alt="ShuffleNetV1"></p>
+<p>对于图a</p>
+<ol>
+<li>输入是$H\times W\times C$，第一个卷积是$1\times 1\times k$，输出为$H\times W\times k$，计算量为$H\times W\times C\times k$；</li>
+<li>输入到Depthwise，卷积为$3\times 3\times k$，输出为$H\times W\times k$，计算量为$H\times W\times 3\times 3\times k$；</li>
+<li>输入到$1\times 1Conv$，卷积核为$1\times 1\times C$，输出为$H\times W\times C$，计算量为$H\times W\times k\times C$；</li>
+<li>最终计算量相加为：HW(2Ck+9k)；</li>
+</ol>
+<p>对于图b</p>
+<p>与上面不同的是把$Conv1\times 1换成GConv1\times 1$，相当于计算量从$H\times W\times C\times k$变为$H\times W\times C\times k/g$，同时还引入了shuffle cost。 </p>
+<p>Channel Shuffle操作</p>
+<p>ShuffleNet的本质是将卷积运算限制在每个Group内，这样模型的计算量取得了显著的下降。然而导致模型的信息流限制在各个Group内，组与组之间没有信息交换，这会影响模型的表示能力。因此，需要引入组间信息交换的机制，即Channel Shuffle操作。同时Channel Shuffle是可导的，可以实现end-to-end一次性训练网络。</p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/Shuffle channel.jpg" alt=" Shuffle channel "></p>
+<p>缺点</p>
+<ol>
+<li>Shuffle channel在实现的时候需要大量的指针跳转和Memory set，这本身就是极其耗时的；同时又特别依赖实现细节，导致实际运行速度不会那么理想。</li>
+<li>Shuffle channel规则是人工设计出来的，不是网络自己学出来的。这不符合网络通过负反馈自动学习特征的基本原则，又陷入人工设计特征的老路（如sift/HOG等）。</li>
+</ol>
+<h1 id="ShuffleNetV2"><a href="#ShuffleNetV2" class="headerlink" title="ShuffleNetV2"></a>ShuffleNetV2</h1><ul>
+<li>过量的组卷积会增强 内存访问消耗时间 （MAC）</li>
+<li>卷积层的输入和输出特征通道数相等时MAC最小，此时模型速度最快。</li>
+<li>模型中的分支数量越少，模型速度越快 </li>
+<li>element-wise操作所带来的时间消耗远比在FLOPs上的体现的数值要多，因此要尽可能减少element-wise操作 </li>
+</ul>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/ShuffleV12对比.jpg" alt="ShuffleV12对比"></p>
+<p> 引入了一种新的运算：channel split。具体来说，在开始时先将输入特征图在通道维度分成两个分支：通道数分别为 $c’和c-c’$，实际实现时$c’=c/2$ 。左边分支做同等映射，右边的分支包含3个连续的卷积，并且输入和输出通道相同 。最后进行concat</p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/ShuffleNetV2.webp" alt="ShuffleNetV2"></p>
+<h1 id="GhostNet"><a href="#GhostNet" class="headerlink" title="GhostNet"></a>GhostNet</h1><ol>
+<li>引入了一种新的Ghost模块，通过使用较少的参数来生成更多的特征；</li>
+<li>Ghost深层神经网络中的一个普通卷积层将被分成两部分。第一部分涉及普通卷积，但它们的总数将受到严格控制，给定第一部分的内在特征映射，然后应用一系列简单的线性运算来生成更多的特征映射；</li>
+<li>在不改变输出特征映射大小的情况下，与普通卷积module相比该Ghost模块所需的参数总数和计算复杂度相比减少了；</li>
+</ol>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/Ghost moudle.gif" alt="Ghost moudle"></p>
+<p>Ghost Module则分为两步操作来获得与普通卷积一样数量的特征图（这里需要强调，是数量一样）。</p>
+<ul>
+<li><p>少量卷积（比如正常用32个卷积核，这里就用16个，从而减少一半的计算量）；</p>
+</li>
+<li><p>cheap operations，如图中的Φ表示，Φ是诸如3\times 3的卷积，并且是逐个特征图的进行卷积（Depth-wise convolutional）。</p>
+</li>
+</ul>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/Ghost block.jpg" alt="Ghost block"></p>
+<p>那么Ghost的计算量是多少呢？</p>
+<p>h’，w’为输入特征图大小，卷积核大小为k，输入通道为c，输出通道为n，d表示$\phi$的线性核的大小，假设Ghost模块中输出Feature Map可以分为n/s组，每组为s个Feature Map，这s个Feature Map中包含一个标准卷积核的计算结果和s-1个线性变换得到的结果 </p>
+<p><img src="/2020/04/18/%E8%BD%BB%E9%87%8F%E7%BA%A7%E7%BD%91%E7%BB%9C/Ghost计算量.gif" alt="Ghost计算量"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/14/%E4%BA%8C%E5%8F%89%E6%A0%91-4/" rel="prev" title="二叉树-4">
+      <i class="fa fa-chevron-left"></i> 二叉树-4
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/19/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" rel="next" title="拓扑排序">
+      拓扑排序 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#轻量级网络"><span class="nav-number">1.</span> <span class="nav-text">轻量级网络</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Group-convolution"><span class="nav-number">2.</span> <span class="nav-text">Group convolution</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MobileNet-V1"><span class="nav-number">3.</span> <span class="nav-text">MobileNet V1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MobileNetV2"><span class="nav-number">4.</span> <span class="nav-text">MobileNetV2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MobileNetV3"><span class="nav-number">5.</span> <span class="nav-text">MobileNetV3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ShuffleNetV1"><span class="nav-number">6.</span> <span class="nav-text">ShuffleNetV1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ShuffleNetV2"><span class="nav-number">7.</span> <span class="nav-text">ShuffleNetV2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GhostNet"><span class="nav-number">8.</span> <span class="nav-text">GhostNet</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

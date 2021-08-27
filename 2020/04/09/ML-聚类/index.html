@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="聚类">
+<meta name="keywords" content="聚类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ML-聚类">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="聚类">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;外部指标样例.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;Jaccard系数.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;FM指数.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;Rand指数.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;内部指标样例.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;DB指数.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;Dunn指数.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;k均值算法.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;LVQ.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;GMM.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;DBSCAN.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;AGNES距离.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;AGNES.png">
+<meta property="og:updated_time" content="2020-04-09T10:31:04.763Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;09&#x2F;ML-%E8%81%9A%E7%B1%BB&#x2F;外部指标样例.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/09/ML-%E8%81%9A%E7%B1%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ML-聚类 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/09/ML-%E8%81%9A%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ML-聚类
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-09 16:04:26 / 修改时间：18:31:04" itemprop="dateCreated datePublished" datetime="2020-04-09T16:04:26+08:00">2020-04-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h1><a id="more"></a>
+
+    <div id="aplayer-xueJaDzA" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h2 id="聚类任务"><a href="#聚类任务" class="headerlink" title="聚类任务"></a>聚类任务</h2><ul>
+<li>无监督学习</li>
+<li>将样本划分为若干不想交子集</li>
+</ul>
+<h2 id="性能度量"><a href="#性能度量" class="headerlink" title="性能度量"></a>性能度量</h2><ul>
+<li>簇内相似度高</li>
+<li>簇间相似度低</li>
+<li>聚类的性能度量分两类：<ul>
+<li>聚类结果与某个参考模型<code>reference model</code>进行比较，称作外部指标<code>external index</code> 。</li>
+<li>直接考察聚类结果而不利用任何参考模型，称作内部指标<code>internal index</code> 。</li>
+</ul>
+</li>
+</ul>
+<p>外部指标：</p>
+<p><img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/外部指标样例.png" alt="外部指标样例"></p>
+<ul>
+<li>Jaccard系数（越大越好）<img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/Jaccard系数.png" alt="Jaccard系数"></li>
+<li>FM指数（越大越好）<img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/FM指数.png" alt="FM指数"></li>
+<li>Rand指数（越大越好）<img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/Rand指数.png" alt="Rand指数"></li>
+</ul>
+<p>内部指标：</p>
+<p><img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/内部指标样例.png" alt="内部指标样例"></p>
+<ul>
+<li>DB指数（越小越好）<img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/DB指数.png" alt="DB指数"></li>
+<li>Dunn指数（越大越好）<img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/Dunn指数.png" alt="Dunn指数"></li>
+</ul>
+<h2 id="距离计算"><a href="#距离计算" class="headerlink" title="距离计算"></a>距离计算</h2><p>闵可夫斯基距离：</p>
+<script type="math/tex; mode=display">
+dist_{mk}(x_i,x_j) = (\sum_{u=1}^n |\hat x_{iu}-x_{ju}|^p)^{\frac{1}{p}}</script><p>p=1为曼哈顿距离，p=2为欧式距离</p>
+<h2 id="原型聚类"><a href="#原型聚类" class="headerlink" title="原型聚类"></a>原型聚类</h2><p>原型聚类<code>prototype-based clustering</code>假设聚类结构能通过一组原型刻画。</p>
+<p>常用的原型聚类有：</p>
+<ul>
+<li><code>k</code>均值算法<code>k-means</code> 。</li>
+<li>学习向量量化算法<code>Learning Vector Quantization:LVQ</code> 。</li>
+<li>高斯混合聚类<code>Mixture-of-Gaussian</code> 。</li>
+</ul>
+<h3 id="k-means"><a href="#k-means" class="headerlink" title="k-means"></a>k-means</h3><p>给定样本集D = {x1,x2,…xm},”k均值” (k-means)算法针对聚类所<br>得簇划分C = {C1,C2, … ,Cl}最小化平方误差:</p>
+<script type="math/tex; mode=display">
+E = \sum_{i=1}^k \sum_{x\in C} ||x-\mu_i||_2^2\\
+\mu是簇Ci的均值向量</script><p><img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/k均值算法.png" alt="k均值算法"></p>
+<p><code>k-means</code> 优点：</p>
+<ul>
+<li>计算复杂度低，</li>
+<li>思想简单，容易实现。</li>
+</ul>
+<p><code>k-means</code> 缺点：</p>
+<ul>
+<li><p>需要首先确定聚类的数量 。</p>
+</li>
+<li><p>分类结果严重依赖于分类中心的初始化。</p>
+<p>通常进行多次<code>k-means</code>，然后选择最优的那次作为最终聚类结果。</p>
+</li>
+<li><p>结果不一定是全局最优的，只能保证局部最优。</p>
+</li>
+<li><p>对噪声敏感。因为簇的中心是取平均，因此聚类簇很远地方的噪音会导致簇的中心点偏移。</p>
+</li>
+<li><p>无法解决不规则形状的聚类。</p>
+</li>
+<li><p>无法处理离散特征。</p>
+</li>
+</ul>
+<p><code>k-means</code> 性质：</p>
+<ul>
+<li><p><code>k-means</code> 实际上假设数据是呈现球形分布，实际任务中很少有这种情况。</p>
+<p>与之相比，<code>GMM</code> 使用更加一般的数据表示，即高斯分布。</p>
+</li>
+<li><p><code>k-means</code> 假设各个簇的先验概率相同，但是各个簇的数据量可能不均匀。</p>
+</li>
+<li><p><code>k-means</code> 使用欧式距离来衡量样本与各个簇的相似度。这种距离实际上假设数据的各个维度对于相似度的作用是相同的。</p>
+</li>
+<li><p><code>k-means</code> 中，各个样本点只属于与其相似度最高的那个簇，这实际上是<code>硬</code> 分簇。</p>
+</li>
+<li><p><code>k-means</code> 算法的迭代过程实际上等价于<code>EM</code> 算法。</p>
+</li>
+</ul>
+<h3 id="LVQ"><a href="#LVQ" class="headerlink" title="LVQ"></a>LVQ</h3><p>试图找到一组原型向量来刻画聚类结构，但与一般聚类算法不同的是，LVQ假设数据样本带有类别标记，学习过程利用样本的这些<strong>监督信息</strong>来辅助聚类</p>
+<p><img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/LVQ.png" alt="LVQ"></p>
+<h3 id="GMM"><a href="#GMM" class="headerlink" title="GMM"></a>GMM</h3><ul>
+<li>采用概率模型来表达聚类原型</li>
+<li>从原型聚类的角度来看，高斯混合聚类是采用概率模型（高斯分布）对原型进行刻画簇划分则由原型对应后验概率确定．</li>
+</ul>
+<p><img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/GMM.png" alt="GMM"></p>
+<h2 id="密度聚类"><a href="#密度聚类" class="headerlink" title="密度聚类"></a>密度聚类</h2><p>算法假设聚类结构能通过样本分布的紧密程度确定，通常情形下，密度聚类算法从样本密度的角度来考察样本之间的可连接性，并基于可连接样本不断扩展聚类簇以获得最终的聚类结果</p>
+<p><img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/DBSCAN.png" alt="DBSCAN"></p>
+<p><code>DBSCAN</code> 算法的优点：</p>
+<ul>
+<li>簇的数量由算法自动确定，无需人工指定。</li>
+<li>基于密度定义，能够对抗噪音。</li>
+<li>可以处理任意形状和大小的簇。</li>
+</ul>
+<p><code>DBSCAN</code> 算法的缺点：</p>
+<ul>
+<li>若样本集的密度不均匀，聚类间距差相差很大时，聚类质量较差。因为此时参数   和   的选择比较困难。</li>
+<li>无法应用于密度不断变化的数据集中。</li>
+</ul>
+<h2 id="层次聚类"><a href="#层次聚类" class="headerlink" title="层次聚类"></a>层次聚类</h2><p>层次聚类(hierarchical clustering) 试图在不同层次对数据集进行划分，从而形成树形的聚类结构数据集的划分可采用“ 自底向上” 的聚合策略，也可采用“ 自顶向下” 的分拆策略。</p>
+<h3 id="AGNES"><a href="#AGNES" class="headerlink" title="AGNES"></a>AGNES</h3><p>AGNES 是一种采用自底向上聚合策略的层次聚类算法它先将数据集中<br>的每个样本看作一个初始聚类簇，然后在算法运行的每一步中找出距离最近的两个聚类簇进行合并，该过程不断重复，直至达到预设的聚类簇个数．这里的关键是如何计算聚类簇之间的距离．实际上，每个簇是一个样木集合，因此，只需采用关于集合的某种距离即可：</p>
+<p><img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/AGNES距离.png" alt="AGNES距离"></p>
+<p><img src="/2020/04/09/ML-%E8%81%9A%E7%B1%BB/AGNES.png" alt="AGNES"></p>
+<p>在第1-9行，算法先对仪含一个样本的初始聚类簇和相应的距离矩阵进行初始化；</p>
+<p>然后在第11-23行，AGNES不断合并距离最近的聚类簇，并对合并得到的聚类簇的距离矩阵进行更新；</p>
+<p>上述过程不断重复直至达到预设的聚类簇数．</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a href="[http://www.huaxiaozhuan.com/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0/chapters/11_cluster.html](http://www.huaxiaozhuan.com/统计学习/chapters/11_cluster.html">AI算法工程师手册</a> )</p>
+<p>西瓜书</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%81%9A%E7%B1%BB/" rel="tag"># 聚类</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/07/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E5%85%AD/" rel="prev" title="OpenCV学习笔记六">
+      <i class="fa fa-chevron-left"></i> OpenCV学习笔记六
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/09/DFS-2/" rel="next" title="DFS-2">
+      DFS-2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#聚类"><span class="nav-number">1.</span> <span class="nav-text">聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#聚类任务"><span class="nav-number">1.1.</span> <span class="nav-text">聚类任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能度量"><span class="nav-number">1.2.</span> <span class="nav-text">性能度量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#距离计算"><span class="nav-number">1.3.</span> <span class="nav-text">距离计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原型聚类"><span class="nav-number">1.4.</span> <span class="nav-text">原型聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#k-means"><span class="nav-number">1.4.1.</span> <span class="nav-text">k-means</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LVQ"><span class="nav-number">1.4.2.</span> <span class="nav-text">LVQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GMM"><span class="nav-number">1.4.3.</span> <span class="nav-text">GMM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#密度聚类"><span class="nav-number">1.5.</span> <span class="nav-text">密度聚类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#层次聚类"><span class="nav-number">1.6.</span> <span class="nav-text">层次聚类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AGNES"><span class="nav-number">1.6.1.</span> <span class="nav-text">AGNES</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.7.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

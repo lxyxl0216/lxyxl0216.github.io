@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="MySQL基本和高级操作">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL语法规则">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;23&#x2F;SQL%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="MySQL基本和高级操作">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-23T07:56:14.243Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/05/23/SQL%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>SQL语法规则 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/05/23/SQL%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL语法规则
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-23 15:55:11 / 修改时间：15:56:14" itemprop="dateCreated datePublished" datetime="2020-05-23T15:55:11+08:00">2020-05-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="MySQL基本和高级操作"><a href="#MySQL基本和高级操作" class="headerlink" title="MySQL基本和高级操作"></a>MySQL基本和高级操作</h1><a id="more"></a>
+
+    <div id="aplayer-ddRLYnkG" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="MySQL基本操作"><a href="#MySQL基本操作" class="headerlink" title="MySQL基本操作"></a>MySQL基本操作</h1><h2 id="SQL语法规则"><a href="#SQL语法规则" class="headerlink" title="SQL语法规则"></a>SQL语法规则</h2><ul>
+<li>基础SQL指令通常是以行为单位</li>
+<li>SQL指令需要语句结束符，默认<code>;</code></li>
+<li>如果使用到关键字或者保留字，需要用反引号</li>
+</ul>
+<h3 id="结构创建"><a href="#结构创建" class="headerlink" title="结构创建"></a>结构创建</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">creat 结构类型 结构名 结构描述；</span></pre></td></tr></table></figure>
+<h3 id="显示结构"><a href="#显示结构" class="headerlink" title="显示结构"></a>显示结构</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#显示结构</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">show 结构类型 （复数）;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="comment">#显示结构创建信息</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">show create 结构类型 结构名;</span></pre></td></tr></table></figure>
+<h3 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 新增数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">insert into 表名 values</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">selest <span class="keyword">from</span> 表名</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">update 表名 set</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">delete <span class="keyword">from</span>  表名</span></pre></td></tr></table></figure>
+<h2 id="SQL数据库操作"><a href="#SQL数据库操作" class="headerlink" title="SQL数据库操作"></a>SQL数据库操作</h2><h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">create database 数据库名字 [数据库选项]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">create database db_1;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"># 创建指定字符集的数据库</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">create database db_2 charset utf8MB4;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"># 创建一个指定校对集的数据库</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">create database db_3 charset utf8MB4 collate utf8MB4_general_ci;</span></pre></td></tr></table></figure>
+<h3 id="显示数据库"><a href="#显示数据库" class="headerlink" title="显示数据库"></a>显示数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"># 显示所有数据库</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">show databases；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"># 显示数据库创建指令</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">show create database db_1；</span></pre></td></tr></table></figure>
+<h3 id="使用数据库"><a href="#使用数据库" class="headerlink" title="使用数据库"></a>使用数据库</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">use db_1；</span></pre></td></tr></table></figure>
+<h3 id="修改数据库"><a href="#修改数据库" class="headerlink" title="修改数据库"></a>修改数据库</h3><ul>
+<li>数据库名字不可修改（先新增，后迁移，最后删除）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"># 修改数据库字符集</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">alter database db_1 charset gbk;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"># 修改数据库校对集</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">alter database db_1 charset gbk collate gbk_chinese_ci;</span></pre></td></tr></table></figure>
+<h3 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a>删除数据库</h3><ul>
+<li>删除不可逆</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">drop database 数据库名字；</span></pre></td></tr></table></figure>
+<h2 id="SQL表-字段-操作"><a href="#SQL表-字段-操作" class="headerlink" title="SQL表(字段)操作"></a>SQL表(字段)操作</h2><h3 id="创建数据表"><a href="#创建数据表" class="headerlink" title="创建数据表"></a>创建数据表</h3><ul>
+<li>表与字段不分家</li>
+<li>创建需要制定存储的数据库</li>
+<li>字段至少需要制定名字和类型</li>
+<li>数据库不限定字段数量<ul>
+<li>每个字段使用逗号分隔</li>
+<li>最后一个不需要字段</li>
+</ul>
+</li>
+<li>表可以制定表选项<ul>
+<li>存储引擎：engine[=] 具体存储引擎</li>
+<li>字符集：[defalut] charset 具体字符集（继承数据库）</li>
+<li>校对集：collate (继承数据库)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"># 表创建语法</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">create table [数据库名.] 表名(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">	字段名 字段类型，</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    ···</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    字段名 字段类型</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">)表选项;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"># 创建简单数据表</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">create table db_2.t_1(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">	name varchar(50)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line"># 创建数据表 ---- 多字段</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">use db_2;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">create table t_2(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">	name varchar(50),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    age int,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    gender varchar(10)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line"># 创建数据表----表选项</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">create table t_2(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">	name varchar(50)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">)engine Innodb charset utf8MB4;</span></pre></td></tr></table></figure>
+<blockquote>
+<p>存储引擎是指数据存储和管理的方式</p>
+<ul>
+<li>Innodb：默认存储引擎，支持事务处理，数据统一管理</li>
+<li>Mylsam：不支持事务处理。数据、表结构、所以独立管理。MySQL5.6以后不再维护。</li>
+</ul>
+<p>如果想创建一个人与已有表一样的数据表<code>create table 表名 like 数据库名字.表名</code></p>
+</blockquote>
+<h3 id="显示数据表"><a href="#显示数据表" class="headerlink" title="显示数据表"></a>显示数据表</h3><ul>
+<li>数据表的显示与用户权限有关</li>
+<li>两种方式<ul>
+<li>显示所有表</li>
+<li>显示具体数据表的创建指令</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"># 显示所有数据表</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">show tables；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"># 显示所有数据表--指定数据库</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">show tables from db_1；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"># 显示部分关联数据表--匹配</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"># %匹配n个，_匹配1个</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">show tables like &#39;%like&#39;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"># 显示数据表的创建指令</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">show create table t_1；</span></pre></td></tr></table></figure>
+<h3 id="查看数据表"><a href="#查看数据表" class="headerlink" title="查看数据表"></a>查看数据表</h3><ul>
+<li>通常是查看字段信息</li>
+<li>详细的显示字段的各项信息</li>
+<li>查看语法有三种</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">desc 表名；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">describe 表名；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">show columns from 表名；</span></pre></td></tr></table></figure>
+<h3 id="更改数据表"><a href="#更改数据表" class="headerlink" title="更改数据表"></a>更改数据表</h3><ul>
+<li>修改表名：rename</li>
+<li>修改表选项：alter table 表名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"># 修改表名</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">rename table t_1 to t1;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"># 如果要夸库修改</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">rename table t_1 to db_1.t1;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"># 修改表选项</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">alter table t1 charset gbk;</span></pre></td></tr></table></figure>
+<blockquote>
+<p>更改表名：rename table 原名 to 新名</p>
+</blockquote>
+<h3 id="更改字段"><a href="#更改字段" class="headerlink" title="更改字段"></a>更改字段</h3><ul>
+<li>字段操作包括：字段名字，类型，属性。</li>
+<li>字段操作包括4类<ul>
+<li>新增字段：add [column]</li>
+<li>更改字段名：change</li>
+<li>修改类型：modify</li>
+<li>删除字段：drop</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"># 新增字段</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">alter table 表名 add [column]  字段名 字段类型 [字段属性] [字段位置]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"># 给已经存在的t_3表增加一个字段 age</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">alter table t_3 add age int；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"># 给已经存在的t_3表增加一个字段 nick</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">alter table t_3 add column nick varchar(10)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"># 字段位置</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">字段分为2种</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">1. 第一个字段first</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">2. after 已经存在的字段名</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">alter table 表名 字段操作 字段类型；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"># 为t_3表增加一个id字段，放在最前面</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">afler table t_3 add id int first；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line"># 在t_3表name 字段后增加一个身份字段card</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">alter table t_3 add card varchar(18) after name;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line"># 更改字段名</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line"># 字段名的修改必须跟上字段类型</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">alter table 表名 change 原字段名 新字段名 字段类型 [字段属性] [位置]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line"># 修改字段名card 为sfz</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">alter table t_3 change card sfz varchar(18);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line"># 修改字段</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line"># 修改字段类型、字段属性、位置</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">alter table 表名 modify 字段名 字段类型 [字段属性] [位置];</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line"># 修改身份证的类型为char(18)并放在id之后</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">34</span></pre></td><td class="code"><pre><span class="line">alter table t_3 modify sfz char(18) after id;</span></pre></td></tr></table></figure>
+<h3 id="删除数据表"><a href="#删除数据表" class="headerlink" title="删除数据表"></a>删除数据表</h3><ul>
+<li>字段删除会将数据也删除</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">alter table 表名 drop 字段名;</span></pre></td></tr></table></figure>
+<h2 id="SQL数据操作"><a href="#SQL数据操作" class="headerlink" title="SQL数据操作"></a>SQL数据操作</h2><h3 id="新增数据"><a href="#新增数据" class="headerlink" title="新增数据"></a>新增数据</h3><ul>
+<li>新增数据是根据表的字段顺序和数据类型要求将数据存放到数据表中</li>
+<li>数据表中的数据以<code>行</code>为存储单位，实际存储属于字段存储数据</li>
+<li>数据插入分两种方式<ul>
+<li>全字段插入：<code>insert into 表名 value(字段列表顺序对应的所有值)</code></li>
+<li>部分字段插入：<code>insert into表名(字段列表) values(字段列表对应的值顺序列表)</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"># 给t_3插入一条完整数据</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">insert into t_3 values(1,&#39;440111200111111111&#39;,&#39;Jim&#39;,&#39;Green&#39;);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"># 根据字段插入数据</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">insert into t_3 (id,sfz,name) values(2,&#39;440111200111111111&#39;,&#39;Tom&#39;)</span></pre></td></tr></table></figure>
+<h3 id="查看数据"><a href="#查看数据" class="headerlink" title="查看数据"></a>查看数据</h3><ul>
+<li>将表中存在的数据按照指定的要求显示</li>
+<li>数据显示包含字段名和数据本身</li>
+<li>数据查看分成两种方式<ul>
+<li>查看全部字段：使用<code>*</code>代替所有字段</li>
+<li>查看部分字段：明确字段名</li>
+</ul>
+</li>
+<li>查看数据很多也是根据条件查询部分</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select *&#x2F;字段列表 from 表名；</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"># 查看t_3表中所有数据</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">select * from t_3;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"># 查看name和身份证</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">select name,sfz from t_3;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"># 查看t_3表中id值为1的信息</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">select * from t_3 where id &#x3D; 1；</span></pre></td></tr></table></figure>
+<h3 id="更新数据"><a href="#更新数据" class="headerlink" title="更新数据"></a>更新数据</h3><ul>
+<li>更新数据通常是根据条件更新某些数据，而不是全部记录都更新</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">update 表名 set 字段 &#x3D; 新值[,字段 &#x3D; 新值][where条件筛选]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"># 更新所有记录的身份证信息</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">update t_3 set sfz &#x3D; &#39;441111200111111111&#39;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"># 更新某个记录的多个字段数据</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">update t_3 set name &#x3D;&#39;Lily&#39;,sfz &#x3D; &#39;442222200111111111&#39; where id &#x3D; 1;</span></pre></td></tr></table></figure>
+<h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><ul>
+<li>删除通常是有条件的删除</li>
+<li>删除为不可逆</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">delete from 表名 [where 条件]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"># 删除t_3表中id为2的数据</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">delete from t_3 where id &#x3D; 2;</span></pre></td></tr></table></figure>
+<h1 id="MySQL高级操作"><a href="#MySQL高级操作" class="headerlink" title="MySQL高级操作"></a>MySQL高级操作</h1><h2 id="数据新增"><a href="#数据新增" class="headerlink" title="数据新增"></a>数据新增</h2><h3 id="批量插入"><a href="#批量插入" class="headerlink" title="批量插入"></a>批量插入</h3><ul>
+<li><p>全字段批量插入 <code>insert into 表名  values(值列表1),(值列表2),...;</code></p>
+</li>
+<li><p>部分字段插入<code>insert into  表名 (字段列表) values(值列表1),(值列表2),...;</code></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">insert into t_3 values(null,&#39;tom&#39;,&#39;10&#39;),(null.&#39;li&#39;,20);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">insert into t_3 (stu_name,age) values(&#39;tt&#39;,10),(&#39;ll&#39;,50);</span></pre></td></tr></table></figure>
+<h3 id="蠕虫复制"><a href="#蠕虫复制" class="headerlink" title="蠕虫复制"></a>蠕虫复制</h3><p>从已经有的表中的数据插入到另一张表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">insert into 表名 [(字段列表)] select 字段列表 from 表名;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">create table t_35(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">	id int primary key auto_increment,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    stu_name varchar(20) not null,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    course varchar(20) ot null,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    score decimal(5,2)        </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">)charset utf8;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">insert into t_35 select * from t_30;</span></pre></td></tr></table></figure>
+<h3 id="主键冲突"><a href="#主键冲突" class="headerlink" title="主键冲突"></a>主键冲突</h3><h2 id="数据查询"><a href="#数据查询" class="headerlink" title="数据查询"></a>数据查询</h2><h3 id="查询选项"><a href="#查询选项" class="headerlink" title="查询选项"></a>查询选项</h3><h3 id="字段选择和别名"><a href="#字段选择和别名" class="headerlink" title="字段选择和别名"></a>字段选择和别名</h3><h3 id="数据源"><a href="#数据源" class="headerlink" title="数据源"></a>数据源</h3><h3 id="where子句"><a href="#where子句" class="headerlink" title="where子句"></a>where子句</h3><ul>
+<li>跟在from数据源之后，对数据进行条件匹配</li>
+<li>where在磁盘读取后，进入内存之前进行筛选</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select * from t_3 where stu_name &#x3D; &#39;li&#39;;</span></pre></td></tr></table></figure>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p>比较运算符</p>
+<ul>
+<li><code>&gt;</code>,<code>&lt;</code>,<code>=</code>,<code>&gt;=</code>,<code>&lt;=</code>,<code>&lt;&gt;</code></li>
+<li>between A and B;</li>
+<li>in（数据1，数据2.。。。）</li>
+<li>like ‘pattern’：像pattern</li>
+<li><code>_</code>对应位置的任意一个字符</li>
+<li><code>%</code>匹配当前位置往后任意数量的字符串</li>
+</ul>
+<p>逻辑运算符</p>
+<ul>
+<li>and ，or，not</li>
+</ul>
+<p>null运算符</p>
+<ul>
+<li>is null，is not null</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select * from t_3 where score &lt; 50;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">select * from t_3 where socre between 50 and 90;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">select * from t_3 where score is null;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">select * from t_3 where stu like &#39;T%&#39;，所有T开头的;</span></pre></td></tr></table></figure>
+<h3 id="group-by"><a href="#group-by" class="headerlink" title="group by"></a>group by</h3><ul>
+<li>分组统计，根据某个字段将所有结果进行分类，并进行数据统计分析</li>
+<li>group by 字句一定是出现在where后</li>
+<li>统计函数：<ul>
+<li>group_concat():将组里的某个字段全部保留</li>
+<li>any_value():不属于分组字段的任意一个组里的值</li>
+<li>count():求对应分组的记录数量</li>
+<li>sum():</li>
+<li>max()/min()</li>
+<li>avg()</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select count(*),class_name from t_4 group by class_name;统计每个班的人数</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">select count(*),class_name,gender from t_4 group by class_name,gender;统计每个班的男女的数量</span></pre></td></tr></table></figure>
+<h3 id="回溯统计"><a href="#回溯统计" class="headerlink" title="回溯统计"></a>回溯统计</h3><p>在进行分组时，每一次结果的回溯都进行一次汇总统计。</p>
+<p>with rollup</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select count(*),class_name,gender,group_concat(name) from t_4 group by class_name,gender;统计每个班的男女</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">select count(*),class_name,gender,group_concat(name) from t_4 group by class_name,gender with rollup;同时计算每一类和所有的统计</span></pre></td></tr></table></figure>
+<h3 id="分组排序"><a href="#分组排序" class="headerlink" title="分组排序"></a>分组排序</h3><ul>
+<li>group by 字段名 [ASC]; 默认；</li>
+<li>group by 字段名 DESC;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">按照班级分组，性别进行降序排序</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">select count(*),class_name,gender,group_concat(name),any_value(name) from t_4 group by class_name,gender desc;</span></pre></td></tr></table></figure>
+<h3 id="having"><a href="#having" class="headerlink" title="having"></a>having</h3><ul>
+<li><p>条件筛选数据</p>
+</li>
+<li><p>having 字句必须出现在group by字句之后</p>
+</li>
+<li>针对内存里已经加载的数据</li>
+<li>having 能做where能做的所有事情，反正不行。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">获取人数小于三的所有班级</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">select count(*) as &#39;count&#39;,class_name,group_concat(name) from t_4 group by class_name having &#39;count&#39;&lt;3;</span></pre></td></tr></table></figure>
+<h3 id="order-by"><a href="#order-by" class="headerlink" title="order by"></a>order by</h3><ul>
+<li>按照某一个条件进行排序</li>
+</ul>
+<ul>
+<li>参照物是校对集</li>
+<li>order by [ASC]</li>
+<li>order by DESC</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select * from t_3 order by age;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">select * from t_3 order by age [DESC];</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">先性别降序，在年龄升序</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">select * from t_3 order by gender desc,age asc;</span></pre></td></tr></table></figure>
+<h3 id="limit"><a href="#limit" class="headerlink" title="limit"></a>limit</h3><ul>
+<li>限制数据获取的数量</li>
+<li>limit 必须在order by之后</li>
+<li>limit数量：限制获取的数量</li>
+<li>limit 起始位置，数量：限制数据获取的位置以及数量；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">select * from t_3 limit 3;前三条</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">select * from t_3 limit 3,3;从3开始的3条</span></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/23/Cpp%E9%9D%A2%E7%BB%8F%E6%80%BB%E7%BB%93/" rel="prev" title="Cpp面经总结">
+      <i class="fa fa-chevron-left"></i> Cpp面经总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/06/01/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%A4%84%E7%90%86/" rel="next" title="数据集处理">
+      数据集处理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL基本和高级操作"><span class="nav-number">1.</span> <span class="nav-text">MySQL基本和高级操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL基本操作"><span class="nav-number">2.</span> <span class="nav-text">MySQL基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL语法规则"><span class="nav-number">2.1.</span> <span class="nav-text">SQL语法规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构创建"><span class="nav-number">2.1.1.</span> <span class="nav-text">结构创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示结构"><span class="nav-number">2.1.2.</span> <span class="nav-text">显示结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据操作"><span class="nav-number">2.1.3.</span> <span class="nav-text">数据操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL数据库操作"><span class="nav-number">2.2.</span> <span class="nav-text">SQL数据库操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">2.2.1.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示数据库"><span class="nav-number">2.2.2.</span> <span class="nav-text">显示数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用数据库"><span class="nav-number">2.2.3.</span> <span class="nav-text">使用数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改数据库"><span class="nav-number">2.2.4.</span> <span class="nav-text">修改数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除数据库"><span class="nav-number">2.2.5.</span> <span class="nav-text">删除数据库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL表-字段-操作"><span class="nav-number">2.3.</span> <span class="nav-text">SQL表(字段)操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据表"><span class="nav-number">2.3.1.</span> <span class="nav-text">创建数据表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示数据表"><span class="nav-number">2.3.2.</span> <span class="nav-text">显示数据表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看数据表"><span class="nav-number">2.3.3.</span> <span class="nav-text">查看数据表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更改数据表"><span class="nav-number">2.3.4.</span> <span class="nav-text">更改数据表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更改字段"><span class="nav-number">2.3.5.</span> <span class="nav-text">更改字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除数据表"><span class="nav-number">2.3.6.</span> <span class="nav-text">删除数据表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL数据操作"><span class="nav-number">2.4.</span> <span class="nav-text">SQL数据操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#新增数据"><span class="nav-number">2.4.1.</span> <span class="nav-text">新增数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看数据"><span class="nav-number">2.4.2.</span> <span class="nav-text">查看数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更新数据"><span class="nav-number">2.4.3.</span> <span class="nav-text">更新数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除数据"><span class="nav-number">2.4.4.</span> <span class="nav-text">删除数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL高级操作"><span class="nav-number">3.</span> <span class="nav-text">MySQL高级操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据新增"><span class="nav-number">3.1.</span> <span class="nav-text">数据新增</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#批量插入"><span class="nav-number">3.1.1.</span> <span class="nav-text">批量插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#蠕虫复制"><span class="nav-number">3.1.2.</span> <span class="nav-text">蠕虫复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主键冲突"><span class="nav-number">3.1.3.</span> <span class="nav-text">主键冲突</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据查询"><span class="nav-number">3.2.</span> <span class="nav-text">数据查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询选项"><span class="nav-number">3.2.1.</span> <span class="nav-text">查询选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字段选择和别名"><span class="nav-number">3.2.2.</span> <span class="nav-text">字段选择和别名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据源"><span class="nav-number">3.2.3.</span> <span class="nav-text">数据源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#where子句"><span class="nav-number">3.2.4.</span> <span class="nav-text">where子句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运算符"><span class="nav-number">3.2.5.</span> <span class="nav-text">运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#group-by"><span class="nav-number">3.2.6.</span> <span class="nav-text">group by</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回溯统计"><span class="nav-number">3.2.7.</span> <span class="nav-text">回溯统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分组排序"><span class="nav-number">3.2.8.</span> <span class="nav-text">分组排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#having"><span class="nav-number">3.2.9.</span> <span class="nav-text">having</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#order-by"><span class="nav-number">3.2.10.</span> <span class="nav-text">order by</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#limit"><span class="nav-number">3.2.11.</span> <span class="nav-text">limit</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

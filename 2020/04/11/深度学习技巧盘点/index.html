@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="网络结构">
+<meta name="keywords" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习技巧盘点">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="网络结构">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;相对感受野.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;low-level.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;上采样.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;lenet.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;Alexnet.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;vgg.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;inception1.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;Resnet.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;ResNext.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;xception.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;Densenet.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;GAN.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;mobilenet.webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;U-Net.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;Linknet.png">
+<meta property="og:updated_time" content="2020-05-04T17:08:20.345Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9&#x2F;相对感受野.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>深度学习技巧盘点 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深度学习技巧盘点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-11 11:42:55" itemprop="dateCreated datePublished" datetime="2020-04-11T11:42:55+08:00">2020-04-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-05 01:08:20" itemprop="dateModified" datetime="2020-05-05T01:08:20+08:00">2020-05-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><a id="more"></a>
+
+    <div id="aplayer-fQqRjyKp" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="设计技巧"><a href="#设计技巧" class="headerlink" title="设计技巧"></a>设计技巧</h1><h2 id="深度-and-宽度"><a href="#深度-and-宽度" class="headerlink" title="深度 and 宽度"></a>深度 and 宽度</h2><ol>
+<li>深度决定了网络的表达能力，网络越深学习能力越强。</li>
+<li>宽度（通道数）决定了网络在某一层学到的信息量，另外因为卷积层能重组通道间的信息，这一操作能让有效信息量增大（这也是1x1卷积的作用，它能学习出重组信息，使得对于任务更友好 ）</li>
+</ol>
+<h2 id="感受野"><a href="#感受野" class="headerlink" title="感受野"></a>感受野</h2><ol>
+<li><p>感受野决定了网络在某一层看到多大范围，一般说来最后一层一定至少要能看到最大的有意义的物体，更大的感受野通常是无害的。感受野必须缓慢增大，这样才能建模不同距离下的空间相关性。 </p>
+</li>
+<li><p>相对感受野指两个下采样之间的感受野。相对感受野也必须缓慢变化。<br><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/相对感受野.png" alt="相对感受野"></p>
+</li>
+<li><p>感受野也不是越大越好（大感受野意味着更多的语义信息），对于某些low-level的任务而言，比如图像降噪，感受野可能也就局部patch大小，对于low-level而言，下采样的意义更小，尽可能少使用下采样。<br><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/low-level.png" alt="low-level"></p>
+</li>
+</ol>
+<h2 id="卷积核"><a href="#卷积核" class="headerlink" title="卷积核"></a>卷积核</h2><ol>
+<li><p>多层小卷积核参数量少，非线性强，有利于特征共享 </p>
+</li>
+<li><p>空洞卷积一般用在子网络的最后面，因为空洞卷积容易丢失空间细节，也考虑了感受野缓慢变化这点，空洞卷积的膨胀率必须缓慢增加 </p>
+</li>
+<li><p>使用小卷积核（不包括1x1，因为它对于增加感受野无意义），小卷积核有利于网络走向更深，并且有更好的识别鲁棒性，尤其是在分辨率更小的特征图上，因为卷积核的尺寸是相当于特征图的分辨率来说的，大特征图上偏大的卷积核其实也并不大。 </p>
+</li>
+<li>能用可分离卷积替代的卷积一定要替代，一般除了第一个卷积，都能替代，替代完后考虑给替代可分离的通道数乘以2，因为可分离卷积的参数和计算量都是线性增长的，这样做依然有速度增益。 </li>
+<li>空洞卷积不能乱用，感受野缓慢增大是必须的，这样才能建模各种距离的空间相关性。</li>
+<li>空洞卷积和下采样都会损失图像细节，都能增大感受野，这两点是相同的，但是空洞卷积能保证分辨率。在两个下采样之间的子网络里也可以使用空洞卷积，这样可以减少层数，尤其在子网络越靠近后面的时候 </li>
+</ol>
+<h2 id="下采样"><a href="#下采样" class="headerlink" title="下采样"></a>下采样</h2><ol>
+<li><p>前面几层下采样频率高一点，中间层下采样频率降低，并使用不下采样的方法提高深度。 </p>
+</li>
+<li><p>下采样在网络前几层的密度大一些，（这样能尽可能用微弱精度损失换取速度提升） 越往后下采样的密度应该更小，最终能够下采样的最大深度，以该层的感受野以及数据集中最大的有意义物体尺寸决定 </p>
+</li>
+<li><p>分割网络最后面完全可以使用不采样的空洞卷积来做，这样可以同时保证感受野和分辨率，但是空洞卷积尽可能用在后面，因为前面使用下采样能够减少很多计算量，到了最后面使用空洞卷积计算量不会增大很多，但是后面的分辨率更重要，如果使用下一次，分辨率会下降的非常厉害，比如图像下采样到一定地步基本就丧失分辨能力了。</p>
+</li>
+</ol>
+<h2 id="跳线"><a href="#跳线" class="headerlink" title="跳线"></a>跳线</h2><ol>
+<li>shortcut connection里，找不到concat，用add凑合。</li>
+<li>所有的跨层连接本质上都是在做多尺度处理，这里面有resnet的shortcut，fpn，和unet的encoder decoder，这些跨层连接都能融合尺度信息，也包括densenet的dense connect。 </li>
+<li>需要短跳转连接，否则中间层无法被有效更新。长短连接都能防止梯度消失，<strong>短连接防止梯度消失效果更明显</strong>。<strong>长连接能让融合高层语义特征和低层空间特征，融合高分辨率，保持边缘等细节</strong>。 </li>
+<li>对于分割模型而言，在encoder和decoder之间使用长跳转连接，在encoder和decoder内部使用短跳转连接，尤其是encoder比较深的情况下，通常说来，长跳转连接的作用更多的是为了恢复分辨率，短跳转连接的作用更多是为了防止梯度消失。 </li>
+</ol>
+<h2 id="模型and参数"><a href="#模型and参数" class="headerlink" title="模型and参数"></a>模型and参数</h2><p>先训一个大模型然后裁剪，也许比直接训一个小模型性能好。 </p>
+<h2 id="上采样"><a href="#上采样" class="headerlink" title="上采样"></a>上采样</h2><p>转置卷积完全可以使用上采样+卷积来替代：</p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/上采样.png" alt="上采样"></p>
+<blockquote>
+<p>几种不同的上采样:(a)先用upsamling或者unpooling然后接两个conv，并使用跳转连接,(b)使用upsampling或者unpooling然后接普通的conv，（c）接转置卷积（d）卷积后使用upsampling或者unpooling，完全可以使用一个稍小的卷积核 , c很容易产生棋盘格现象 </p>
+</blockquote>
+<h1 id="LeNet"><a href="#LeNet" class="headerlink" title="LeNet"></a>LeNet</h1><p>两个卷积层，两个池化，两个全连接，卷积都是5*5，s=1，maxpolling</p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/lenet.webp" alt="lenet"></p>
+<h1 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h1><p>模型共八层（不算input层），包含五个卷积层、三个全连接层。最后一层使用softmax做分类输出。</p>
+<p>AlexNet使用了ReLU做激活函数；防止过拟合使用dropout和数据增强；双GPU实现；使用LRN。</p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/Alexnet.webp" alt="Alexnet"></p>
+<h1 id="VggNet"><a href="#VggNet" class="headerlink" title="VggNet"></a>VggNet</h1><p>采用大量的3*3卷积核，同时加入1*1卷积核，</p>
+<p>网络越深越好，</p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/vgg.webp" alt="vgg"></p>
+<h1 id="GoogleNet"><a href="#GoogleNet" class="headerlink" title="GoogleNet"></a>GoogleNet</h1><p>inception-V1：采用不同大小的卷积核最终拼接在一起。不同尺度特征的融合</p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/inception1.webp" alt="inception1"></p>
+<p>inception-V2：连续两个3*3的卷积代替5*5，同时提出BN，在tf中BN在激活之前效果更好。网络加深，参数减少。</p>
+<p>inception-V3：提出用1*n和n*1卷积核代替n*n，网络加深，参数减少。</p>
+<h1 id="Resnet"><a href="#Resnet" class="headerlink" title="Resnet"></a>Resnet</h1><p>退化问题：</p>
+<p>随着网络深度的增加，准确度变得饱和，然后迅速退化，这种退化不是过拟合造成的，并且在适当的深度模型中添加更多的层会导致更高的训练误差。</p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/Resnet.png" alt="Resnet"></p>
+<p>为什么残差结构是有效的呢？</p>
+<p>这是因为引入残差之后的特征映射对输出的变化更加敏感，也即是说梯度更大，更容易训练。 </p>
+<p>推导一下残差结构的梯度计算公式，假设从浅层到深层的学习特征$y = x+F(x,W)$，其中$F(x,W)$就是带权重的卷积之后的结果，我们可以反向求出损失函数对$x$的提取$\frac{dloss}{dx} = \frac{dloss}{dy} \times \frac{dy}{dx}=\frac{dloss}{dy}*(1+\frac{dF(x,W)}{dx})$，其中$\frac{dloss}{dy}$代表损失函数在最高层的梯度，小括号中的表示残差连接可以无损的传播梯度，而另外一项残差的梯度则需要经过带有可学习参数的卷积层。另外残差梯度不会巧合到全部为，而且就算它非常小也还有这一项存在，因此梯度会稳定的回传，不用担心梯度消失。同时因为残差一般会比较小，残差学习需要学习的内容少，学习难度也变小，学习就更容易。 </p>
+<h1 id="ResNeXt"><a href="#ResNeXt" class="headerlink" title="ResNeXt"></a>ResNeXt</h1><p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/ResNext.webp" alt="ResNext"></p>
+<h1 id="Xception"><a href="#Xception" class="headerlink" title="Xception"></a>Xception</h1><p>深度可分离卷积，通过3*3卷积和1*1卷积减少计算量。（其实就是3*3*1的卷积+1*1*通道数，代替3*3*通道数）</p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/xception.webp" alt="xception"></p>
+<h1 id="DenseNet"><a href="#DenseNet" class="headerlink" title="DenseNet"></a>DenseNet</h1><p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/Densenet.webp" alt="Densenet"></p>
+<p>作用：减轻了梯度消失，加强特征传递，减少参数数量</p>
+<p>concatenation()</p>
+<p>缺点：训练时十分消耗内存，这是由于算法实现不优带来 </p>
+<h1 id="GAN"><a href="#GAN" class="headerlink" title="GAN"></a>GAN</h1><p>假设我们有两个网络，G（Generator）和D（Discriminator）。那么它的名字暗示的那种，它们的功能分别是：<br>G是一个生成图片的网络，它接收一个随机的噪声z，通过这个噪声生成图片，记做G（z）。<br>D是一个判别网络，判别一张图片是不是“真实的”。它的输入参数是x，x代表一张图片，输出D（x）代表x为真实图片的概率，如果为1，就代表100％是真实的图片，而输出为0，就代表不可能是真实的图片。<br>在训练过程中<strong>，生成网络G的目标就是试图生成真实的图片去欺骗判别网络D。而D的目标就是尝试把G生成的图片和真实的图片分别开来</strong>。<br><strong>在最理想的状态下</strong>，G可以生成分解为“以假乱真”的图片G（z）。对于D而言，它难以确定G生成的图片到底是不是真实的，因此D（G （z））= 0.5。<br>我们得到了一个生成式的模型G，它可以用来生成图片。 </p>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/GAN.png" alt="GAN_loss"></p>
+<h1 id="SENet"><a href="#SENet" class="headerlink" title="SENet"></a>SENet</h1><p>​     /  全局最大池化-》全连接-》relu-》全连接-》sigmoid\</p>
+<p>x/——————————————————————————————————————&gt;$\times$</p>
+<p> 对通道进行加权，强调有效信息，抑制无效信息 </p>
+<h1 id="MobileNet"><a href="#MobileNet" class="headerlink" title="MobileNet"></a>MobileNet</h1><p>v1</p>
+<ul>
+<li>使用depthwise separable convolutions；</li>
+<li>放弃pooling层，而使用stride=2的卷积。</li>
+<li>标准卷积的卷积核的通道数等于输入特征图的通道数 </li>
+</ul>
+<p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/mobilenet.webp" alt="mobilenet"></p>
+<p>v2</p>
+<ul>
+<li>引入了残差结构；</li>
+<li>在dw之前先进行1×1卷积增加feature map通道数 </li>
+<li>采用线性激活</li>
+</ul>
+<h1 id="U-Net"><a href="#U-Net" class="headerlink" title="U-Net"></a>U-Net</h1><p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/U-Net.png" alt="U-Net"></p>
+<ul>
+<li>U型结构</li>
+<li>跳线连接</li>
+</ul>
+<ol>
+<li><p>其中UNet的编码器一共有4次下采样来获取高级语义信息，解码器自然对应了4次上采样来进行分辨率恢复</p>
+</li>
+<li><p>为了减少下采样过程带来的空间信息损失跳层连接被引入了</p>
+</li>
+<li><p>通过Concat的方式使得上采样恢复的特征图中包含更多low-level的语义信息，使得结果的精细程度更好。 </p>
+</li>
+<li>使用转置卷积的UNet参数量是31M左右，如果对其channel进行缩小例如缩小两倍，参数量可以变为7.75M左右，缩小4倍变成2M左右 </li>
+</ol>
+<h1 id="Linknet"><a href="#Linknet" class="headerlink" title="Linknet"></a>Linknet</h1><p><img src="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/Linknet.png" alt="Linknet"></p>
+<p>这项工作的主要贡献是在原始的UNet中引入了残差连接，并直接将编码器与解码器连接来提高准确率，一定程度上减少了处理时间。通过这种方式，保留编码部分中不同层丢失的信息，同时，在进行重新学习丢失的信息时并未增加额外的参数与操作。 </p>
+<blockquote>
+<p>参考： <a href="https://zhuanlan.zhihu.com/p/100609339" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/100609339</a> </p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/10/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-3/" rel="prev" title="论文整理-3">
+      <i class="fa fa-chevron-left"></i> 论文整理-3
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/" rel="next" title="卷积计算">
+      卷积计算 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络结构"><span class="nav-number">1.</span> <span class="nav-text">网络结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设计技巧"><span class="nav-number">2.</span> <span class="nav-text">设计技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#深度-and-宽度"><span class="nav-number">2.1.</span> <span class="nav-text">深度 and 宽度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感受野"><span class="nav-number">2.2.</span> <span class="nav-text">感受野</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积核"><span class="nav-number">2.3.</span> <span class="nav-text">卷积核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下采样"><span class="nav-number">2.4.</span> <span class="nav-text">下采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳线"><span class="nav-number">2.5.</span> <span class="nav-text">跳线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型and参数"><span class="nav-number">2.6.</span> <span class="nav-text">模型and参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上采样"><span class="nav-number">2.7.</span> <span class="nav-text">上采样</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LeNet"><span class="nav-number">3.</span> <span class="nav-text">LeNet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AlexNet"><span class="nav-number">4.</span> <span class="nav-text">AlexNet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VggNet"><span class="nav-number">5.</span> <span class="nav-text">VggNet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GoogleNet"><span class="nav-number">6.</span> <span class="nav-text">GoogleNet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Resnet"><span class="nav-number">7.</span> <span class="nav-text">Resnet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ResNeXt"><span class="nav-number">8.</span> <span class="nav-text">ResNeXt</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Xception"><span class="nav-number">9.</span> <span class="nav-text">Xception</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DenseNet"><span class="nav-number">10.</span> <span class="nav-text">DenseNet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GAN"><span class="nav-number">11.</span> <span class="nav-text">GAN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SENet"><span class="nav-number">12.</span> <span class="nav-text">SENet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MobileNet"><span class="nav-number">13.</span> <span class="nav-text">MobileNet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#U-Net"><span class="nav-number">14.</span> <span class="nav-text">U-Net</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linknet"><span class="nav-number">15.</span> <span class="nav-text">Linknet</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>

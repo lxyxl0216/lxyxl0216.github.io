@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://lxyxl0216.github.io').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="卷积计算 im2col 卷积计算量 反卷积计算量">
+<meta name="keywords" content="卷积计算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷积计算">
+<meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97&#x2F;index.html">
+<meta property="og:site_name" content="李小阳小李">
+<meta property="og:description" content="卷积计算 im2col 卷积计算量 反卷积计算量">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97&#x2F;im2col1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97&#x2F;前向传播.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97&#x2F;反向传播.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97&#x2F;普通卷积.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97&#x2F;普通反卷积.png">
+<meta property="og:updated_time" content="2020-04-23T15:01:50.238Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;11&#x2F;%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97&#x2F;im2col1.png">
+
+<link rel="canonical" href="https://lxyxl0216.github.io/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>卷积计算 | 李小阳小李</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="stylesheet" href="\assets\css\APlayer.min.css" class="aplayer-style-marker">
+<script src="\assets\js\APlayer.min.js" class="aplayer-script-marker"></script>
+<script src="\assets\js\Meting.min.js" class="meting-script-marker"></script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">李小阳小李</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">水低为海，人地为王</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-fw fa-music"></i>music</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lxyxl0216.github.io/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Alex Li">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="李小阳小李">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          卷积计算
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-11 15:30:17" itemprop="dateCreated datePublished" datetime="2020-04-11T15:30:17+08:00">2020-04-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-23 23:01:50" itemprop="dateModified" datetime="2020-04-23T23:01:50+08:00">2020-04-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="卷积计算"><a href="#卷积计算" class="headerlink" title="卷积计算"></a>卷积计算</h1><ul>
+<li>im2col</li>
+<li>卷积计算量</li>
+<li>反卷积计算量</li>
+</ul>
+<a id="more"></a>
+
+    <div id="aplayer-AozSpVpr" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="im2col"><a href="#im2col" class="headerlink" title="im2col"></a>im2col</h1><p>假设输入feature map 维度是 $(1,C,H,W)$，表示batch为1，通道为C，高为H，宽为W，卷积核维度是$(Cout,C,K,K)$ ，表示输出通道为$Cout$，卷积核大小是$K*K$ 。 </p>
+<p><img src="/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/im2col1.png" alt="im2col"></p>
+<p>则$im2col$过程如入上图所示，窗口从左到右上到下的顺序在每个输入通道同步滑动，每个窗口内容按行展开成一列，然后再按通道顺序接上填到$im2col$buffer对应的列，且$im2col$buffer 按从左到右顺序填写。 </p>
+<p>因为没有padding且步长为1，所以根据卷积输出大小计算公式可得： </p>
+<script type="math/tex; mode=display">
+Hout=(H+2p-K)/s+1=H-K+1\\
+Wout = (W+2p-K)/s+1=W-K+1\\</script><p>所以im2col输出buffer的宽维度为$(H-K+1)<em>(W-K+1)$，高维度则是$K</em>K<em>C$，再把权值reshape成$(Cout,C</em>K*K)$ ，则卷积计算就可以化为矩阵相乘运算了。 </p>
+<h2 id="卷积前向计算"><a href="#卷积前向计算" class="headerlink" title="卷积前向计算"></a>卷积前向计算</h2><p>输入维度featuremap：$(1,Cin,Hin,Win)$</p>
+<p>权值维度：$(Cout,Cin,K,K)$</p>
+<p>输出维度：$(1,Cout,Hout,Wout)$</p>
+<p><img src="/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/前向传播.png" alt="前向传播"></p>
+<p>则im2col之前先要先根据pad在输入边缘补一圈0，然后再根据步长s去取每个卷积的位置填入buffer里面。 </p>
+<h2 id="卷积反向传播"><a href="#卷积反向传播" class="headerlink" title="卷积反向传播"></a>卷积反向传播</h2><p>其实用不太严谨的方式来想，我们知道输入对应的梯度维度大小肯定是和输入大小一致的，而上一层传回来的梯度大小肯定是和输出一致的。而且既然是反向传播，计算过程肯定是卷积前向过程的逆过程。 </p>
+<p>所以是将权值转置之后左乘输出梯度，得到类似im2col buffer 大小的中间结果然后再接一个col2im操作，就可以得到输入梯度了： </p>
+<p><img src="/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/反向传播.png" alt="反向传播"></p>
+<p>这个col2im也很好理解，就是im2col反过来，把每一列回填累加回输入梯度对应的位置，之前前向过程滑窗怎么取的就怎么填回去。 </p>
+<p>简单来说就是把中间buffer结果的每一列从一个$Cin<em>K</em>K$的向量，reshape 成$(Cin,K,K)$的 tensor，然后根据$Cin$的索引把对应$(K,K)$的 patch 回填累加到输入梯度对应 channel 的位置上。 </p>
+<h1 id="普通卷积"><a href="#普通卷积" class="headerlink" title="普通卷积"></a>普通卷积</h1><p>卷积的运算一般的实现就是转化为矩阵乘法运算，首先来看一下卷积运算的简单的示意图：<br><img src="/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/普通卷积.png" alt="普通卷积"></p>
+<p>首先左上角定义了输入和输出的feature map的形状，假设卷积核大小是，所以权值的形状就是 。<br>然后一般来说实现卷积的前向是通过首先对输入的feature map应用im2col操作，从  $Cin<em>Hin</em>Win$形状的矩阵，转换成形状是$Cin<em>K</em>K<em>Hout</em>Wout$的矩阵，接着与权值相乘，就得到右边的输出。所以卷积前向的运算量是：</p>
+<script type="math/tex; mode=display">
+Cout*K*K*Cin*Hout*Wout</script><p><strong>当然卷积运算的时候除了乘法还有加法，这只算了乘法的次数。</strong></p>
+<p>如果加上加偏置的计算，运算量就是：</p>
+<script type="math/tex; mode=display">
+Cout*K*K*Cin*Hout*Wout+Cout*Hout+Wout</script><p>卷积的反向和接下来要介绍和反卷积的前向是对应的，这里简单提一下卷积的反向过程，求输入的梯度的时候是把权值转置，然后与输出的梯度相乘就得到中间结果，然后再做一个col2im操作把中间结果回填到输入梯度矩阵的对应位置上。 </p>
+<h1 id="普通反卷积"><a href="#普通反卷积" class="headerlink" title="普通反卷积"></a>普通反卷积</h1><p><img src="/2020/04/11/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/普通反卷积.png" alt="普通反卷积"></p>
+<p>左上角也是定义了反卷积的输入与输出的feature map大小，这里反卷积的权值的形状与卷积有点不同，是$Cin<em>Cout</em>K*K$ ，这是因为反卷积的前向和后向操作分别是对应卷积的后向和前向，也就是刚好反过来的。</p>
+<p>然后我们直接看反卷积的前向操作，和卷积的后向操作对应，权值做转置与输入feature map做一个乘法，这里可以看成是一个$1<em>1$的卷积，输出通道数是 $Cout</em>K*K$，然后的到中间结果，然后再做一个col2im的操作回填到输出feature map对应的位置上。所以反卷积的运算量如下：</p>
+<script type="math/tex; mode=display">
+Cout * K*K*Cin*Hin*Win</script><p>同样 部分也是只考虑了乘法次数，还有后面的col2im回填累加其实也会占据运行时间的，但是这里没有加上这个加法次数的时间。</p>
+<p>加上偏置的话则是：</p>
+<script type="math/tex; mode=display">
+Cout*K*K*Cin*Hin*Win+Cout*Hout+Wout</script><p>所以计算反卷积的运算量是需要知道输入与输出feature map大小的。 </p>
+<h1 id="卷积计算量"><a href="#卷积计算量" class="headerlink" title="卷积计算量"></a>卷积计算量</h1><p>普通卷积：</p>
+<script type="math/tex; mode=display">
+K*K*C_{in}*C_{out}*H_{out}*W_{out}</script><p>深度可分离卷积：</p>
+<script type="math/tex; mode=display">
+K*K*C_{in}*H_{in}*W_{out} + 1*1*C_{in}*C_{out}*H_{out}*W_{out}</script><h1 id="卷积参数量"><a href="#卷积参数量" class="headerlink" title="卷积参数量"></a>卷积参数量</h1><p>普通卷积：</p>
+<script type="math/tex; mode=display">
+K*K*C_{in}*C_{out}</script><p>深度可分离卷积：</p>
+<script type="math/tex; mode=display">
+K*K*C_{in}+C_{in}*C_{out}*1*1</script><p>对比：</p>
+<script type="math/tex; mode=display">
+\frac{K*K*C_{in}+C_{in}*C_{out}}{K*K*C_{in}*C_{out}}=\frac{1}{C_{out}}+\frac{1}{K*K}</script><h1 id="感受野计算"><a href="#感受野计算" class="headerlink" title="感受野计算"></a>感受野计算</h1><p>忽略padding</p>
+<script type="math/tex; mode=display">
+当前的感受野 = 上一层的感受野+(K-1)*stridde</script><blockquote>
+<p>GiantPandaCV公众号</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%B7%E7%A7%AF%E8%AE%A1%E7%AE%97/" rel="tag"># 卷积计算</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%80%E5%B7%A7%E7%9B%98%E7%82%B9/" rel="prev" title="深度学习技巧盘点">
+      <i class="fa fa-chevron-left"></i> 深度学习技巧盘点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/11/ML-%E9%99%8D%E7%BB%B4/" rel="next" title="ML-降维">
+      ML-降维 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#卷积计算"><span class="nav-number">1.</span> <span class="nav-text">卷积计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#im2col"><span class="nav-number">2.</span> <span class="nav-text">im2col</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积前向计算"><span class="nav-number">2.1.</span> <span class="nav-text">卷积前向计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积反向传播"><span class="nav-number">2.2.</span> <span class="nav-text">卷积反向传播</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#普通卷积"><span class="nav-number">3.</span> <span class="nav-text">普通卷积</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#普通反卷积"><span class="nav-number">4.</span> <span class="nav-text">普通反卷积</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#卷积计算量"><span class="nav-number">5.</span> <span class="nav-text">卷积计算量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#卷积参数量"><span class="nav-number">6.</span> <span class="nav-text">卷积参数量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#感受野计算"><span class="nav-number">7.</span> <span class="nav-text">感受野计算</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Alex Li"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Alex Li</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alex Li</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">189k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:15</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.5.0
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共88.1k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+</body>
+</html>
