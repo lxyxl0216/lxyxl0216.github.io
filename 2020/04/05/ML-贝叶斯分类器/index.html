@@ -239,7 +239,7 @@
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -253,40 +253,33 @@
       
         <h1 id="贝叶斯分类器"><a href="#贝叶斯分类器" class="headerlink" title="贝叶斯分类器"></a>贝叶斯分类器</h1><a id="more"></a>
 
-    <div id="aplayer-tlyUyksQ" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
-<h2 id="贝叶斯定理"><a href="#贝叶斯定理" class="headerlink" title="贝叶斯定理"></a>贝叶斯定理</h2><script type="math/tex; mode=display">
-p(类别|特征) = \frac{p(特征|类)}{类别}</script><p>假设有N种可能的类别标记，即$Y= {c_1,c_2, … ,c_N}$, $\lambda_{ij}$ 是将一个真实标记为$c_j$的样本误分类为$c_i$所产生的损失．基于后验概率$P(c_i |x) $可获得将样本$x$分类为$c_i$所产生的期望损失(expected loss), 即在样本$x$的“ 条件风险“</p>
-<script type="math/tex; mode=display">
-R(c_i|x) = \sum_{j=1}^N \lambda_{ij}P(c_j|x)</script><p>我们的任务是寻找一个判定准则$X-&gt;Y$以最小化总体风险</p>
-<script type="math/tex; mode=display">
-R(h) = E_X[R(h(x)|x)]</script><p>为最小化总体风险，只需在每个样本上选择那个能使条件风险$R(c|x) $最小的类别标记，即$h^*(x) = argmin R(c|x)$</p>
+
+    <div id="aplayer-acRnwguD" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+
+
+
+<h2 id="贝叶斯定理"><a href="#贝叶斯定理" class="headerlink" title="贝叶斯定理"></a>贝叶斯定理</h2><p>$$<br>p(类别|特征) = \frac{p(特征|类)}{类别}<br>$$</p>
+<p>假设有N种可能的类别标记，即$Y= {c_1,c_2, … ,c_N}$, $\lambda_{ij}$ 是将一个真实标记为$c_j$的样本误分类为$c_i$所产生的损失．基于后验概率$P(c_i |x) $可获得将样本$x$分类为$c_i$所产生的期望损失(expected loss), 即在样本$x$的“ 条件风险“<br>$$<br>R(c_i|x) = \sum_{j=1}^N \lambda_{ij}P(c_j|x)<br>$$<br>我们的任务是寻找一个判定准则$X-&gt;Y$以最小化总体风险<br>$$<br>R(h) = E_X[R(h(x)|x)]<br>$$<br>为最小化总体风险，只需在每个样本上选择那个能使条件风险$R(c|x) $最小的类别标记，即$h^*(x) = argmin R(c|x)$</p>
 <p>$h^<em>称为贝叶斯最优分类器$，$R(h^</em>)$为贝叶斯风险，$1-R(h^*)$反映分类器能达到的最好性能。</p>
 <p>具体来说若目标是最小化分类错误率，则误判损失$\lambda_{ij}$可写为$\lambda =0, i=j$或者$\lambda =1,其他$</p>
 <p>此时条件风险为$R(c|x) = 1-P(c|x)$</p>
 <p>因此$h^*= argmax P(c|x)$,$P(c|x) = \frac{P(x,c)}{P(x)}$==&gt;$P(c|x) = \frac{P(c)P(x|c)}{P(x)}$</p>
 <p>其中$P(c)$是类的先验概率，$P(x|c)$是样本x相对于类c的类条件概率，或称为似然</p>
-<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>令$D_c$表示训练集D 中第c类样本组成的集合，假设这些样本是独立同分布的，则参数$\theta_c$对于数据集$D_c$的似然是</p>
-<script type="math/tex; mode=display">
-P(D_c|\theta_c) = \prod P(x|\theta_c)</script><p>对$\theta_c$进行极大似然估计，就是去寻找能最大化似然$P(D_c|\theta_c)$的参数值$\hat{\theta_c}$</p>
-<p>对数似然：</p>
-<script type="math/tex; mode=display">
-LL(\theta_c)=\log P(D_c|\theta_c)=\sum \log P(x|\theta_c)\\
-所以：\hat{\theta_c}=argmax LL(\theta_c)</script><p>极大似然估计流程：</p>
+<h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><p>令$D_c$表示训练集D 中第c类样本组成的集合，假设这些样本是独立同分布的，则参数$\theta_c$对于数据集$D_c$的似然是<br>$$<br>P(D_c|\theta_c) = \prod P(x|\theta_c)<br>$$<br>对$\theta_c$进行极大似然估计，就是去寻找能最大化似然$P(D_c|\theta_c)$的参数值$\hat{\theta_c}$</p>
+<p>对数似然：<br>$$<br>LL(\theta_c)=\log P(D_c|\theta_c)=\sum \log P(x|\theta_c)\<br>所以：\hat{\theta_c}=argmax LL(\theta_c)<br>$$</p>
+<p>极大似然估计流程：</p>
 <ol>
 <li>写出似然函数：$L(\theta) = \Pi f(x|\theta_1,\theta_2，。。。\theta_n)$</li>
 <li>对似然函数取对数：$Ln L(\theta_i) $</li>
 <li>对$\theta$求偏导数：$\frac{\partial}{\partial \theta_i} LnL(\theta)$</li>
 <li>解似然方程：$\frac{\partial}{\partial \theta_i} LnL(\theta)=0$</li>
 </ol>
-<h2 id="朴素贝叶斯分类器"><a href="#朴素贝叶斯分类器" class="headerlink" title="朴素贝叶斯分类器"></a>朴素贝叶斯分类器</h2><script type="math/tex; mode=display">
-P(c|x) = \frac{P(c)P(x|c)}{P(x)}=\frac{P(c)}{P(x)} \prod^d_{i=1}P(x_i|c)</script><script type="math/tex; mode=display">
-h_{nb}= argmax P(c)\prod^d_{i=1}P(x_i|c)</script><script type="math/tex; mode=display">
-类先验概率：P(c) = \frac{D_c}{D}</script><script type="math/tex; mode=display">
-对于离散型：P(x_i|c) = \frac{D_{cx_i}}{D_c}\\
-对于连续型：P(x_i|c) = \frac{1}{\sqrt{2\pi}\sigma_{c,i}}exp(-\frac{(x_i-\mu_{c,i})^2}{2\sigma^2_{c,i}})</script><p>为了避免被训练集未出现的属性“抹去”，要采用平滑方法，即拉普拉斯修正</p>
-<script type="math/tex; mode=display">
-\hat{P}(c) = \frac{D_{c}+1}{D+N}\\
-\hat{P}(x_i|c) = \frac{D_{cx_i}+1}{D_c+N_i}</script>
+<h2 id="朴素贝叶斯分类器"><a href="#朴素贝叶斯分类器" class="headerlink" title="朴素贝叶斯分类器"></a>朴素贝叶斯分类器</h2><p>$$<br>P(c|x) = \frac{P(c)P(x|c)}{P(x)}=\frac{P(c)}{P(x)} \prod^d_{i=1}P(x_i|c)<br>$$</p>
+<p>$$<br>h_{nb}= argmax P(c)\prod^d_{i=1}P(x_i|c)<br>$$</p>
+<p>$$<br>类先验概率：P(c) = \frac{D_c}{D}<br>$$</p>
+<p>$$<br>对于离散型：P(x_i|c) = \frac{D_{cx_i}}{D_c}\<br>对于连续型：P(x_i|c) = \frac{1}{\sqrt{2\pi}\sigma_{c,i}}exp(-\frac{(x_i-\mu_{c,i})^2}{2\sigma^2_{c,i}})<br>$$</p>
+<p>为了避免被训练集未出现的属性“抹去”，要采用平滑方法，即拉普拉斯修正<br>$$<br>\hat{P}(c) = \frac{D_{c}+1}{D+N}\<br>\hat{P}(x_i|c) = \frac{D_{cx_i}+1}{D_c+N_i}<br>$$</p>
+
     </div>
 
     
@@ -361,7 +354,7 @@ h_{nb}= argmax P(c)\prod^d_{i=1}P(x_i|c)</script><script type="math/tex; mode=di
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -408,12 +401,12 @@ h_{nb}= argmax P(c)\prod^d_{i=1}P(x_i|c)</script><script type="math/tex; mode=di
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">193k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:15</span>
+    <span title="站点阅读时长">5:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -423,7 +416,7 @@ h_{nb}= argmax P(c)\prod^d_{i=1}P(x_i|c)</script><script type="math/tex; mode=di
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共88.1k字</span>
+  <span class="post-count">博客全站共89.7k字</span>
 </div>
 
         

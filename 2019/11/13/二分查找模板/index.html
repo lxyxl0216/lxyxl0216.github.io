@@ -46,13 +46,13 @@
   };
 </script>
 
-  <meta name="description" content="二分模板一共有两个，分别适用于不同情况算法思路：假设目标值在闭区间[l, r]中， 每次将区间长度缩小一半，当l &#x3D; r时，我们就找到了目标值。 版本1当我们将区间[l, r]划分成[l, mid]和[mid + 1, r]时，其更新操作是r &#x3D; mid或者l &#x3D; mid + 1;，计算mid时不需要加1。 1C++ 代码模板：2int bsearch_1(int l, int r)3&amp;#123">
+  <meta name="description" content="二分模板一共有两个，分别适用于不同情况算法思路：假设目标值在闭区间[l, r]中， 每次将区间长度缩小一半，当l &#x3D; r时，我们就找到了目标值。 版本1当我们将区间[l, r]划分成[l, mid]和[mid + 1, r]时，其更新操作是r &#x3D; mid或者l &#x3D; mid + 1;，计算mid时不需要加1。 1C++ 代码模板：2int bsearch_1(int l, int r)3&amp;#12">
 <meta name="keywords" content="二分,数据结构,剑指offer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="二分查找模板">
 <meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%A8%A1%E6%9D%BF&#x2F;index.html">
 <meta property="og:site_name" content="李小阳小李">
-<meta property="og:description" content="二分模板一共有两个，分别适用于不同情况算法思路：假设目标值在闭区间[l, r]中， 每次将区间长度缩小一半，当l &#x3D; r时，我们就找到了目标值。 版本1当我们将区间[l, r]划分成[l, mid]和[mid + 1, r]时，其更新操作是r &#x3D; mid或者l &#x3D; mid + 1;，计算mid时不需要加1。 1C++ 代码模板：2int bsearch_1(int l, int r)3&amp;#123">
+<meta property="og:description" content="二分模板一共有两个，分别适用于不同情况算法思路：假设目标值在闭区间[l, r]中， 每次将区间长度缩小一半，当l &#x3D; r时，我们就找到了目标值。 版本1当我们将区间[l, r]划分成[l, mid]和[mid + 1, r]时，其更新操作是r &#x3D; mid或者l &#x3D; mid + 1;，计算mid时不需要加1。 1C++ 代码模板：2int bsearch_1(int l, int r)3&amp;#12">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2020-04-02T04:26:25.512Z">
 <meta name="twitter:card" content="summary">
@@ -261,9 +261,11 @@
 
       
         <a id="more"></a>
+
 <h1 id="二分模板一共有两个，分别适用于不同情况"><a href="#二分模板一共有两个，分别适用于不同情况" class="headerlink" title="二分模板一共有两个，分别适用于不同情况"></a>二分模板一共有两个，分别适用于不同情况</h1><p>算法思路：假设目标值在闭区间[l, r]中， 每次将区间长度缩小一半，当l = r时，我们就找到了目标值。</p>
 <h2 id="版本1"><a href="#版本1" class="headerlink" title="版本1"></a>版本1</h2><p>当我们将区间[l, r]划分成[l, mid]和[mid + 1, r]时，其更新操作是r = mid或者l = mid + 1;，计算mid时不需要加1。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">C++ 代码模板：</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bsearch_1</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="function"></span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">while</span> (l &lt; r)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> (check(mid)) r = mid;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> l;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+
 <h2 id="版本2"><a href="#版本2" class="headerlink" title="版本2"></a>版本2</h2><p>当我们将区间[l, r]划分成[l, mid - 1]和[mid, r]时，其更新操作是r = mid - 1或者l = mid;，此时为了防止死循环，计算mid时需要加1。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">C++ 代码模板：</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bsearch_2</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="function"></span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">while</span> (l &lt; r)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">int</span> mid = l + r + <span class="number">1</span> &gt;&gt; <span class="number">1</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> (check(mid)) l = mid;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">else</span> r = mid - <span class="number">1</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> l;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
     </div>
@@ -345,7 +347,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -392,12 +394,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">193k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:15</span>
+    <span title="站点阅读时长">5:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -407,7 +409,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共88.1k字</span>
+  <span class="post-count">博客全站共89.7k字</span>
 </div>
 
         

@@ -54,12 +54,12 @@
 <meta property="og:site_name" content="李小阳小李">
 <meta property="og:description" content="第三章 线性模型">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B&#x2F;多元线性回归算法.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B&#x2F;LDA示意图.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B&#x2F;LDA优化目标.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B&#x2F;%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%AE%97%E6%B3%95.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B&#x2F;LDA%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B&#x2F;LDA%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87.png">
 <meta property="og:updated_time" content="2020-04-01T16:33:43.854Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B&#x2F;多元线性回归算法.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;01&#x2F;ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B&#x2F;%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%AE%97%E6%B3%95.png">
 
 <link rel="canonical" href="https://lxyxl0216.github.io/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/">
 
@@ -269,35 +269,37 @@
       
         <h1 id="第三章-线性模型"><a href="#第三章-线性模型" class="headerlink" title="第三章 线性模型"></a>第三章 线性模型</h1><a id="more"></a>
 
-    <div id="aplayer-kvwZbfkc" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
-<h2 id="3-1-基本形式"><a href="#3-1-基本形式" class="headerlink" title="3.1 基本形式"></a>3.1 基本形式</h2><p>给定由d个属性描述的示例X= (x1;x2;… ;xd），其中Xi是尤在第i个属性上的取值线性模型(linear model)试图学得一个通过属性的线性组合来进行预测的函数，即</p>
-<script type="math/tex; mode=display">
-f(x) = W1X1 + W2X2 十．．．十WdXd + b</script><script type="math/tex; mode=display">
-f(x)=w^Tx+b</script><h2 id="3-2线性回归"><a href="#3-2线性回归" class="headerlink" title="3.2线性回归"></a>3.2线性回归</h2><h3 id="3-2-1问题描述"><a href="#3-2-1问题描述" class="headerlink" title="3.2.1问题描述"></a>3.2.1问题描述</h3><p>给定数据集D =$ {(x1,y1), (x2,y2),…,(x_m,y_m)}$,其中,$x_i = (x_{i1};x_{i2};…;x_{id}),y \in R$,“ 线性回归” (linear regression)试图学得一个线性模型以尽可能准确地预测实值输出标记.</p>
+
+
+
+    <div id="aplayer-TyUoNMuH" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+
+
+
+<h2 id="3-1-基本形式"><a href="#3-1-基本形式" class="headerlink" title="3.1 基本形式"></a>3.1 基本形式</h2><p>给定由d个属性描述的示例X= (x1;x2;… ;xd），其中Xi是尤在第i个属性上的取值线性模型(linear model)试图学得一个通过属性的线性组合来进行预测的函数，即<br>$$<br>f(x) = W1X1 + W2X2 十．．．十WdXd + b<br>$$</p>
+<p>$$<br>f(x)=w^Tx+b<br>$$</p>
+<h2 id="3-2线性回归"><a href="#3-2线性回归" class="headerlink" title="3.2线性回归"></a>3.2线性回归</h2><h3 id="3-2-1问题描述"><a href="#3-2-1问题描述" class="headerlink" title="3.2.1问题描述"></a>3.2.1问题描述</h3><p>给定数据集D =$ {(x1,y1), (x2,y2),…,(x_m,y_m)}$,其中,$x_i = (x_{i1};x_{i2};…;x_{id}),y \in R$,“ 线性回归” (linear regression)试图学得一个线性模型以尽可能准确地预测实值输出标记.</p>
 <h3 id="3-2-2模型描述"><a href="#3-2-2模型描述" class="headerlink" title="3.2.2模型描述"></a>3.2.2模型描述</h3><ul>
 <li>$f(x_i) = wx_i+b$</li>
 </ul>
 <h3 id="3-2-3目标函数"><a href="#3-2-3目标函数" class="headerlink" title="3.2.3目标函数"></a>3.2.3目标函数</h3><ul>
-<li>$(w^<em>,b^</em>) = argmin \sum (f(x_i)-y_i)^2$</li>
+<li>$(w^*,b^*) = argmin \sum (f(x_i)-y_i)^2$</li>
 <li>均方误差最小化来进行模型求解的方法称为“最小二乘法”</li>
 </ul>
 <h3 id="3-2-4参数估计"><a href="#3-2-4参数估计" class="headerlink" title="3.2.4参数估计"></a>3.2.4参数估计</h3><p>求解w和b使$E_{(w,b)} =\sum(y_i - wx_i - b)2$ 最小化的过程称为线性回归模型的最小二乘“ 参数估计” (parameter estimation). 我们可将E(w,b) 分别对w和b 求导，得到</p>
 <ul>
-<li><script type="math/tex; mode=display">
-\frac{\partial E_{(w,b)}}{\partial w} = 2(w\sum x_i^2-\sum(y_i-b)xi)\\
-令等式为0，求得：w=\frac{\sum y_i(x_i-\bar x)}{\sum x_i-(\sum x_i)^2/m}</script></li>
-<li><script type="math/tex; mode=display">
-\frac{\partial E_{(w,b)}}{\partial b} =2(mb-\sum (y_i-wx_i))\\
-令等式为0，求得：b = \sum(y_i-wx_i)/m</script></li>
+<li><p>$$<br>\frac{\partial E_{(w,b)}}{\partial w} = 2(w\sum x_i^2-\sum(y_i-b)xi)\<br>令等式为0，求得：w=\frac{\sum y_i(x_i-\bar x)}{\sum x_i-(\sum x_i)^2/m}<br>$$</p>
+</li>
+<li><p>$$<br>\frac{\partial E_{(w,b)}}{\partial b} =2(mb-\sum (y_i-wx_i))\<br>令等式为0，求得：b = \sum(y_i-wx_i)/m<br>$$</p>
+</li>
 </ul>
 <ul>
 <li>$\ln y = x^Tx+b$</li>
 </ul>
-<h3 id="3-2-4多元线性回归"><a href="#3-2-4多元线性回归" class="headerlink" title="3.2.4多元线性回归"></a>3.2.4多元线性回归</h3><p><img src="/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/多元线性回归算法.png" alt="多元线性回归算法"></p>
+<h3 id="3-2-4多元线性回归"><a href="#3-2-4多元线性回归" class="headerlink" title="3.2.4多元线性回归"></a>3.2.4多元线性回归</h3><p><img src="/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/%E5%A4%9A%E5%85%83%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E7%AE%97%E6%B3%95.png" alt="多元线性回归算法"></p>
 <h2 id="3-3对数几率回归"><a href="#3-3对数几率回归" class="headerlink" title="3.3对数几率回归"></a>3.3对数几率回归</h2><h3 id="3-3-1问题描述"><a href="#3-3-1问题描述" class="headerlink" title="3.3.1问题描述"></a>3.3.1问题描述</h3><p>广义线性模型中：只需找一个单调可微函数将分类任务的真实标记y与线性回归模型的预测值联系起来．</p>
-<h3 id="3-3-2对数几率函数"><a href="#3-3-2对数几率函数" class="headerlink" title="3.3.2对数几率函数"></a>3.3.2对数几率函数</h3><script type="math/tex; mode=display">
-y = \frac{1}{1+e^{-z}}\\
-ln \frac{y}{1-y}=w^Tx+b</script><h3 id="3-3-3优点"><a href="#3-3-3优点" class="headerlink" title="3.3.3优点"></a>3.3.3优点</h3><ul>
+<h3 id="3-3-2对数几率函数"><a href="#3-3-2对数几率函数" class="headerlink" title="3.3.2对数几率函数"></a>3.3.2对数几率函数</h3><p>$$<br>y = \frac{1}{1+e^{-z}}\<br>ln \frac{y}{1-y}=w^Tx+b<br>$$</p>
+<h3 id="3-3-3优点"><a href="#3-3-3优点" class="headerlink" title="3.3.3优点"></a>3.3.3优点</h3><ul>
 <li>分类学习方法</li>
 <li>直接对分类可能性进行建模，无需事先假设数据分布。</li>
 <li>它不是仅预测出“ 类别” ，而是可得到近似概率预测。</li>
@@ -314,12 +316,12 @@ ln \frac{y}{1-y}=w^Tx+b</script><h3 id="3-3-3优点"><a href="#3-3-3优点" clas
 <li><p>预测：在对新样本进行分类时，将其投影到同样的这条直线上，冉根据投影点的位置来确定新样本的类别</p>
 </li>
 </ul>
-<p><img src="/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/LDA示意图.png" alt="LDA示意图"></p>
+<p><img src="/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/LDA%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="LDA示意图"></p>
 <ul>
 <li>欲使同类样例的投影点尽可能接近，可以让同类样例投影点的协方差尽可能小</li>
 <li>欲使异类样例的投影点尽可能远离，可以让类中心之间的距离尽可能大</li>
 </ul>
-<p><img src="/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/LDA优化目标.png" alt="LDA优化目标"></p>
+<p><img src="/2020/04/01/ML-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/LDA%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87.png" alt="LDA优化目标"></p>
 <h2 id="3-5多分类学习"><a href="#3-5多分类学习" class="headerlink" title="3.5多分类学习"></a>3.5多分类学习</h2><h2 id="3-6类别不平衡问题"><a href="#3-6类别不平衡问题" class="headerlink" title="3.6类别不平衡问题"></a>3.6类别不平衡问题</h2><ul>
 <li>欠采样</li>
 <li>过采样</li>
@@ -403,7 +405,7 @@ ln \frac{y}{1-y}=w^Tx+b</script><h3 id="3-3-3优点"><a href="#3-3-3优点" clas
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -450,12 +452,12 @@ ln \frac{y}{1-y}=w^Tx+b</script><h3 id="3-3-3优点"><a href="#3-3-3优点" clas
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">193k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:15</span>
+    <span title="站点阅读时长">5:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -465,7 +467,7 @@ ln \frac{y}{1-y}=w^Tx+b</script><h3 id="3-3-3优点"><a href="#3-3-3优点" clas
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共88.1k字</span>
+  <span class="post-count">博客全站共89.7k字</span>
 </div>
 
         

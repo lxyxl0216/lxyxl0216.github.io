@@ -54,12 +54,12 @@
 <meta property="og:site_name" content="李小阳小李">
 <meta property="og:description" content="图形金字塔">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83&#x2F;高斯金字塔.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83&#x2F;拉普拉斯金字塔.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83&#x2F;DOG金字塔.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83&#x2F;%E9%AB%98%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83&#x2F;%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83&#x2F;DOG%E9%87%91%E5%AD%97%E5%A1%94.png">
 <meta property="og:updated_time" content="2020-05-09T06:59:05.696Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83&#x2F;高斯金字塔.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;05&#x2F;02&#x2F;OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83&#x2F;%E9%AB%98%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94.png">
 
 <link rel="canonical" href="https://lxyxl0216.github.io/2020/05/02/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83/">
 
@@ -248,7 +248,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
+              <span>1.3k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -269,7 +269,9 @@
       
         <h1 id="图形金字塔"><a href="#图形金字塔" class="headerlink" title="图形金字塔"></a>图形金字塔</h1><a id="more"></a>
 
-    <div id="aplayer-NfhwDPSo" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+
+    <div id="aplayer-zRAlsmTh" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+
 <h2 id="什么是图像金字塔"><a href="#什么是图像金字塔" class="headerlink" title="什么是图像金字塔"></a>什么是图像金字塔</h2><p>图像金字塔是图像中多尺度表达的一种，最主要用于图像的分割，是一种以多分辨率来解释图像的有效但概念简单的结构。图像金字塔最初用于机器视觉和图像压缩，一幅图像的金字塔是一系列以金字塔形状排列的分辨率逐步降低，且来源于同一张原始图的图像集合。其通过梯次向下采样获得，直到达到某个终止条件才停止采样。金字塔的底部是待处理图像的高分辨率表示，而顶部是低分辨率的近似。我们将一层一层的图像比喻成金字塔，层级越高，则图像越小，分辨率越低。</p>
 <ul>
 <li>高斯金字塔 ( Gaussian pyramid): 用来向下/降采样，主要的图像金字塔</li>
@@ -283,7 +285,7 @@
 </ul>
 <p>PryUp和PryDown不是互逆的，即PryUp不是降采样的逆操作。这种情况下，图像首先在每个维度上扩大为原来的两倍，新增的行（偶数行）以0填充。然后给指定的滤波器进行卷积（实际上是一个在每个维度都扩大为原来两倍的过滤器）去估计“丢失”像素的近似值。PryDown( )是一个会丢失信息的函数。为了恢复原来更高的分辨率的图像，我们要获得由降采样操作丢失的信息，这些数据就和拉普拉斯金字塔有关系了。</p>
 <h2 id="高斯金字塔"><a href="#高斯金字塔" class="headerlink" title="高斯金字塔"></a>高斯金字塔</h2><p>高斯金字塔是通过高斯平滑和下采样获得一系列下采样图像，也就是说第K层高斯金字塔通过平滑、亚采样就可以获得K+1层高斯图像，高斯金字塔包含了一系列低通滤波器，其截至频率从上一层到下一层是以因子2逐渐增加，所以高斯金字塔可以跨越很大的频率范围。金字塔的图像如下： </p>
-<p><img src="/2020/05/02/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83/高斯金字塔.png" alt="高斯金字塔"></p>
+<p><img src="/2020/05/02/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83/%E9%AB%98%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94.png" alt="高斯金字塔"></p>
 <p>下采样</p>
 <ul>
 <li>高斯模糊</li>
@@ -294,13 +296,12 @@
 <li>行列扩大两倍</li>
 <li>高斯核计算填充值</li>
 </ul>
-<h2 id="拉普拉斯金字塔"><a href="#拉普拉斯金字塔" class="headerlink" title="拉普拉斯金字塔"></a>拉普拉斯金字塔</h2><script type="math/tex; mode=display">
-L = G_i-up(G_{i+1}) \otimes kernel_{高斯}\\
-L=  G_i -PyrUP(G_{i+1})</script><p>将降采样之后的图像再进行上采样操作，然后与之前还没降采样的原图进行做差得到残差图 </p>
-<p><img src="/2020/05/02/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83/拉普拉斯金字塔.png" alt="拉普拉斯金字塔"></p>
+<h2 id="拉普拉斯金字塔"><a href="#拉普拉斯金字塔" class="headerlink" title="拉普拉斯金字塔"></a>拉普拉斯金字塔</h2><p>$$<br>L = G_i-up(G_{i+1}) \otimes kernel_{高斯}\<br>L=  G_i -PyrUP(G_{i+1})<br>$$</p>
+<p>将降采样之后的图像再进行上采样操作，然后与之前还没降采样的原图进行做差得到残差图 </p>
+<p><img src="/2020/05/02/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83/%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E9%87%91%E5%AD%97%E5%A1%94.png" alt="拉普拉斯金字塔"></p>
 <h2 id="DOG金字塔-Difference-of-Gaussian-DOG"><a href="#DOG金字塔-Difference-of-Gaussian-DOG" class="headerlink" title="DOG金字塔(Difference of Gaussian-DOG)"></a>DOG金字塔(Difference of Gaussian-DOG)</h2><p>通俗描述：就是把同一张图像在不同的参数下做高斯模糊之后的结果相减，得到的输出图像。称为高斯不同(DOG)。高斯不同是图像的内在特征，在灰度图像增强、角点检测中经常用到</p>
 <p>理论描述：差分金字塔，DOG（Difference of Gaussian）金字塔是在高斯金字塔的基础上构建起来的，其实生成高斯金字塔的目的就是为了构建DOG金字塔。DOG金字塔的第1组第1层是由高斯金字塔的第1组第2层减第1组第1层得到的。以此类推，逐组逐层生成每一个差分图像，所有差分图像构成差分金字塔。概括为DOG金字塔的第0组第l层图像是由高斯金字塔的第0组第i+1层减第0组第i层得到的。</p>
-<p><img src="/2020/05/02/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83/DOG金字塔.png" alt="DOG金字塔"></p>
+<p><img src="/2020/05/02/OpenCV%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%83/DOG%E9%87%91%E5%AD%97%E5%A1%94.png" alt="DOG金字塔"></p>
 
     </div>
 
@@ -379,7 +380,7 @@ L=  G_i -PyrUP(G_{i+1})</script><p>将降采样之后的图像再进行上采样
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -426,12 +427,12 @@ L=  G_i -PyrUP(G_{i+1})</script><p>将降采样之后的图像再进行上采样
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">193k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:15</span>
+    <span title="站点阅读时长">5:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -441,7 +442,7 @@ L=  G_i -PyrUP(G_{i+1})</script><p>将降采样之后的图像再进行上采样
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共88.1k字</span>
+  <span class="post-count">博客全站共89.7k字</span>
 </div>
 
         

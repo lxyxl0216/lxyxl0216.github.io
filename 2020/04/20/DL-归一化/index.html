@@ -54,10 +54,10 @@
 <meta property="og:site_name" content="李小阳小李">
 <meta property="og:description" content="Normalization">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;其他归一化.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;%E5%85%B6%E4%BB%96%E5%BD%92%E4%B8%80%E5%8C%96.png">
 <meta property="og:updated_time" content="2020-05-18T05:55:33.920Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;其他归一化.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E5%BD%92%E4%B8%80%E5%8C%96&#x2F;%E5%85%B6%E4%BB%96%E5%BD%92%E4%B8%80%E5%8C%96.png">
 
 <link rel="canonical" href="https://lxyxl0216.github.io/2020/04/20/DL-%E5%BD%92%E4%B8%80%E5%8C%96/">
 
@@ -267,7 +267,11 @@
       
         <h1 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h1><a id="more"></a>
 
-    <div id="aplayer-FvxMHlwL" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+
+    <div id="aplayer-QijAJDcJ" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+
+
+
 <h1 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h1><h2 id="为什么会提出BN"><a href="#为什么会提出BN" class="headerlink" title="为什么会提出BN"></a>为什么会提出BN</h2><p>深度神经网络训练困难的一个重要原因是：深度神经网络涉及很多层的叠加，而每一层的参数更新会导致上一层的输入数据分布发生变化。这会带来两个问题：</p>
 <ul>
 <li>下层输入的变化可能趋向于变大或者变小，导致上层落入饱和区，使得学习过早停止。</li>
@@ -278,30 +282,25 @@
 <ol>
 <li>计算输入的<strong>每个维度</strong>的均值和方差：</li>
 </ol>
-<script type="math/tex; mode=display">
-\bar{\mu} = \frac{1}{m}\sum_{i=1}^{m}h_i\\
-\bar{\sigma}=(\sigma_1^2,\sigma_2^2,...\sigma_n^2)^T\\
-\sigma_j^2 = \frac{1}{m}\sum_{i=1}^m(h_{ij}-\mu_j)</script><ol>
+<p>$$<br>\bar{\mu} = \frac{1}{m}\sum_{i=1}^{m}h_i\<br>\bar{\sigma}=(\sigma_1^2,\sigma_2^2,…\sigma_n^2)^T\<br>\sigma_j^2 = \frac{1}{m}\sum_{i=1}^m(h_{ij}-\mu_j)<br>$$</p>
+<ol start="2">
 <li>对输入的<strong>每个维度</strong>进行归一化：</li>
 </ol>
-<script type="math/tex; mode=display">
-h_i^1 = \frac{h_i-\bar{\mu}}{\sqrt{\bar{\sigma}^2}+\epsilon}</script><ol>
+<p>$$<br>h_i^1 = \frac{h_i-\bar{\mu}}{\sqrt{\bar{\sigma}^2}+\epsilon}<br>$$</p>
+<ol start="3">
 <li>进行缩放处理：</li>
 </ol>
-<script type="math/tex; mode=display">
-h_i^2 = \gamma \odot h_i^1 +\beta\\
-这里\gamma 和\beta是网络从数据中自动学习到的参数用于调整h_i^2的均值和方差</script><blockquote>
+<p>$$<br>h_i^2 = \gamma \odot h_i^1 +\beta\<br>这里\gamma 和\beta是网络从数据中自动学习到的参数用于调整h_i^2的均值和方差<br>$$</p>
+<blockquote>
 <p>虽然$h_i^2$的每个维度不是零均值、单位方差的，但是可以保证它的每个维度的均值、方差不再依赖于低层的网络。</p>
 </blockquote>
 <h3 id="缩放的原因"><a href="#缩放的原因" class="headerlink" title="缩放的原因"></a>缩放的原因</h3><ul>
-<li><p>归一化一个神经元的均值和标准差会降低包含该神经元的神经网络的表达能力。(若每个神经元的输出都是均值为0、标准差为 1 ，则会产生两个问题：</p>
-<ul>
+<li>归一化一个神经元的均值和标准差会降低包含该神经元的神经网络的表达能力。(若每个神经元的输出都是均值为0、标准差为 1 ，则会产生两个问题：<ul>
 <li>无论底层的神经元如何学习，其输出在提交给上层神经元处理之前，都被粗暴的归一化。导致底层神经元的学习毫无意义</li>
 <li>sigmoid 等激活函数通过区分饱和区、非饱和区（线性区），使得神经网络具有非线性计算的能力。输入归一化使得数据几乎都被映射到激活函数的线性区，从而降低了模型的表达能力。)</li>
 </ul>
 </li>
-<li><p>所以缩放的原因就是保证模型的表达能力不会降低</p>
-</li>
+<li>所以缩放的原因就是保证模型的表达能力不会降低</li>
 <li>当网络学习的参数$\gamma = \sqrt{\sigma^2+\epsilon},\beta=\bar{\mu}$时，输入与输出相同，。这样，模型既可以改变、也可以保持原输入，这就提升了网络的表达能力。</li>
 </ul>
 <h3 id="不使用偏置的原因"><a href="#不使用偏置的原因" class="headerlink" title="不使用偏置的原因"></a>不使用偏置的原因</h3><ul>
@@ -317,55 +316,57 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
 <li>不使用RNN。因为不同样本的 sequence 的长度不同，因此RNN 的深度是不固定的。同一个batch 中的多个样本会产生不同深度的RNN ，因此很难对同一层的样本进行归一化。</li>
 </ul>
 <h2 id="BN代码"><a href="#BN代码" class="headerlink" title="BN代码"></a>BN代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BatchNormalization</span><span class="params">(Layer)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, epsilon=<span class="number">1e-3</span>, axis=<span class="number">-1</span>,</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="params">                 weights=None, beta_init=<span class="string">'zero'</span>, gamma_init=<span class="string">'one'</span>,</span></span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="params">                 gamma_regularizer=None, beta_regularizer=None, **kwargs)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">        self.supports_masking = <span class="literal">True</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">        self.beta_init = initializers.get(beta_init)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">        self.gamma_init = initializers.get(gamma_init)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">        self.epsilon = epsilon</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">        self.axis = axis</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">        self.gamma_regularizer = regularizers.get(gamma_regularizer)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">        self.beta_regularizer = regularizers.get(beta_regularizer)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">        self.initial_weights = weights</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">        super(BatchNormalization, self).__init__(**kwargs)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">build</span><span class="params">(self, input_shape)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">        self.input_spec = [InputSpec(shape=input_shape)]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">        shape = (input_shape[self.axis],)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">        self.gamma = self.add_weight(shape,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">                                     initializer=self.gamma_init,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">                                     regularizer=self.gamma_regularizer,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">                                     name=<span class="string">'&#123;&#125;_gamma'</span>.format(self.name),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">                                     trainable=<span class="literal">False</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">        self.beta = self.add_weight(shape,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">                                    initializer=self.beta_init,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line">                                    regularizer=self.beta_regularizer,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line">                                    name=<span class="string">'&#123;&#125;_beta'</span>.format(self.name),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line">                                    trainable=<span class="literal">False</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">        self.running_mean = self.add_weight(shape, initializer=<span class="string">'zero'</span>,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line">                                            name=<span class="string">'&#123;&#125;_running_mean'</span>.format(self.name),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line">                                            trainable=<span class="literal">False</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">34</span></pre></td><td class="code"><pre><span class="line">        self.running_std = self.add_weight(shape, initializer=<span class="string">'one'</span>,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">35</span></pre></td><td class="code"><pre><span class="line">                                           name=<span class="string">'&#123;&#125;_running_std'</span>.format(self.name),</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">36</span></pre></td><td class="code"><pre><span class="line">                                           trainable=<span class="literal">False</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">37</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">38</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> self.initial_weights <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">39</span></pre></td><td class="code"><pre><span class="line">            self.set_weights(self.initial_weights)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">40</span></pre></td><td class="code"><pre><span class="line">            <span class="keyword">del</span> self.initial_weights</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">41</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">42</span></pre></td><td class="code"><pre><span class="line">        self.built = <span class="literal">True</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">43</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">44</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(self, x, mask=None)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">45</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">46</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">assert</span> self.built, <span class="string">'Layer must be built before being called'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">47</span></pre></td><td class="code"><pre><span class="line">        input_shape = K.int_shape(x)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">48</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">49</span></pre></td><td class="code"><pre><span class="line">        reduction_axes = list(range(len(input_shape)))</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">50</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">del</span> reduction_axes[self.axis]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">51</span></pre></td><td class="code"><pre><span class="line">        broadcast_shape = [<span class="number">1</span>] * len(input_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">52</span></pre></td><td class="code"><pre><span class="line">        broadcast_shape[self.axis] = input_shape[self.axis]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">53</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">54</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">if</span> sorted(reduction_axes) == range(K.ndim(x))[:<span class="number">-1</span>]:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">55</span></pre></td><td class="code"><pre><span class="line">            x_normed = K.batch_normalization(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">56</span></pre></td><td class="code"><pre><span class="line">                x, self.running_mean, self.running_std,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">57</span></pre></td><td class="code"><pre><span class="line">                self.beta, self.gamma,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">58</span></pre></td><td class="code"><pre><span class="line">                epsilon=self.epsilon)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">59</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">else</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">60</span></pre></td><td class="code"><pre><span class="line">            <span class="comment"># need broadcasting</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">61</span></pre></td><td class="code"><pre><span class="line">            broadcast_running_mean = K.reshape(self.running_mean, broadcast_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">62</span></pre></td><td class="code"><pre><span class="line">            broadcast_running_std = K.reshape(self.running_std, broadcast_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">63</span></pre></td><td class="code"><pre><span class="line">            broadcast_beta = K.reshape(self.beta, broadcast_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">64</span></pre></td><td class="code"><pre><span class="line">            broadcast_gamma = K.reshape(self.gamma, broadcast_shape)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">65</span></pre></td><td class="code"><pre><span class="line">            x_normed = K.batch_normalization(</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">66</span></pre></td><td class="code"><pre><span class="line">                x, broadcast_running_mean, broadcast_running_std,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">67</span></pre></td><td class="code"><pre><span class="line">                broadcast_beta, broadcast_gamma,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">68</span></pre></td><td class="code"><pre><span class="line">                epsilon=self.epsilon)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">69</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">70</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">return</span> x_normed</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">71</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">72</span></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_config</span><span class="params">(self)</span>:</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">73</span></pre></td><td class="code"><pre><span class="line">        config = &#123;<span class="string">'epsilon'</span>: self.epsilon,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">74</span></pre></td><td class="code"><pre><span class="line">                  <span class="string">'axis'</span>: self.axis,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">75</span></pre></td><td class="code"><pre><span class="line">                  <span class="string">'gamma_regularizer'</span>: self.gamma_regularizer.get_config() <span class="keyword">if</span> self.gamma_regularizer <span class="keyword">else</span> <span class="literal">None</span>,</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">76</span></pre></td><td class="code"><pre><span class="line">                  <span class="string">'beta_regularizer'</span>: self.beta_regularizer.get_config() <span class="keyword">if</span> self.beta_regularizer <span class="keyword">else</span> <span class="literal">None</span>&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">77</span></pre></td><td class="code"><pre><span class="line">        base_config = super(BatchNormalization, self).get_config()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">78</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">return</span> dict(list(base_config.items()) + list(config.items()))</span></pre></td></tr></table></figure>
-<h1 id="其他-Normalization"><a href="#其他-Normalization" class="headerlink" title="其他 Normalization"></a>其他 Normalization</h1><p><img src="/2020/04/20/DL-%E5%BD%92%E4%B8%80%E5%8C%96/其他归一化.png" alt="其他归一化"></p>
+
+
+
+
+
+<h1 id="其他-Normalization"><a href="#其他-Normalization" class="headerlink" title="其他 Normalization"></a>其他 Normalization</h1><p><img src="/2020/04/20/DL-%E5%BD%92%E4%B8%80%E5%8C%96/%E5%85%B6%E4%BB%96%E5%BD%92%E4%B8%80%E5%8C%96.png" alt="其他归一化"></p>
 <ul>
 <li>BN 是对<strong>每个神经元</strong>（通道上）在mini batch 样本之间计算均值和方差。对每个神经元， mini-batch 中的所有样本在该神经元上都使用相同的均值和方差。但是不同神经元使用不同的均值和方差。</li>
 <li>LN 是对单个样本的<strong>同一层的神经元</strong>进行归一化，同层神经元使用相同的均值和方差。</li>
 <li>IN是对同一层神经元中的同一个通道进行归一化。</li>
 <li>GN 介于LN 和IN 之间。如果G=1 ，即只有一个分组，则GN 就是LN ；如果G=C ，即每个通道构成一个组，则GN 就是IN 。</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center"></th>
-<th style="text-align:center">Batch N</th>
-<th style="text-align:center">Layer N</th>
-<th style="text-align:center">Instance N</th>
-<th style="text-align:center">Group N</th>
+<th align="center"></th>
+<th align="center">Batch N</th>
+<th align="center">Layer N</th>
+<th align="center">Instance N</th>
+<th align="center">Group N</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">维度</td>
-<td style="text-align:center">对N、H、W做归一化，而保留通道 C 的维度。</td>
-<td style="text-align:center">对C、H、W归一化</td>
-<td style="text-align:center">对H、W做归一化</td>
-<td style="text-align:center">channel分组，然后再做归一化</td>
+<tbody><tr>
+<td align="center">维度</td>
+<td align="center">对N、H、W做归一化，而保留通道 C 的维度。</td>
+<td align="center">对C、H、W归一化</td>
+<td align="center">对H、W做归一化</td>
+<td align="center">channel分组，然后再做归一化</td>
 </tr>
 <tr>
-<td style="text-align:center">目的</td>
-<td style="text-align:center">使数据在进入激活函数之前，沿着通道计算每个batch的均值、方差，‘强迫’数据保持均值为0，方差为1的正态分布</td>
-<td style="text-align:center">LN对深度网络的某一层的所有神经元的输入进行归一化</td>
-<td style="text-align:center">针对图像像素做normalization，最初用于图像的风格化迁移。</td>
-<td style="text-align:center">在 channel 方向 group，然后每个 group 内做 Norm，计算</td>
+<td align="center">目的</td>
+<td align="center">使数据在进入激活函数之前，沿着通道计算每个batch的均值、方差，‘强迫’数据保持均值为0，方差为1的正态分布</td>
+<td align="center">LN对深度网络的某一层的所有神经元的输入进行归一化</td>
+<td align="center">针对图像像素做normalization，最初用于图像的风格化迁移。</td>
+<td align="center">在 channel 方向 group，然后每个 group 内做 Norm，计算</td>
 </tr>
 <tr>
-<td style="text-align:center">作用</td>
-<td style="text-align:center">1.避免梯度消失2.减弱对初始化的强依赖性3.保持隐藏层中数值的均值、方差不变，让数值更稳定4.正则作用5.容许较大学习率</td>
-<td style="text-align:center">不需要批训练，在单条数据内部就能归一化</td>
-<td style="text-align:center">可以加速模型收敛，并且保持每个图像实例之间的独立。</td>
-<td style="text-align:center">解决BN对较小的mini-batch size效果差的问题</td>
+<td align="center">作用</td>
+<td align="center">1.避免梯度消失2.减弱对初始化的强依赖性3.保持隐藏层中数值的均值、方差不变，让数值更稳定4.正则作用5.容许较大学习率</td>
+<td align="center">不需要批训练，在单条数据内部就能归一化</td>
+<td align="center">可以加速模型收敛，并且保持每个图像实例之间的独立。</td>
+<td align="center">解决BN对较小的mini-batch size效果差的问题</td>
 </tr>
 <tr>
-<td style="text-align:center">问题</td>
-<td style="text-align:center">1.batch size太小，则计算的均值、方差不足以代表整个数据分布2.batch size太大：会超过内存容量；需要跑更多的epoch，导致总训练时间变长3.会直接固定梯度下降的方向，导致很难更新。</td>
-<td style="text-align:center">LN用于RNN效果比较明显，但是在CNN上，效果不如BN。</td>
-<td style="text-align:center"></td>
+<td align="center">问题</td>
+<td align="center">1.batch size太小，则计算的均值、方差不足以代表整个数据分布2.batch size太大：会超过内存容量；需要跑更多的epoch，导致总训练时间变长3.会直接固定梯度下降的方向，导致很难更新。</td>
+<td align="center">LN用于RNN效果比较明显，但是在CNN上，效果不如BN。</td>
+<td align="center"></td>
+<td align="center"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>比喻成一摞书，这摞书总共有 N 本，每本有 C 页，每页有 H 行，每行 有W 个字符。</p>
 <ol>
 <li><p>BN 求均值时，相当于把这些书按页码一一对应地加起来（例如第1本书第36页，第2本书第36页……），再除以每个页码下的字符总数：N×H×W，因此可以把 BN 看成求“平均书”的操作（注意这个“平均书”每页只有一个字），求标准差时也是同理。</p>
@@ -455,7 +456,7 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -502,12 +503,12 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">193k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:15</span>
+    <span title="站点阅读时长">5:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -517,7 +518,7 @@ h_i^2 = \gamma \odot h_i^1 +\beta\\
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共88.1k字</span>
+  <span class="post-count">博客全站共89.7k字</span>
 </div>
 
         

@@ -55,10 +55,10 @@
 <meta property="og:description" content="基本优化算法">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;SGD.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;动量.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;%E5%8A%A8%E9%87%8F.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;Adagrad.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;RMSprop.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;RMSprop+动量.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;RMSprop+%E5%8A%A8%E9%87%8F.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95&#x2F;Adam.png">
 <meta property="og:updated_time" content="2020-05-07T08:51:59.528Z">
 <meta name="twitter:card" content="summary">
@@ -272,7 +272,9 @@
       
         <h1 id="基本优化算法"><a href="#基本优化算法" class="headerlink" title="基本优化算法"></a>基本优化算法</h1><a id="more"></a>
 
-    <div id="aplayer-TGvTWKdM" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+
+    <div id="aplayer-LvUbdEve" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+
 <h2 id="GD"><a href="#GD" class="headerlink" title="GD"></a>GD</h2><p>网络更新参数的公式为：$\theta=\theta-\eta \times \nabla_{\theta}J(\theta)$其中η是学习率，$\nabla_{\theta}J(\theta)$是损失函数$J(θ)$的梯度。</p>
 <p>梯度下降中，对于$θ$的更新，所有的样本都有贡献，也就是参与调整$θ$ 。其计算得到的是一个标准梯度。因而理论上来说一次更新的幅度是比较大的。如果样本不多的情况下，当然是这样收敛的速度会更快。 </p>
 <h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
@@ -280,8 +282,8 @@
 <li>权重更新的快慢是由学习率η决定的，并且可以在凸面误差曲面中收敛到全局最优值，在非凸曲面中可能趋于局部最优值。</li>
 <li>使用标准形式的批量梯度下降还有一个问题，就是在训练大型数据集时存在冗余的权重更新。</li>
 </ul>
-<h2 id="mini-SGD"><a href="#mini-SGD" class="headerlink" title="mini-SGD"></a>mini-SGD</h2><script type="math/tex; mode=display">
-\theta = \theta-\epsilon \nabla_{\theta}J(\theta)</script><p>随机梯度下降沿着随机挑选的mini-batch 数据的梯度下降方向推进，可以很大程度的加速训练过程。</p>
+<h2 id="mini-SGD"><a href="#mini-SGD" class="headerlink" title="mini-SGD"></a>mini-SGD</h2><p>$$<br>\theta = \theta-\epsilon \nabla_{\theta}J(\theta)<br>$$</p>
+<p>随机梯度下降沿着随机挑选的mini-batch 数据的梯度下降方向推进，可以很大程度的加速训练过程。</p>
 <h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/SGD.png" alt="SGD"></p>
 <h3 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>可以减少参数更新的波动，最终得到效果更好和更稳定的收敛。</li>
@@ -292,51 +294,42 @@
 <li>每次梯度的方向不确定，可能需要很长时间接近最小值点 （更新时间长）</li>
 <li></li>
 </ul>
-<h2 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h2><script type="math/tex; mode=display">
-v=\alpha v-\epsilon \nabla_{\theta}J(\theta)\\
-\theta = \theta+v</script><p>动量方法积累了之前梯度的指数级衰减的移动平均，然后继续沿着该方向移动。</p>
+<h2 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h2><p>$$<br>v=\alpha v-\epsilon \nabla_{\theta}J(\theta)\<br>\theta = \theta+v<br>$$</p>
+<p>动量方法积累了之前梯度的指数级衰减的移动平均，然后继续沿着该方向移动。</p>
 <ul>
 <li>它是一种移动平均，权重是指数级衰减的：近期的权重较大，远期的权重很小。</li>
 <li>动量方法取这些加权梯度的均值，根据该均值的方向决定参数的更新方向。</li>
 <li>在原步长之上，增加了与上一时刻步长相关的$v$，$\alpha$为衰减指数通常取 0.9 左右。</li>
 <li>这意味着<strong>参数更新方向不仅由当前的梯度决定，也与此前累积的下降方向有关</strong>。这使得参数中那些梯度方向变化不大的维度可以加速更新，并减少梯度方向变化较大的维度上的更新幅度。由此产生了加速收敛和减小震荡的效果。</li>
 </ul>
-<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/动量.png" alt="动量"></p>
+<h3 id="算法-1"><a href="#算法-1" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/%E5%8A%A8%E9%87%8F.png" alt="动量"></p>
 <h3 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>使网络能更优和更稳定的收敛；</li>
 <li>减少振荡过程；</li>
 <li>当其梯度指向实际移动方向时，动量项v增大；当梯度与实际移动方向相反时，v减小。这种方式意味着动量项只对相关样本进行参数更新，减少了不必要的参数更新，从而得到更快且稳定的收敛，也减少了振荡过程。通过优化相关方向的训练和弱化无关方向的振荡，来加速SGD训练。</li>
 </ul>
-<h2 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h2><p>AdaGrad 算法的思想是：参数空间每个方向的学习率反比于某个值的平方根。这个值就是该方向上累计的梯度分量的平方值之和。</p>
-<script type="math/tex; mode=display">
-r = r + g \odot g\\
-\theta = \theta-\frac{\epsilon}{\sqrt{\bar r} }\odot g</script><ul>
+<h2 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h2><p>AdaGrad 算法的思想是：参数空间每个方向的学习率反比于某个值的平方根。这个值就是该方向上累计的梯度分量的平方值之和。<br>$$<br>r = r + g \odot g\<br>\theta = \theta-\frac{\epsilon}{\sqrt{\bar r} }\odot g<br>$$</p>
+<ul>
 <li><p>如果代价函数在某个方向上有较大偏导数，则这个方向上学习率降低</p>
 </li>
 <li><p>如果代价函数在某个方向上有较小偏导数，则这个方向上学习率提高</p>
 </li>
-<li>由于随着迭代次数的增加，r也在增大，因此起到了衰减学习率的作用</li>
+<li><p>由于随着迭代次数的增加，r也在增大，因此起到了衰减学习率的作用</p>
+</li>
 </ul>
 <h3 id="算法-2"><a href="#算法-2" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/Adagrad.png" alt="Adagrad"></p>
 <h3 id="缺点-2"><a href="#缺点-2" class="headerlink" title="缺点"></a>缺点</h3><ul>
 <li>AdaGrad 学习速率减小的时机过早，且减小的幅度过大。因为学习率与历史梯度的平方和的开方成反比，导致过快、过多的下降。</li>
 <li>学习率可能衰减至0，导致提前结束</li>
 </ul>
-<h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><p>将梯度累计策略修改为指数平方加权的移动平均</p>
-<script type="math/tex; mode=display">
-r = \lambda r + (1-\lambda)g \odot g\\
-\theta = \theta-\frac{\epsilon}{\sqrt{\bar r} }\odot g\\
-\lambda 是衰减速率，指定了指数加权移动平均的有效长度</script><h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/RMSprop.png" alt="RMSprop"></p>
-<p> <img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/RMSprop+动量.png" alt="RMSprop+动量"></p>
+<h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><p>将梯度累计策略修改为指数平方加权的移动平均<br>$$<br>r = \lambda r + (1-\lambda)g \odot g\<br>\theta = \theta-\frac{\epsilon}{\sqrt{\bar r} }\odot g\<br>\lambda 是衰减速率，指定了指数加权移动平均的有效长度<br>$$</p>
+<h3 id="算法-3"><a href="#算法-3" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/RMSprop.png" alt="RMSprop"></p>
+<p> <img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/RMSprop+%E5%8A%A8%E9%87%8F.png" alt="RMSprop+动量"></p>
 <h3 id="优点-3"><a href="#优点-3" class="headerlink" title="优点"></a>优点</h3><ul>
 <li>与动量相比， RMSProp 不需要手动配置学习率超参数，由算法自动完成。</li>
 <li>AdaGrad当应用于非凸函数训练神经网络时，学习轨迹可能穿过了很多不同的结构，最终到达一个局部是凸碗的区域。AdaGrad根据平方梯度的整个历史收缩学习率，可能使得学习率在达到这样的凸结构前就变得太小了</li>
 </ul>
-<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><p>结合了AdaGrad和RMSProp ，能计算每个参数的自适应学习率；不仅使用了平方梯度的指数衰减平均值，而且保持了梯度的指数衰减平均值，这一点与动量类似</p>
-<script type="math/tex; mode=display">
-s=\beta_1*s+(1-\beta_1)*g\\
-r=\beta_2*r+(1-\beta_2)*g \odot g\\
-\theta = \theta -\epsilon\frac{s}{\sqrt{r}}*g</script><p> 计算了每个梯度分量的指数平均和梯度分量的平方指数平均 </p>
+<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><p>结合了AdaGrad和RMSProp ，能计算每个参数的自适应学习率；不仅使用了平方梯度的指数衰减平均值，而且保持了梯度的指数衰减平均值，这一点与动量类似<br>$$<br>s=\beta_1*s+(1-\beta_1)<em>g\<br>r=\beta_2</em>r+(1-\beta_2)*g \odot g\<br>\theta = \theta -\epsilon\frac{s}{\sqrt{r}}*g<br>$$<br> 计算了每个梯度分量的指数平均和梯度分量的平方指数平均 </p>
 <h3 id="算法-4"><a href="#算法-4" class="headerlink" title="算法"></a>算法</h3><p><img src="/2020/04/20/DL-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/Adam.png" alt="Adam"></p>
 <h3 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h3><ul>
 <li>无论梯度的大小如何， Adam 算法的参数更新步长几乎都是$\epsilon$，相比较而言， AdaGrad 和 RMSProp 算法的参数更新步长随时间在减少。</li>
@@ -430,7 +423,7 @@ r=\beta_2*r+(1-\beta_2)*g \odot g\\
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -477,12 +470,12 @@ r=\beta_2*r+(1-\beta_2)*g \odot g\\
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">189k</span>
+    <span title="站点总字数">193k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:15</span>
+    <span title="站点阅读时长">5:21</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -492,7 +485,7 @@ r=\beta_2*r+(1-\beta_2)*g \odot g\\
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共88.1k字</span>
+  <span class="post-count">博客全站共89.7k字</span>
 </div>
 
         
