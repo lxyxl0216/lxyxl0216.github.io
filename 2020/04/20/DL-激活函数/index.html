@@ -55,7 +55,7 @@
 <meta property="og:description" content="激活函数">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0&#x2F;ReLU.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0&#x2F;ReLU%E6%89%A9%E5%B1%95.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0&#x2F;ReLU扩展.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0&#x2F;prelu.jpeg">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0&#x2F;sigmoid.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;20&#x2F;DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0&#x2F;tanh.jpg">
@@ -250,7 +250,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.2k</span>
+              <span>1.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -271,13 +271,9 @@
       
         <h1 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h1><a id="more"></a>
 
-
-    <div id="aplayer-KyVJUFGF" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
-
-
-
-<h1 id="ReLU"><a href="#ReLU" class="headerlink" title="ReLU"></a>ReLU</h1><h2 id="什么是ReLU"><a href="#什么是ReLU" class="headerlink" title="什么是ReLU"></a>什么是ReLU</h2><p>$$<br>修正线性单元采用激活函数g(z) = max{0,z}<br>$$</p>
-<p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/ReLU.png" alt="ReLU"></p>
+    <div id="aplayer-XMpYSeFu" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
+<h1 id="ReLU"><a href="#ReLU" class="headerlink" title="ReLU"></a>ReLU</h1><h2 id="什么是ReLU"><a href="#什么是ReLU" class="headerlink" title="什么是ReLU"></a>什么是ReLU</h2><script type="math/tex; mode=display">
+修正线性单元采用激活函数g(z) = max\{0,z\}</script><p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/ReLU.png" alt="ReLU"></p>
 <h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
 <li>解决了梯度消失问题</li>
 <li>计算速度非常快，只需要判断输入是否大于0</li>
@@ -291,16 +287,17 @@
 </ul>
 </li>
 </ul>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>当$z&lt;0$时使用一个，小于0部分增加斜率$\alpha$<br>$$<br>h = g(z,\alpha) = max(0,z)+\alpha min(0,z)<br>$$</p>
-<ul>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>当$z&lt;0$时使用一个，小于0部分增加斜率$\alpha$</p>
+<script type="math/tex; mode=display">
+h = g(z,\alpha) = max(0,z)+\alpha min(0,z)</script><ul>
 <li>绝对值修正：$\alpha =-1$</li>
 <li>渗透修正线性单元：$\alpha=0.01$</li>
 <li>参数化修正线性单元：$\alpha$作为学习参数</li>
 </ul>
-<p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/ReLU%E6%89%A9%E5%B1%95.png" alt="ReLU扩展1"></p>
+<p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/ReLU扩展.png" alt="ReLU扩展1"></p>
 <p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/prelu.jpeg" alt="ReLU扩展2"></p>
-<h1 id="Sigmoid"><a href="#Sigmoid" class="headerlink" title="Sigmoid"></a>Sigmoid</h1><h2 id="什么是sigmoid"><a href="#什么是sigmoid" class="headerlink" title="什么是sigmoid"></a>什么是sigmoid</h2><p>$$<br>sigmoid(x) = \frac{1}{1+e^{-x}}<br>$$</p>
-<p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/sigmoid.jpg" alt="sigmoid"></p>
+<h1 id="Sigmoid"><a href="#Sigmoid" class="headerlink" title="Sigmoid"></a>Sigmoid</h1><h2 id="什么是sigmoid"><a href="#什么是sigmoid" class="headerlink" title="什么是sigmoid"></a>什么是sigmoid</h2><script type="math/tex; mode=display">
+sigmoid(x) = \frac{1}{1+e^{-x}}</script><p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/sigmoid.jpg" alt="sigmoid"></p>
 <ul>
 <li>适用于二项伯努利分布</li>
 </ul>
@@ -316,9 +313,13 @@
 <h2 id="扩展-1"><a href="#扩展-1" class="headerlink" title="扩展"></a>扩展</h2><ul>
 <li>sigmoid的代价函数通常采用负对数似然函数</li>
 </ul>
-<p>$$<br>z = wx+b\<br>J(\theta) = -\log P(y|x) \<br>P(y=1|x) = \sigma(z)=\frac{exp(z)}{exp(z)+exp(0)}\<br>P(y=0|x) = 1-\sigma(z)=\frac{exp(0)}{exp(z)+exp(0)}\<br>P(y|x) = -\log \sigma((2y-1)z)<br>$$</p>
-<h1 id="tanh"><a href="#tanh" class="headerlink" title="tanh"></a>tanh</h1><h2 id="什么是tanh"><a href="#什么是tanh" class="headerlink" title="什么是tanh"></a>什么是tanh</h2><p>$$<br>双曲正切函数 = tanh(z)<br>$$</p>
-<p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/tanh.jpg" alt="tanh"></p>
+<script type="math/tex; mode=display">
+z = wx+b\\
+J(\theta) = -\log P(y|x) \\
+P(y=1|x) = \sigma(z)=\frac{exp(z)}{exp(z)+exp(0)}\\
+P(y=0|x) = 1-\sigma(z)=\frac{exp(0)}{exp(z)+exp(0)}\\
+P(y|x) = -\log \sigma((2y-1)z)</script><h1 id="tanh"><a href="#tanh" class="headerlink" title="tanh"></a>tanh</h1><h2 id="什么是tanh"><a href="#什么是tanh" class="headerlink" title="什么是tanh"></a>什么是tanh</h2><script type="math/tex; mode=display">
+双曲正切函数 = tanh(z)</script><p><img src="/2020/04/20/DL-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/tanh.jpg" alt="tanh"></p>
 <ul>
 <li>与sigmoid的关系 $tanh(z) = 2\sigma(2z)-1$</li>
 </ul>
@@ -410,20 +411,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -457,12 +458,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">193k</span>
+    <span title="站点总字数">200k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:21</span>
+    <span title="站点阅读时长">5:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -472,7 +473,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共89.7k字</span>
+  <span class="post-count">博客全站共90.7k字</span>
 </div>
 
         

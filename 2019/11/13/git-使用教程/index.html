@@ -46,13 +46,13 @@
   };
 </script>
 
-  <meta name="description" content="配置user信息 Git config –global user.name ‘your_name’ git config –global user.email ‘email’  git config –local 支队某个仓库有用 git config –system 对系统所有登录用于使用 –list 显示配置 Github配置 创建ssh key ：ssh-keygen -t  rsa -">
+  <meta name="description" content="配置user信息 Git config —global user.name ‘your_name’ git config —global user.email ‘email’  git config —local 支队某个仓库有用 git config —system 对系统所有登录用于使用 —list 显示配置 Github配置 创建ssh key ：ssh-keygen -t  rsa -b">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git 使用教程">
 <meta property="og:url" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;git-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B&#x2F;index.html">
 <meta property="og:site_name" content="李小阳小李">
-<meta property="og:description" content="配置user信息 Git config –global user.name ‘your_name’ git config –global user.email ‘email’  git config –local 支队某个仓库有用 git config –system 对系统所有登录用于使用 –list 显示配置 Github配置 创建ssh key ：ssh-keygen -t  rsa -">
+<meta property="og:description" content="配置user信息 Git config —global user.name ‘your_name’ git config —global user.email ‘email’  git config —local 支队某个仓库有用 git config —system 对系统所有登录用于使用 —list 显示配置 Github配置 创建ssh key ：ssh-keygen -t  rsa -b">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2019&#x2F;11&#x2F;13&#x2F;git-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B&#x2F;git.png">
 <meta property="og:updated_time" content="2020-04-30T12:35:27.353Z">
@@ -263,14 +263,13 @@
 
       
         <a id="more"></a>
-
 <h1 id="配置user信息"><a href="#配置user信息" class="headerlink" title="配置user信息"></a>配置user信息</h1><ul>
-<li>Git config –global user.name ‘your_name’</li>
-<li>git config –global user.email ‘email’</li>
+<li>Git config —global user.name ‘your_name’</li>
+<li>git config —global user.email ‘email’</li>
 </ul>
-<p>git config –local 支队某个仓库有用</p>
-<p>git config –system 对系统所有登录用于使用</p>
-<p>–list 显示配置</p>
+<p>git config —local 支队某个仓库有用</p>
+<p>git config —system 对系统所有登录用于使用</p>
+<p>—list 显示配置</p>
 <h1 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h1><p>配置</p>
 <p>创建ssh key ：ssh-keygen -t  rsa -b -C “email”</p>
 <p>添加key ：id_rsa.pub</p>
@@ -278,60 +277,80 @@
 <p>git remote add 《name》  url </p>
 <p>git remote -v 查看分支</p>
 <p>git fetch master  把master远端的拉下来，与本地无关联</p>
-<p>git push  –all</p>
+<p>git push  —all</p>
 <h1 id="第一阶段"><a href="#第一阶段" class="headerlink" title="第一阶段"></a>第一阶段</h1><p>想要让git对一个目录进行版本控制需要以下步骤</p>
 <ul>
 <li><p>进入要管理的文件夹</p>
 </li>
 <li><p>执行初始化命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git init</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git init</span></pre></td></tr></table></figure>
+</li>
 <li><p>管理目录下的文件状态</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git status</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git status</span></pre></td></tr></table></figure>
+</li>
 <li><p>管理制定文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git add 文件名</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git add . &#x2F; --all</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git add 文件名</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git add . &#x2F; --all</span></pre></td></tr></table></figure>
+</li>
 <li><p>生成版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git commit -m &#39;描述信息&#39;</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git commit -m &#39;描述信息&#39;</span></pre></td></tr></table></figure>
+</li>
 <li><p>修改版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git commit --amend（修改最近一次的message）</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git commit --amend（修改最近一次的message）</span></pre></td></tr></table></figure>
+</li>
 <li><p>显示日志</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git log</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git log</span></pre></td></tr></table></figure>
+</li>
 </ul>
 <h1 id="第二阶段"><a href="#第二阶段" class="headerlink" title="第二阶段"></a>第二阶段</h1><ul>
 <li><p>回滚</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reset --hard 版本号</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reset --hard 版本号</span></pre></td></tr></table></figure>
+</li>
 <li><p>显示所有日志</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reflog</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reflog</span></pre></td></tr></table></figure>
+</li>
 <li><p>回滚到回滚之前的状态</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reset -- hard 版本号</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git reset -- hard 版本号</span></pre></td></tr></table></figure>
+</li>
 </ul>
 <p><img src="/2019/11/13/git-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/git.png" alt="git"></p>
 <h1 id="第三阶段"><a href="#第三阶段" class="headerlink" title="第三阶段"></a>第三阶段</h1><ul>
 <li><p>查看目前处在的分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch</span></pre></td></tr></table></figure>
+</li>
 <li><p>创建分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch 新分支名字</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch 新分支名字</span></pre></td></tr></table></figure>
+</li>
 <li><p>切换分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git checkout 分支名字</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git checkout 分支名字</span></pre></td></tr></table></figure>
+</li>
 <li><p>合并分支（切换到master分支）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git checkout master </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git merge 新分支的名字</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">出现冲突，手动删除</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git checkout master </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">git merge 新分支的名字</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">出现冲突，手动删除</span></pre></td></tr></table></figure>
+</li>
 <li><p>删除分支</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch -d 分支名字</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git branch -d 分支名字</span></pre></td></tr></table></figure>
+</li>
 </ul>
 <h1 id="第四阶段"><a href="#第四阶段" class="headerlink" title="第四阶段"></a>第四阶段</h1><ul>
 <li><p>远程仓库起别名（默认新名字会使用origin）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git remote add 新名字 远程仓库</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git remote add 新名字 远程仓库</span></pre></td></tr></table></figure>
+</li>
 <li><p>推送代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git push 新名字 分支</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git push 新名字 分支</span></pre></td></tr></table></figure>
+</li>
 <li><p>克隆仓库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git clone 远程仓库</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git clone 远程仓库</span></pre></td></tr></table></figure>
+</li>
 <li><p>拉取文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git pull 新名字 分支名字</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git pull 新名字 分支名字</span></pre></td></tr></table></figure>
+</li>
 </ul>
 <h1 id="第五阶段"><a href="#第五阶段" class="headerlink" title="第五阶段"></a>第五阶段</h1><ul>
 <li><p>保持代码提交整洁(变基)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git rebase 分支</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git rebase 分支</span></pre></td></tr></table></figure>
+</li>
 <li><p>记录图形展示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git log --graph</span></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">git log --graph</span></pre></td></tr></table></figure>
+</li>
 </ul>
 
     </div>
@@ -411,20 +430,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -458,12 +477,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">193k</span>
+    <span title="站点总字数">200k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:21</span>
+    <span title="站点阅读时长">5:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -473,7 +492,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共89.7k字</span>
+  <span class="post-count">博客全站共90.7k字</span>
 </div>
 
         

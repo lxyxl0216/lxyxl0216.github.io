@@ -268,11 +268,7 @@
       
         <h1 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h1><a id="more"></a>
 
-
-    <div id="aplayer-yOfkjLEk" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
-
-
-
+    <div id="aplayer-kncmGUbm" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h2 id="什么是正则化"><a href="#什么是正则化" class="headerlink" title="什么是正则化"></a>什么是正则化</h2><p>正则化常用于缓解模型过拟合。过拟合发生的原因是模型的容量过大，而正则化可以对模型施加某些限制，<br>从而降低模型的有效容量。</p>
 <p>正则化策略代表了某种先验知识，即：倾向于选择简单的模型。</p>
 <p>正则化方法：通过对目标函数$J$添加一个参数范数正则化项$\Omega(\theta)$来限制模型的容量，正则之后的$\bar{J}(\theta;X,y)=J(\theta;X,y)+\alpha\Omega(\theta)$，$\alpha$作为正则化系数，衡量$\Omega$和$J$的比重，如果$\alpha$设置足够大，则参数$\theta$越接近0，模型越简单。</p>
@@ -297,39 +293,44 @@
 <li>只有方差接近甚至小于$\alpha$的特征受影响较大。</li>
 </ul>
 <p><img src="/2020/04/20/DL-%E6%AD%A3%E5%88%99%E5%8C%96/L2.png" alt="L2物理意义"></p>
-<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><table>
+<h2 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h2><div class="table-container">
+<table>
 <thead>
 <tr>
-<th align="center">L1</th>
-<th align="center">L2</th>
+<th style="text-align:center">L1</th>
+<th style="text-align:center">L2</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center">各个元素绝对值之和</td>
-<td align="center">各元素的平方和</td>
+<tbody>
+<tr>
+<td style="text-align:center">各个元素绝对值之和</td>
+<td style="text-align:center">各元素的平方和</td>
 </tr>
 <tr>
-<td align="center">特征选择，稀疏模型</td>
-<td align="center">防止过拟合，提高泛化能力</td>
+<td style="text-align:center">特征选择，稀疏模型</td>
+<td style="text-align:center">防止过拟合，提高泛化能力</td>
 </tr>
 <tr>
-<td align="center">L1会趋向于产生少量的特征，而其他的特征都是0</td>
-<td align="center">L2会选择更多的特征，这些特征都会接近于0</td>
+<td style="text-align:center">L1会趋向于产生少量的特征，而其他的特征都是0</td>
+<td style="text-align:center">L2会选择更多的特征，这些特征都会接近于0</td>
 </tr>
 <tr>
-<td align="center">假设分布为拉普拉斯分布</td>
-<td align="center">假设分布为高斯分布</td>
+<td style="text-align:center">假设分布为拉普拉斯分布</td>
+<td style="text-align:center">假设分布为高斯分布</td>
 </tr>
 <tr>
-<td align="center">特征稀疏化</td>
-<td align="center">使权重w变得更小，从而降低模型复杂度。</td>
+<td style="text-align:center">特征稀疏化</td>
+<td style="text-align:center">使权重w变得更小，从而降低模型复杂度。</td>
 </tr>
-</tbody></table>
-<h2 id="为什么l1趋向0而l2不会"><a href="#为什么l1趋向0而l2不会" class="headerlink" title="为什么l1趋向0而l2不会"></a>为什么l1趋向0而l2不会</h2><p>从权值更新角度考虑：<br>$$<br>L_1=|w1|+|w_2|+…+|w_n|,\frac{\partial L}{\partial w_i}=sign(w_i)\L_2=\frac{1}{2}(w_1^2+w_2^2+…+w_n^2),\frac{\partial L}{\partial w_i}=w_i\假设学习率\eta为0.5.\L_1的权值更新公式为w_i=w_i-\eta *1\L_2的权值更新公式为w_i=w_i-\eta *w_i\<br>$$</p>
-<ul>
+</tbody>
+</table>
+</div>
+<h2 id="为什么l1趋向0而l2不会"><a href="#为什么l1趋向0而l2不会" class="headerlink" title="为什么l1趋向0而l2不会"></a>为什么l1趋向0而l2不会</h2><p>从权值更新角度考虑：</p>
+<script type="math/tex; mode=display">
+L_1=|w1|+|w_2|+...+|w_n|,\frac{\partial L}{\partial w_i}=sign(w_i)\\L_2=\frac{1}{2}(w_1^2+w_2^2+...+w_n^2),\frac{\partial L}{\partial w_i}=w_i\\假设学习率\eta为0.5.\\L_1的权值更新公式为w_i=w_i-\eta *1\\L_2的权值更新公式为w_i=w_i-\eta *w_i\\</script><ul>
 <li><p>L1的权值每次更新都固定减少一个特定的值(比如0.5)，那么经过若干次迭代之后，权值就有可能减少到0</p>
 </li>
-<li><p>L2的权值每次都等于上一次的1/2，那么，虽然权值不断变小\但是因为每次都等于上一次的一半，所以很快会收敛到较小的值但不为0</p>
+<li><p>L2的权值每次都等于上一次的1/2，那么，虽然权值不断变小\\但是因为每次都等于上一次的一半，所以很快会收敛到较小的值但不为0</p>
 </li>
 </ul>
 <p>从几何角度考虑 ：</p>
@@ -352,8 +353,7 @@
 </ul>
 <p>dropout 训练与bagging 训练不同：</p>
 <ul>
-<li><p>bagging 中，假设所有的子模型都是独立的。</p>
-</li>
+<li>bagging 中，假设所有的子模型都是独立的。</li>
 <li><p>dropout 中，所有的子模型是共享参数的，每个子模型继承了基础神经网络的不同子集。</p>
 <ul>
 <li>参数共享使得在有限的内存下训练指数数量的子模型变得可能。</li>
@@ -361,8 +361,7 @@
 </li>
 <li><p>bagging 中，每个子模型在其相应的训练集上训练到收敛。</p>
 </li>
-<li><p>dropout 中，大部分子模型都没有显式的被训练（因为指数量级的神经网络不可能被训练完成）。</p>
-<ul>
+<li>dropout 中，大部分子模型都没有显式的被训练（因为指数量级的神经网络不可能被训练完成）。<ul>
 <li>我们只是对子模型的某些部分训练单个step ，同时参数共享使得子模型的剩余部分能够有较好的参数<br>值。</li>
 </ul>
 </li>
@@ -446,20 +445,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -493,12 +492,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">193k</span>
+    <span title="站点总字数">200k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:21</span>
+    <span title="站点阅读时长">5:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -508,7 +507,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共89.7k字</span>
+  <span class="post-count">博客全站共90.7k字</span>
 </div>
 
         

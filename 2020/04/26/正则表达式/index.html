@@ -259,11 +259,7 @@
       
         <h1 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h1><a id="more"></a>
 
-
-    <div id="aplayer-yAJRPPwG" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
-
-
-
+    <div id="aplayer-buqGOtzY" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h2 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h2><ul>
 <li>.     匹配除换行符意外的任意字符</li>
 <li>\w  匹配字母或数字或下划线</li>
@@ -279,10 +275,9 @@
 <li>a|b  匹配字符a或者字符b</li>
 <li>()      匹配括号内的表达式，也表示一个组</li>
 <li>[…]   匹配字符组中的字符</li>
-<li>[^…] 匹配除了字符组中字符的所有字符</li>
+<li><sup><a href="#fn_..." id="reffn_...">...</a></sup> 匹配除了字符组中字符的所有字符</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">我喜欢abc_123</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">.  :我 喜 欢 a b c _ <span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">\w :a b c _ <span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">\s :空白符，tab</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">\d :<span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">^\d\d\d :无输出</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">\d\d\d$ :<span class="number">123</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">\W :我 喜 欢</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">a|b :a b</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">a(b|c)(b|c)_123 :abc_123</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">[ac] :a c</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">[a-z0<span class="number">-9</span>A-Z] : a b c <span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">[^ab] : 我 喜 欢 c _ <span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span></pre></td></tr></table></figure>
-
 <h2 id="量词"><a href="#量词" class="headerlink" title="量词"></a>量词</h2><ul>
 <li>*        重复0次或更多次</li>
 <li>+        重复一次或更多次</li>
@@ -293,28 +288,19 @@
 </ul>
 <p>只作用于前边一个字符</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">aaa_bab_c_a</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">a* :aaa  a    a</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">a+ :aaa a a</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">a? :a a a  a    a</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">\w&#123;<span class="number">4</span>&#125;:aaa_ bab_</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">\w&#123;<span class="number">4</span>,&#125;:aaa_bab_c_a</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">\w&#123;<span class="number">4</span>,<span class="number">6</span>&#125;:aaa_ba b_c_a</span></pre></td></tr></table></figure>
-
 <h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h2><p>匹配身份证号：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">^[<span class="number">1</span><span class="number">-9</span>]\d&#123;<span class="number">16</span>&#125;[<span class="number">0</span><span class="number">-9</span>x]$</span></pre></td></tr></table></figure>
-
 <p>匹配邮箱：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">\w+@\w+\.\w+</span></pre></td></tr></table></figure>
-
-
-
 <h2 id="惰性匹配和贪婪匹配"><a href="#惰性匹配和贪婪匹配" class="headerlink" title="惰性匹配和贪婪匹配"></a>惰性匹配和贪婪匹配</h2><p>贪婪匹配：尽可能多的去匹配，？，*，+,{}</p>
 <p>惰性匹配：尽可能少的匹配，.*?</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">&lt;div&gt;哈哈哈&lt;div&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">&lt;.*&gt;  :&lt;div&gt;哈哈哈&lt;div&gt;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&lt;.*?&gt; :&lt;div&gt;</span></pre></td></tr></table></figure>
-
-
-
 <h2 id="re模块"><a href="#re模块" class="headerlink" title="re模块"></a>re模块</h2><p>使用r来将字符串全部表示为字符，包括换行（r”我是周杰伦\n我也是”）</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>从一个字符串中提取所有数字</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">l = re.findall(<span class="string">"\d+"</span>,<span class="string">"我今天18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">print(l)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># '18','5'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="number">2.</span>判断一句话是否有数字，匹配到第一个</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">l = re.search(<span class="string">"\d+"</span>,<span class="string">"我今天18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">返回的是re的match对象，通过group输出</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">print(l.group())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 18</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="number">3.</span>素有数据匹配，返回迭代器</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">l = re.finditer(<span class="string">"\d+"</span>,<span class="string">"我今天18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">print([item.group <span class="keyword">for</span> item <span class="keyword">in</span> l])</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># [18,16]</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line"><span class="number">4.</span>match 从头开始匹配，默认加上^</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">l = re.match(<span class="string">"\d+"</span>,<span class="string">"18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">print(l.group())</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># 18</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line"><span class="number">5.</span>分割</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">l = re,split(<span class="string">"\d+"</span>,<span class="string">"我今天18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">print(l)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># '我今天','，我喜欢'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">l = re.split(<span class="string">"[我1]"</span>,<span class="string">"我今天我18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">print(l)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># ['', '今天', '', '8，', '喜欢', '6']</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line"><span class="number">6.</span>替换</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">l = re.sub(<span class="string">"\d"</span>,<span class="string">"_VVV_"</span>,<span class="string">"我今天我18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line">print(l)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line">我今天我_VVV__VVV_，我喜欢_VVV__VVV_</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">34</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">35</span></pre></td><td class="code"><pre><span class="line"><span class="number">7.</span>返回替换的次数</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">36</span></pre></td><td class="code"><pre><span class="line">l = re.subn(<span class="string">"\d"</span>,<span class="string">"_VVV_"</span>,<span class="string">"我今天我18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">37</span></pre></td><td class="code"><pre><span class="line">print(l)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">38</span></pre></td><td class="code"><pre><span class="line">(<span class="string">'我今天我_VVV__VVV_，我喜欢_VVV__VVV_'</span>, <span class="number">4</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">39</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">40</span></pre></td><td class="code"><pre><span class="line"><span class="number">8.</span>预先加载</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">41</span></pre></td><td class="code"><pre><span class="line">obj = re.compile(<span class="string">"\d"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">42</span></pre></td><td class="code"><pre><span class="line">l = obj.findall(<span class="string">"我今天我18，我喜欢16"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">43</span></pre></td><td class="code"><pre><span class="line">print(l)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">44</span></pre></td><td class="code"><pre><span class="line">[<span class="string">'1'</span>, <span class="string">'8'</span>, <span class="string">'1'</span>, <span class="string">'6'</span>]</span></pre></td></tr></table></figure>
-
 <p>爬虫必回的一个重点</p>
 <ol>
 <li>（）括起来的内容是最终要的结构</li>
-<li>（？P&lt;name&gt;）把正则匹配到的内容放到name组中，后边可以直接从组中取group.(name)</li>
+<li>（？P\<name\>）把正则匹配到的内容放到name组中，后边可以直接从组中取group.(name)</name\></li>
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">obj = re.compile(<span class="string">r"今天吃了(?P&lt;mian&gt;\d+)碗面"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">result= obj.finditer(<span class="string">"明天吃3碗面，今天吃了2碗面"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">print([item.group(<span class="string">"mian"</span>) <span class="keyword">for</span> item <span class="keyword">in</span> result])</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># ['2']</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">print([item.groupdict() <span class="keyword">for</span> item <span class="keyword">in</span> result])</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="comment"># [&#123;'mian': '2'&#125;]</span></span></pre></td></tr></table></figure>
     </div>
@@ -394,20 +380,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -441,12 +427,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">193k</span>
+    <span title="站点总字数">200k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:21</span>
+    <span title="站点阅读时长">5:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -456,7 +442,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共89.7k字</span>
+  <span class="post-count">博客全站共90.7k字</span>
 </div>
 
         

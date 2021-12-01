@@ -54,12 +54,12 @@
 <meta property="og:site_name" content="李小阳小李">
 <meta property="og:description" content="第四章 决策树">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;%E6%9C%AA%E5%89%AA%E6%9E%9D.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;%E9%A2%84%E5%89%AA%E6%9E%9D.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;%E5%90%8E%E5%89%AA%E6%9E%9D.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;未剪枝.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;预剪枝.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;后剪枝.png">
 <meta property="og:updated_time" content="2020-04-02T09:58:38.027Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;%E6%9C%AA%E5%89%AA%E6%9E%9D.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;02&#x2F;ML-%E5%86%B3%E7%AD%96%E6%A0%91&#x2F;未剪枝.png">
 
 <link rel="canonical" href="https://lxyxl0216.github.io/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/">
 
@@ -263,11 +263,7 @@
       
         <h1 id="第四章-决策树"><a href="#第四章-决策树" class="headerlink" title="第四章 决策树"></a>第四章 决策树</h1><a id="more"></a>
 
-
-    <div id="aplayer-ERbrdmsg" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
-
-
-
+    <div id="aplayer-GrEiomSr" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <h2 id="4-1基本流程"><a href="#4-1基本流程" class="headerlink" title="4.1基本流程"></a>4.1基本流程</h2><ol>
 <li><p>决策树模型可以认为是<code>if-then</code>规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。 </p>
 </li>
@@ -282,15 +278,13 @@
 </ul>
 </li>
 </ul>
-<ol start="3">
+<ol>
 <li><p>决策树的学习目标是：根据给定的训练数据集构造一个决策树模型，使得它能够对样本进行正确的分类。</p>
 </li>
 <li><p>决策树最优化的策略是：损失函数最小化。决策树的损失函数通常是正则化的极大似然函数。</p>
 </li>
-<li><p>决策树学习的算法通常递归地选择<strong>最优</strong>特征，并根据该特征对训练数据进行分割，使得对各个子数据集有一个最好的分类。这一过程对应着特征空间的划分，也对应着决策树的构建。</p>
-</li>
-<li><p>决策树生成算法：</p>
-<ul>
+<li>决策树学习的算法通常递归地选择<strong>最优</strong>特征，并根据该特征对训练数据进行分割，使得对各个子数据集有一个最好的分类。这一过程对应着特征空间的划分，也对应着决策树的构建。</li>
+<li>决策树生成算法：<ul>
 <li>构建根结点：将所有训练数据放在根结点。</li>
 <li>选择一个<strong>最优特征</strong>，根据这个特征将训练数据分割成子集，使得各个子集有一个在当前条件下最好的分类。<ul>
 <li>若这些子集已能够被基本正确分类，则将该子集构成叶结点。</li>
@@ -356,25 +350,27 @@
 </li>
 <li><p>过拟合产生得原因是决策树太复杂。解决的办法是：对<strong>决策树剪枝</strong>，即对生成的决策树进行简化。</p>
 </li>
-<li><p>剪枝的依据是：极小化决策树的整体损失函数或者代价函数。</p>
-</li>
-<li><p>决策树生成算法是学习局部的模型，决策树剪枝是学习整体的模型。即：生成算法仅考虑局部最优，而剪枝算法考虑全局最优。</p>
-</li>
+<li>剪枝的依据是：极小化决策树的整体损失函数或者代价函数。</li>
+<li>决策树生成算法是学习局部的模型，决策树剪枝是学习整体的模型。即：生成算法仅考虑局部最优，而剪枝算法考虑全局最优。</li>
 </ol>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th align="center">未剪枝</th>
-<th align="center">预剪枝</th>
-<th align="center">后剪枝</th>
+<th style="text-align:center">未剪枝</th>
+<th style="text-align:center">预剪枝</th>
+<th style="text-align:center">后剪枝</th>
 </tr>
 </thead>
-<tbody><tr>
-<td align="center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/%E6%9C%AA%E5%89%AA%E6%9E%9D.png" alt="未剪枝"></td>
-<td align="center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/%E9%A2%84%E5%89%AA%E6%9E%9D.png" alt="预剪枝"></td>
-<td align="center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/%E5%90%8E%E5%89%AA%E6%9E%9D.png" alt="后剪枝"></td>
+<tbody>
+<tr>
+<td style="text-align:center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/未剪枝.png" alt="未剪枝"></td>
+<td style="text-align:center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/预剪枝.png" alt="预剪枝"></td>
+<td style="text-align:center"><img src="/2020/04/02/ML-%E5%86%B3%E7%AD%96%E6%A0%91/后剪枝.png" alt="后剪枝"></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="4-4-1预剪枝"><a href="#4-4-1预剪枝" class="headerlink" title="4.4.1预剪枝"></a>4.4.1预剪枝</h3><p>预剪枝是指在决策树生成过程中，对每个结点在划分前先进行估计，若当前结点的划分不能带来决策树泛化性能提升，则停止划分并将当前结点标记为叶结点。</p>
 <ul>
 <li>这不仅降低了过拟合的风险，还显著减少了决策树的训练时间开销和测试时间开销</li>
@@ -472,20 +468,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -519,12 +515,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">193k</span>
+    <span title="站点总字数">200k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:21</span>
+    <span title="站点阅读时长">5:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -534,7 +530,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共89.7k字</span>
+  <span class="post-count">博客全站共90.7k字</span>
 </div>
 
         

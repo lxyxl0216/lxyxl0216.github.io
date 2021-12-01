@@ -55,10 +55,10 @@
 <meta property="og:description" content="支持向量机">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;SVM.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E4%B8%8E%E9%97%B4%E9%9A%94.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;%E6%A0%B8%E5%87%BD%E6%95%B0.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;%E8%BD%AF%E9%97%B4%E9%9A%94.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;%E8%BD%AF%E9%97%B4%E9%9A%94SVM.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;支持向量与间隔.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;核函数.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;软间隔.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;软间隔SVM.png">
 <meta property="og:updated_time" content="2020-04-04T16:03:21.798Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;lxyxl0216.github.io&#x2F;2020&#x2F;04&#x2F;03&#x2F;ML-SVM&#x2F;SVM.png">
@@ -271,11 +271,7 @@
       
         <h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><a id="more"></a>
 
-
-    <div id="aplayer-uzfiQMbo" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
-
-
-
+    <div id="aplayer-yPRQKEan" class="aplayer aplayer-tag-marker meting-tag-marker" data-id="3072684435" data-server="netease" data-type="playlist" data-mode="circulation" data-autoplay="false" data-mutex="true" data-listmaxheight="340px" data-preload="auto" data-theme="#555"></div>
 <p>支持向量机是一种二分类模型。它是定义在特征空间上的、间隔最大的线性分类器。</p>
 <ul>
 <li><p>间隔最大使得支持向量机有别于感知机。</p>
@@ -291,25 +287,61 @@
 <li>当训练数据不可分时，通过使用核技巧以及软间隔最大化，学习一个非线性分类器，即非线性支持向量机。</li>
 </ul>
 <h2 id="间隔与支持向量"><a href="#间隔与支持向量" class="headerlink" title="间隔与支持向量"></a>间隔与支持向量</h2><p><img src="/2020/04/03/ML-SVM/SVM.png" alt="SVM"></p>
-<p>在样本空间中，划分超平面可通过如下线性方程来描述:<br>$$<br>w^Tx+b = 0<br>$$<br>样本空间中任意点”到超平面(w,b)的距慈可写为:<br>$$<br>r =\frac{|w^Tx+b|}{||w||}<br>$$<br>假设超平面(w,b)能将训练样本正确分类，即对于$（xi,yi) \in D$, 若yi=+1, 则有$w^Tx+b&gt;0$; 若yi = -1, 则有$w^Tx+b&lt;0$. 令<br>$$<br>w^Tx+b \geq+1,yi=+1\<br>w^Tx+b \leq-1,yi=-1<br>$$<br>距离超平面最近的这几个训练样本点使式(3)的等号成立，它们被称为“ 支持向量” (support vector), 两个异类支待向量到超平面的距离之和为：被称为间隔<br>$$<br>\gamma = \frac{2}{||w||}<br>$$<br><img src="/2020/04/03/ML-SVM/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E4%B8%8E%E9%97%B4%E9%9A%94.png" alt="支持向量与间隔"></p>
-<p>为了找到<code>最大间隔</code>的划分超平面，求w,b使$\gamma$最大<br>$$<br>\max\limits_{w,b}\frac{2}{||w||},s.t.yi(w^Tx+b) \geq 1\<br>==&gt;\min\limits_{w,b}\frac{1}{2}||w||^2,s.t.yi(w^Tx+b) \geq1\<br>$$</p>
-<h2 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h2><p>对式(5)的每条约束添加拉格朗日乘子$\alpha_i \geq 0$，则该问题的拉格朗日函数可写为：<br>$$<br>\max \limits_{\alpha}\min \limits_{w,b} (L(w,b,\alpha)) = \frac{1}{2}||w||^2+\sum_{i=1}^m \alpha_i(1-y_i(w^Tx_i+b))\<br>令L(w,b,\alpha)对w，b的偏导数为0\<br>w = \sum_{i=1}^m \alpha_i y_ix_i,0 = \sum_{i=1}^m \alpha_i y_i<br>$$<br>根据拉格朗日对偶性，原始问题的对偶问题是极大极小问题： :$\max \limits_{\alpha}\min \limits_{w,b} (L(w,b,\alpha))$</p>
-<p>先计算$\min \limits_{w,b} (L(w,b,\alpha))$,将w带入拉格朗日函数：<br>$$<br>\min \limits_{w,b}(L(w,b,\alpha)) = \frac{1}{2}(\sum_{i=1}^m \alpha_i y_ix_i)^T(\sum_{j=1}^m \alpha_iy_ix_i)+\sum_{i=1}^m \alpha_i - \sum_{i=1}^m \alpha_iy_i(\sum_{j=1}^m \alpha_iy_jx_j)^Tx_i\<br>=\frac{1}{2}\sum_{i=1}^m \sum_{j=1}^m \alpha_iy_ix_i^T\alpha_jy_jx_j+\sum_{i=1}^m\alpha_i-\sum_{i=1}^m \sum_{j=1}^m\alpha_iy_i\alpha_jy_jx_j^Tx_i\<br>=\sum_{i=1}^m\alpha_i-\frac{1}{2}\sum_{i=1}^m \sum_{j=1}^m \alpha_iy_ix_i^T\alpha_jy_jx_j<br>$$<br>最终优化问题变为<br>$$<br>\max \limits_{\alpha}\sum_{i=1}^m\alpha_i-\frac{1}{2}\sum_{i=1}^m \sum_{j=1}^m \alpha_iy_ix_i^T\alpha_jy_jx_j\<br>s.t. \sum_{i=1}^m\alpha_iy_i=0,\alpha \geq0<br>$$</p>
-<p>满足KKT条件：</p>
-<p>$$<br>KKT:\alpha_i \geq0\y_i(w^Tx+b)-1 \geq0\<br>\alpha_i(y_i(w^Tx_i+b)-1)=0\<br>\nabla_wL(w,b,\alpha)=0\ \nabla_bL(w,b,\alpha)=0\<br>$$</p>
-<p>$$<br>存在y_k,x_x使y_k(w^Tx_k+b)-1=0\<br>两边同乘y_k ,所以，y_ky_k(w^Tx_k+b)=y_k\<br>因为y_k为+1 或者-1，所以y_ky_k = 1\<br>所以w^Tx+b=y_k\<br>b = y_k-w^Tx_k\<br>b = y_k-\sum_{i=1}^m \alpha_i y_ix_ix_k<br>$$</p>
-<p>由此$w^*=\sum_{i=1}^m \alpha_i y_ix_i$,$b^* =y_k-\sum_{i=1}^m \alpha_i y_ix_ix_k $</p>
+<p>在样本空间中，划分超平面可通过如下线性方程来描述:</p>
+<script type="math/tex; mode=display">
+w^Tx+b = 0</script><p>样本空间中任意点”到超平面(w,b)的距慈可写为:</p>
+<script type="math/tex; mode=display">
+r =\frac{|w^Tx+b|}{||w||}</script><p>假设超平面(w,b)能将训练样本正确分类，即对于$（xi,yi) \in D$, 若yi=+1, 则有$w^Tx+b&gt;0$; 若yi = -1, 则有$w^Tx+b&lt;0$. 令</p>
+<script type="math/tex; mode=display">
+w^Tx+b \geq+1,yi=+1\\
+w^Tx+b \leq-1,yi=-1</script><p>距离超平面最近的这几个训练样本点使式(3)的等号成立，它们被称为“ 支持向量” (support vector), 两个异类支待向量到超平面的距离之和为：被称为间隔</p>
+<script type="math/tex; mode=display">
+\gamma = \frac{2}{||w||}</script><p><img src="/2020/04/03/ML-SVM/支持向量与间隔.png" alt="支持向量与间隔"></p>
+<p>为了找到<code>最大间隔</code>的划分超平面，求w,b使$\gamma$最大</p>
+<script type="math/tex; mode=display">
+\max\limits_{w,b}\frac{2}{||w||},s.t.yi(w^Tx+b) \geq 1\\
+==>\min\limits_{w,b}\frac{1}{2}||w||^2,s.t.yi(w^Tx+b) \geq1\\</script><h2 id="对偶问题"><a href="#对偶问题" class="headerlink" title="对偶问题"></a>对偶问题</h2><p>对式(5)的每条约束添加拉格朗日乘子$\alpha_i \geq 0$，则该问题的拉格朗日函数可写为：</p>
+<script type="math/tex; mode=display">
+\max \limits_{\alpha}\min \limits_{w,b} (L(w,b,\alpha)) = \frac{1}{2}||w||^2+\sum_{i=1}^m \alpha_i(1-y_i(w^Tx_i+b))\\
+令L(w,b,\alpha)对w，b的偏导数为0\\
+w = \sum_{i=1}^m \alpha_i y_ix_i,0 = \sum_{i=1}^m \alpha_i y_i</script><p>根据拉格朗日对偶性，原始问题的对偶问题是极大极小问题： :$\max \limits_{\alpha}\min \limits_{w,b} (L(w,b,\alpha))$</p>
+<p>先计算$\min \limits_{w,b} (L(w,b,\alpha))$,将w带入拉格朗日函数：</p>
+<script type="math/tex; mode=display">
+\min \limits_{w,b}(L(w,b,\alpha)) = \frac{1}{2}(\sum_{i=1}^m \alpha_i y_ix_i)^T(\sum_{j=1}^m \alpha_iy_ix_i)+\sum_{i=1}^m \alpha_i - \sum_{i=1}^m \alpha_iy_i(\sum_{j=1}^m \alpha_iy_jx_j)^Tx_i\\
+=\frac{1}{2}\sum_{i=1}^m \sum_{j=1}^m \alpha_iy_ix_i^T\alpha_jy_jx_j+\sum_{i=1}^m\alpha_i-\sum_{i=1}^m \sum_{j=1}^m\alpha_iy_i\alpha_jy_jx_j^Tx_i\\
+=\sum_{i=1}^m\alpha_i-\frac{1}{2}\sum_{i=1}^m \sum_{j=1}^m \alpha_iy_ix_i^T\alpha_jy_jx_j</script><p>最终优化问题变为</p>
+<script type="math/tex; mode=display">
+\max \limits_{\alpha}\sum_{i=1}^m\alpha_i-\frac{1}{2}\sum_{i=1}^m \sum_{j=1}^m \alpha_iy_ix_i^T\alpha_jy_jx_j\\
+s.t. \sum_{i=1}^m\alpha_iy_i=0,\alpha \geq0</script><p>满足KKT条件：</p>
+<script type="math/tex; mode=display">
+KKT:\alpha_i \geq0\\y_i(w^Tx+b)-1 \geq0\\
+\alpha_i(y_i(w^Tx_i+b)-1)=0\\
+\nabla_wL(w,b,\alpha)=0\\ \nabla_bL(w,b,\alpha)=0\\</script><script type="math/tex; mode=display">
+存在y_k,x_x使y_k(w^Tx_k+b)-1=0\\
+两边同乘y_k ,所以，y_ky_k(w^Tx_k+b)=y_k\\
+因为y_k为+1 或者-1，所以y_ky_k = 1\\
+所以w^Tx+b=y_k\\
+b = y_k-w^Tx_k\\
+b = y_k-\sum_{i=1}^m \alpha_i y_ix_ix_k</script><p>由此$w^<em>=\sum_{i=1}^m \alpha_i y_ix_i$,$b^</em> =y_k-\sum_{i=1}^m \alpha_i y_ix_ix_k $</p>
 <p>故分离超平面为$w^<em>x+b^</em>=0$，分类决策函数为$f(x) = sign(w^<em>x+b^</em>)$</p>
 <h2 id="核函数"><a href="#核函数" class="headerlink" title="核函数"></a>核函数</h2><ul>
 <li>可将样本从原始空间映射到一个更高维的特征空间，使得样本在这个特征空间内线性可分</li>
 </ul>
-<p><img src="/2020/04/03/ML-SVM/%E6%A0%B8%E5%87%BD%E6%95%B0.png" alt="核函数"></p>
+<p><img src="/2020/04/03/ML-SVM/核函数.png" alt="核函数"></p>
 <h2 id="软间隔和正则化"><a href="#软间隔和正则化" class="headerlink" title="软间隔和正则化"></a>软间隔和正则化</h2><ul>
 <li>所有样本都必须划分正确，这称为“ 硬间隔”</li>
 <li>“软间隔”允许某些样本不满足约束</li>
 </ul>
-<p><img src="/2020/04/03/ML-SVM/%E8%BD%AF%E9%97%B4%E9%9A%94.png" alt="软间隔"></p>
-<p>优化目标：<br>$$<br>\min \limits_{w,b} + \frac{1}{2}||w||^2 +C\sum_{i=1}^m l_{0/1}(y_i(w^Tx_i+b)-1)\<br>l_{0/1}是“0/1损失sign(x)”,然而非凸、非连续数学性质不太好\<br>使用hinge损失：l_{hinge}(z) = max(0,1-z)\<br>指数损失：l_{exp}(z) = exp(-z)\<br>对数损失：l_{log}(z) = log(z+exp(-z))<br>$$<br>引入松弛变量：即为软间隔支持向量机<br>$$<br>\min \limits_{w,b,\xi} \frac{1}{2}||w||^2+C\sum_{i=1}^m \xi_i<br>$$<br><img src="/2020/04/03/ML-SVM/%E8%BD%AF%E9%97%B4%E9%9A%94SVM.png" alt="软间隔SVM"></p>
+<p><img src="/2020/04/03/ML-SVM/软间隔.png" alt="软间隔"></p>
+<p>优化目标：</p>
+<script type="math/tex; mode=display">
+\min \limits_{w,b} + \frac{1}{2}||w||^2 +C\sum_{i=1}^m l_{0/1}(y_i(w^Tx_i+b)-1)\\
+l_{0/1}是“0/1损失sign(x)”,然而非凸、非连续数学性质不太好\\
+使用hinge损失：l_{hinge}(z) = max(0,1-z)\\
+指数损失：l_{exp}(z) = exp(-z)\\
+对数损失：l_{log}(z) = log(z+exp(-z))</script><p>引入松弛变量：即为软间隔支持向量机</p>
+<script type="math/tex; mode=display">
+\min \limits_{w,b,\xi} \frac{1}{2}||w||^2+C\sum_{i=1}^m \xi_i</script><p><img src="/2020/04/03/ML-SVM/软间隔SVM.png" alt="软间隔SVM"></p>
 
     </div>
 
@@ -388,20 +420,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-count">54</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -435,12 +467,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">193k</span>
+    <span title="站点总字数">200k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:21</span>
+    <span title="站点阅读时长">5:34</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
@@ -450,7 +482,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共89.7k字</span>
+  <span class="post-count">博客全站共90.7k字</span>
 </div>
 
         
